@@ -1,6 +1,7 @@
 Param(
     [String]$CSV = "machines.csv"
 )
+#CSV Must contain the following headers "Hostname" and "MAC"
 
 Function Send-WOL {
 <# 
