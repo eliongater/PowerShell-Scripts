@@ -14,14 +14,14 @@ try {
     $result = Get-HPBIOSSettingValue -name $Setting
         
     if ($result -eq $ExpectedValue){
-        #Exit 1 for Intune and "Match" to remediate in SCCM
-        Write-Host "Match"
-        exit 1
-    }
-    else {
         #Exit 0 for Intune and "No_Match" for SCCM, only remediate "Match"
         Write-Host "No_Match"
         exit 0
+    }
+    else {
+        #Exit 1 for Intune and "Match" to remediate in SCCM
+        Write-Host "Match"
+        exit 1
     }
 }
 catch {
