@@ -7,8 +7,8 @@
 #=============================================================================================================================
 
 # Define Variables
-$Setting = "Secure Boot"
-$ExpectedValue = "Enabled"
+$Setting = "Configure Legacy Support and Secure Boot"
+$ExpectedValue = "Legacy Support Disable and Secure Boot Enable"
 
 try {
     Set-HPBIOSSettingValue -name $Setting -Value $ExpectedValue
