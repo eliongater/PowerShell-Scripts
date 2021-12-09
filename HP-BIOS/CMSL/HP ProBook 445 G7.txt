@@ -1,0 +1,3556 @@
+
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Setup Password
+Path                     : \Security
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 1
+SecurityLevel            : 0
+Sequence                 : 1
+Value                    : 
+IsSet                    : 0
+MaxLength                : 32
+MinLength                : 4
+Size                     : 1
+SupportedEncoding        : {utf-16}
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_0
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Power-On Password
+Path                     : \Security
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 1
+SecurityLevel            : 0
+Sequence                 : 1
+Value                    : 
+IsSet                    : 0
+MaxLength                : 32
+MinLength                : 4
+Size                     : 1
+SupportedEncoding        : {utf-16}
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_1
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Secure Platform Management Counter
+Path                     : \Security\Security Configuration\HP Secure Platform Management
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 8050
+Value                    : 4294967295
+IntValue                 : 4294967295
+LowerBound               : 0
+UpperBound               : 4294967295
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_0
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Enhanced BIOS Authentication Mode Settings Anti-Replay Counter
+Path                     : \Security\Security Configuration\HP Secure Platform Management
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 10020
+Value                    : 0
+IntValue                 : 0
+LowerBound               : 0
+UpperBound               : 4294967295
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_1
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Enhanced BIOS Authentication Mode Actions Anti-Replay Counter
+Path                     : \Security\Security Configuration\HP Secure Platform Management
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 10030
+Value                    : 0
+IntValue                 : 0
+LowerBound               : 0
+UpperBound               : 4294967295
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_2
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Remote HP PC Hardware Diagnostics Last Execution Status
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27886
+Value                    : 0
+IntValue                 : 0
+LowerBound               : 0
+UpperBound               : 4294967295
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_3
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Password Minimum Length
+Path                     : \Security\Administrator Tools\Password Policies
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 5010
+Value                    : 8
+IntValue                 : 8
+LowerBound               : 4
+UpperBound               : 32
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_4
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Data transfer timeout
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27855
+Value                    : 100
+IntValue                 : 100
+LowerBound               : 1
+UpperBound               : 65535
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_5
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : BIOS Power-On Hour
+Path                     : \Advanced\Scheduled Power-On
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 20017
+Value                    : 0
+IntValue                 : 0
+LowerBound               : 0
+UpperBound               : 23
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_6
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : BIOS Power-On Minute
+Path                     : \Advanced\Scheduled Power-On
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 20018
+Value                    : 0
+IntValue                 : 0
+LowerBound               : 0
+UpperBound               : 59
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_7
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : USB Type-C Controller(s) Firmware Version:
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 315
+Value                    : CCG5 : 2.3.0
+Elements                 : {CCG5 : 2.3.0}
+Size                     : 1
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_0
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : HBMA Priority List
+Path                     : \Advanced
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 18019
+Value                    : USB NIC Dongle:HP External Adapter :0BDA_8153,USB NIC Dongle:HP USB-C Travel Dock :17E9_4352,USB NIC Dongle:HP USB Travel Dock :17E9_4351,Embedded NIC:Realtek 
+                           :10EC_8168:103C_8730(Disabled)
+Elements                 : {USB NIC Dongle:HP External Adapter :0BDA_8153, USB NIC Dongle:HP USB-C Travel Dock :17E9_4352, USB NIC Dongle:HP USB Travel Dock :17E9_4351, Embedded NIC:Realtek 
+                           :10EC_8168:103C_8730(Disabled)}
+Size                     : 4
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_1
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : DriveLock Enabled Drives
+Path                     : \Security\Utilities\Hard Drive Utilities
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 13050
+Value                    : 
+Elements                 : 
+Size                     : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_2
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Legacy Boot Order
+Path                     : \Advanced\Boot Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21101
+Value                    : <no legacy boot options available>(Disabled)
+Elements                 : {<no legacy boot options available>(Disabled)}
+Size                     : 1
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_3
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : UEFI Boot Order
+Path                     : \Advanced\Boot Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21111
+Value                    : HDD:M.2:1,HDD:USB:1,NETWORK IPV4:EMBEDDED:1,NETWORK IPV6:EMBEDDED:1,NETWORK IPV4:EXPANSION:1,NETWORK IPV6:EXPANSION:1
+Elements                 : {HDD:M.2:1, HDD:USB:1, NETWORK IPV4:EMBEDDED:1, NETWORK IPV6:EMBEDDED:1...}
+Size                     : 6
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_4
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Storage Devices
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 232
+Value                    : SSSTC CL1-8D256-HP-UKFCN01ZTEV7K7 (256 GB)
+Elements                 : {SSSTC CL1-8D256-HP-UKFCN01ZTEV7K7 (256 GB)}
+Size                     : 1
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_5
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Minimum BIOS Version
+Path                     : \Main\Update System BIOS
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 2020
+Value                    : 00.00.00
+MaxLength                : 9
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_0
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Secure Platform Management Key Endorsement Certificate
+Path                     : \Security\Security Configuration\HP Secure Platform Management
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 1
+SecurityLevel            : 1
+Sequence                 : 8000
+Value                    : 
+MaxLength                : 5745
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_1
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Secure Platform Management Signing Key
+Path                     : \Security\Security Configuration\HP Secure Platform Management
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 8010
+Value                    : 
+MaxLength                : 689
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_2
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Secure Platform Management Current State
+Path                     : \Security\Security Configuration\HP Secure Platform Management
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 8020
+Value                    : Not provisioned
+MaxLength                : 50
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_3
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Secure Platform Management Version
+Path                     : \Security\Security Configuration\HP Secure Platform Management
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 8030
+Value                    : 1.00
+MaxLength                : 10
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_4
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Secure Platform Management Usage Bitmask
+Path                     : \Security\Security Configuration\HP Secure Platform Management
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 8040
+Value                    : 0x0000
+MaxLength                : 14
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_5
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Secure Platform Management Key Endorsement Key
+Path                     : \Security\Security Configuration\HP Secure Platform Management
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 8060
+Value                    : 
+MaxLength                : 344
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_6
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Enhanced BIOS Authentication Mode Local Access Key 1
+Path                     : \Security\Security Configuration\HP Secure Platform Management
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 10010
+Value                    : 
+MaxLength                : 645
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_7
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Enhanced BIOS Authentication Mode Version
+Path                     : \Security\Security Configuration\HP Secure Platform Management
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 10005
+Value                    : 1.01
+MaxLength                : 11
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_8
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Secure Erase Hard Disk Serial Number
+Path                     : \Security\Utilities\Hard Drive Utilities
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 13060
+Value                    : 
+MaxLength                : 20
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_9
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Secure Erase Hard Disk Model Number
+Path                     : \Security\Utilities\Hard Drive Utilities
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 13061
+Value                    : 
+MaxLength                : 40
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_10
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Secure Erase Completion Date
+Path                     : \Security\Utilities\Hard Drive Utilities
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 13062
+Value                    : 
+MaxLength                : 17
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_11
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Secure Erase Completion Status
+Path                     : \Security\Utilities\Hard Drive Utilities
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 13063
+Value                    : 
+MaxLength                : 23
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_12
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Feature Byte
+Path                     : \Main\System Information\System IDs
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 1230
+Value                    : 6J6S6b7B7J7M7Q7W7m7saBapaqasauawbUbhcAdUdpdqfPk8mE.HQ
+MaxLength                : 249
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_13
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Build ID
+Path                     : \Main\System Information\System IDs
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 1235
+Value                    : 20WWPECT601#SABG#DABG
+MaxLength                : 55
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_14
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Remote HP PC Hardware Diagnostics Custom Client Upload Url
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27881
+Value                    : 
+MaxLength                : 256
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_15
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Remote HP PC Hardware Diagnostics Custom Client Download Url
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27883
+Value                    : 
+MaxLength                : 256
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_16
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Remote HP PC Hardware Diagnostics Upload Server Username
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27888
+Value                    : 
+MaxLength                : 256
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_17
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Remote HP PC Hardware Diagnostics Upload Server Password
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27889
+Value                    : 
+MaxLength                : 256
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_18
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Remote HP PC Hardware Diagnostics Last Execution Time Stamp
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27887
+Value                    : 
+MaxLength                : 256
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_19
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Update Address
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27805
+Value                    : 
+MaxLength                : 255
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_20
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Proxy Address
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27852
+Value                    : 
+MaxLength                : 255
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_21
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : DNS Addresses
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27854
+Value                    : 
+MaxLength                : 255
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_22
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : IPv4 Address
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27856
+Value                    : 
+MaxLength                : 255
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_23
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : IPv4 Subnet Mask
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27856
+Value                    : 
+MaxLength                : 255
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_24
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : IPv4 Gateway
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27856
+Value                    : 
+MaxLength                : 255
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_25
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Overwrite SSID
+Path                     : \Advanced\OverwriteSSID
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 29000
+Value                    : FFFF
+MaxLength                : 10
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_26
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : HBMA Factory MAC Address
+Path                     : \Advanced
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 18011
+Value                    : B0-22-7A-CB-4D-82
+MaxLength                : 35
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_27
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : HBMA System MAC Address
+Path                     : \Advanced
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 18012
+Value                    : B0-22-7A-CB-4D-82
+MaxLength                : 35
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_28
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : HBMA Custom MAC Address
+Path                     : \Advanced
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 18013
+Value                    : 00-00-00-00-00-00
+MaxLength                : 35
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_29
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Product Name
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 10
+Value                    : HP ProBook 445 G7
+MaxLength                : 60
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_30
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Serial Number
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 190
+Value                    : 5CD1141Z6T
+MaxLength                : 32
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_31
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : SKU Number
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 200
+Value                    : 18V78PA#ABG
+MaxLength                : 48
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_32
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Universally Unique Identifier (UUID)
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 210
+Value                    : 80412FE2171490FAA5170AB3A6ABC3D3
+MaxLength                : 32
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_33
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : UUID (standard format)
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 215
+Value                    : E22F4180-1417-FA90-A517-0AB3A6ABC3D3
+MaxLength                : 36
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_34
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Asset Tracking Number
+Path                     : \Main\System Information\System IDs
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 1220
+Value                    : 
+MaxLength                : 80
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_35
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Ownership Tag
+Path                     : \Main\System Information\System IDs
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 1225
+Value                    : 
+MaxLength                : 80
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_36
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : System Board CT Number
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 250
+Value                    : PJWMD038JF02JC
+MaxLength                : 14
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_37
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Product Family
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 260
+Value                    : 103C_5336AN HP ProBook
+MaxLength                : 48
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_38
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : MS Digital Marker
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 270
+Value                    : 010000000000000001000000000000001D000000484B4B34342D574E36584B2D34383837502D37465842562D4237565833
+MaxLength                : 98
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_39
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : HP_Disk0MapForUefiBootOrder
+Path                     : \Advanced\Boot Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21120
+Value                    : PciRoot(0x0)/Pci(0x2,0x4)/Pci(0x0,0x0)/NVMe(0x1,18-C2-67-30-56-01-F6-38)/HD(1,GPT,E3BED2C2-DE60-46BF-9526-0ACEB7E80339,0x800,0x82000)/\EFI\Microsoft\Boot\bootmgfw.e
+                           fi
+                           	PciRoot(0x0)/Pci(0x8,0x1)/Pci(0x0,0x3)
+                           	PciRoot(0x0)/Pci(0x1,0x2)/Pci(0x0,0x0)/MAC(B0227ADE8289,0x0)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.0.0,0.0.0.0)
+                           	PciRoot(0x0)/Pci(0x1,0x2)/Pci(0x0,0x0)/MAC(B0227ADE8289,0x0)/IPv6(0000:0000:0000:0000:0000:0000:0000:0000,0x0,Static,0000:0000:0000:0000:0000:0000:0000:0000,0x40,0
+                           000:0000:0000:0000:0000:0000:0000:0000)
+                           	PciRoot(0x0)/Pci(0x8,0x1)/Pci(0x0,0x3)/USB(0x4,0x0)/USB(0x3,0x0)/MAC(B0227ACB4D82,0x0)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.0.0,0.0.0.0)
+                           	PciRoot(0x0)/Pci(0x8,0x1)/Pci(0x0,0x3)/USB(0x4,0x0)/USB(0x3,0x0)/MAC(B0227ACB4D82,0x0)/IPv6(0000:0000:0000:0000:0000:0000:0000:0000,0x0,Static,0000:0000:0000:0000:
+                           0000:0000:0000:0000,0x40,0000:0000:0000:0000:0000:0000:0000:0000)
+MaxLength                : 1780
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_40
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : TPM Specification Version
+Path                     : \Security\Security Configuration\TPM Embedded Security
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 6001
+Value                    : 2.0
+MaxLength                : 8
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_41
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Memory Size
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 231
+Value                    : 8192 MB
+MaxLength                : 16
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_42
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Primary Battery Serial Number
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 260
+Value                    : 01327 2021/03/04
+MaxLength                : 34
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_43
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : System BIOS Version
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 280
+Value                    : S79 Ver. 01.06.00  07/28/2021
+MaxLength                : 60
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_44
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : BIOS Build Version
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 281
+Value                    : 0000
+MaxLength                : 10
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_45
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Audio Controller
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 295
+Value                    : Realtek ALC3247
+MaxLength                : 32
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_46
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Video BIOS Version
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 300
+Value                    : AMD GOP X64 Release Driver Rev.2.10.0.0.0.Jan 21 2020.17:42:40
+MaxLength                : 126
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_47
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Reference Code Revision
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 301
+Value                    : RenoirPI-FP6 1.0.0.6
+MaxLength                : 42
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_48
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Embedded Controller Firmware Version
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 310
+Value                    : 13.23.00
+MaxLength                : 18
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_49
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Born On Date
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 330
+Value                    : 11/15/2021
+MaxLength                : 22
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_50
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : System Board ID
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 340
+Value                    : 8730
+MaxLength                : 10
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_51
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Processor 1 Type
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 30
+Value                    : AMD Ryzen 3 4300U with Radeon Graphics         
+MaxLength                : 96
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_52
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Processor 1 Speed
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 40
+Value                    : 2700 MHz
+MaxLength                : 18
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_53
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Processor 1 Cores
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 45
+Value                    : 4
+MaxLength                : 4
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_54
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Processor 1 Cache Size (L1/L2/L3)
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 50
+Value                    : 256 KB / 2 MB / 4 MB
+MaxLength                : 42
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_55
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Processor 1 MicroCode Revision
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 60
+Value                    : 8600106
+MaxLength                : 16
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_56
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Processor 1 Stepping
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 70
+Value                    : 1
+MaxLength                : 4
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_57
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Processor 1 Bottom-Slot 1(left)
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 71
+Value                    : 8 GB Samsung
+MaxLength                : 26
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_58
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Processor 1 Bottom-Slot 2(right)
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 72
+Value                    : Empty
+MaxLength                : 12
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_59
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Integrated MAC Address 1
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 400
+Value                    : B0-22-7A-DE-82-89
+MaxLength                : 36
+MinLength                : 0
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_60
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : System Management Command
+Path                     : \Security\Utilities\System Management Command
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 15010
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_0
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Fast Boot
+Path                     : \Advanced\Boot Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21020
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_1
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : BIOS Rollback Policy
+Path                     : \Main\Update System BIOS
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 2010
+Value                    : *Unrestricted Rollback to older BIOS,Restricted Rollback to older BIOS
+CurrentValue             : Unrestricted Rollback to older BIOS
+PossibleValues           : {Unrestricted Rollback to older BIOS, Restricted Rollback to older BIOS}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_2
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Audio Alerts During Boot
+Path                     : \Advanced\Boot Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21021
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_3
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Manufacturing Programming Mode
+Path                     : \
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 4001
+Value                    : Unlock,*Lock
+CurrentValue             : Lock
+PossibleValues           : {Unlock, Lock}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_4
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Sure Start BIOS Settings Protection
+Path                     : \Security\Security Configuration\BIOS SureStart
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 1
+SecurityLevel            : 1
+Sequence                 : 7070
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_5
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Sure Start Secure Boot Keys Protection
+Path                     : \Security\Security Configuration\BIOS SureStart
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 1
+SecurityLevel            : 1
+Sequence                 : 7075
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_6
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Enhanced BIOS Authentication Mode
+Path                     : \Security\Security Configuration\HP Secure Platform Management
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 10000
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_7
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Startup Delay (sec.)
+Path                     : \Advanced\Boot Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21010
+Value                    : *0,5,10,15,20,25,30,35,40,45,50,55,60
+CurrentValue             : 0
+PossibleValues           : {0, 5, 10, 15...}
+Size                     : 13
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_8
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : TPM Activation Policy
+Path                     : \Security\Security Configuration\TPM Embedded Security
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 6040
+Value                    : F1 to Boot,*Allow user to reject,No prompts
+CurrentValue             : Allow user to reject
+PossibleValues           : {F1 to Boot, Allow user to reject, No prompts}
+Size                     : 3
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_9
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Sure Start Security Event Boot Notification
+Path                     : \Security\Security Configuration\BIOS SureStart
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 7090
+Value                    : Time out after 15 seconds,*Require Acknowledgment
+CurrentValue             : Require Acknowledgment
+PossibleValues           : {Time out after 15 seconds, Require Acknowledgment}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_10
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Ready BIOS for Device Guard Use
+Path                     : \Security\Secure Boot Configuration
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 22070
+Value                    : *Do Nothing,Configure on Next Boot,Clear Configuration on Next Boot
+CurrentValue             : Do Nothing
+PossibleValues           : {Do Nothing, Configure on Next Boot, Clear Configuration on Next Boot}
+Size                     : 3
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_11
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Physical Presence Interface
+Path                     : \Security\Security Configuration\Physical Presence Interface
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 1
+SecurityLevel            : 1
+Sequence                 : 11010
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_12
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Select Language
+Path                     : \Advanced\Display Language
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 19010
+Value                    : *English,Deutsch,Espanol,Italiano,Francais,Japanese,Portugues,Dansk,Svenska,Nederlands,Norsk,Suomi,Simplified Chinese,Traditional Chinese,Russian
+CurrentValue             : English
+PossibleValues           : {English, Deutsch, Espanol, Italiano...}
+Size                     : 15
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_13
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Select Keyboard Layout
+Path                     : \Advanced\Display Language
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 19020
+Value                    : *English,Deutsch,Espanol,Italiano,Francais,Japanese,Portugues,Dansk,Svenska,Nederlands,Norsk,Suomi,Simplified Chinese,Traditional Chinese,Russian
+CurrentValue             : English
+PossibleValues           : {English, Deutsch, Espanol, Italiano...}
+Size                     : 15
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_14
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Save/Restore MBR of System Hard Drive
+Path                     : \Security\Utilities\Hard Drive Utilities
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 13010
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_15
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Allow OPAL Hard Drive SID Authentication
+Path                     : \Security\Utilities\Hard Drive Utilities
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 1
+SecurityLevel            : 1
+Sequence                 : 13070
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_16
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : SureStart Production Mode
+Path                     : \Security\Security Configuration\EC Production Mode
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 16010
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_17
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Permanent Disable Absolute Persistence Module Set Once
+Path                     : \Security\Utilities
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 14010
+Value                    : *No,Yes
+CurrentValue             : No
+PossibleValues           : {No, Yes}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_18
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Absolute Persistence Module Current State
+Path                     : \Security\Utilities
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 14020
+Value                    : *Inactive,Active
+CurrentValue             : Inactive
+PossibleValues           : {Inactive, Active}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_19
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Native OS Firmware Update Service
+Path                     : \Main\Update System BIOS
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 2008
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_20
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : USB Storage Boot
+Path                     : \Advanced\Boot Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21051
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_21
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Network (PXE) Boot
+Path                     : \Advanced\Boot Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21052
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_22
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : IPv6 during UEFI Boot
+Path                     : \Advanced\Boot Options
+Prerequisites            : {SELECT * FROM HP_BIOSEnumeration WHERE Name='Network (PXE) Boot' AND CurrentValue == 'Enable'}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21053
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_23
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Clear BIOS Event Log
+Path                     : \Main\BIOS Event Log
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 3000
+Value                    : *Don't Clear,Clear
+CurrentValue             : Don't Clear
+PossibleValues           : {Don't Clear, Clear}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_24
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Boot Sector (MBR/GPT) Recovery Policy
+Path                     : \Security\Boot Sector (MBR/GPT) Recovery Policy
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 18000
+Value                    : *Local user control,Recover in event of corruption
+CurrentValue             : Local user control
+PossibleValues           : {Local user control, Recover in event of corruption}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_25
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Remote HP PC Hardware Diagnostics Use Custom Download Url
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27882
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_26
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Remote HP PC Hardware Diagnostics Scheduled Execution Enabled
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27884
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_27
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Remote HP PC Hardware Diagnostics Execute On Next Boot
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27891
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_28
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Remote HP PC Hardware Diagnostics Scheduled Execution Frequency
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27885
+Value                    : Daily,*Weekly,Monthly
+CurrentValue             : Weekly
+PossibleValues           : {Daily, Weekly, Monthly}
+Size                     : 3
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_29
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Video Memory Size
+Path                     : \Advanced\GFX
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 24900
+Value                    : *Auto,256 MB,512 MB
+CurrentValue             : Auto
+PossibleValues           : {Auto, 256 MB, 512 MB}
+Size                     : 3
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_30
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : At least one symbol is required in Administrator and User passwords
+Path                     : \Security\Administrator Tools\Password Policies
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 5020
+Value                    : *No,Yes
+CurrentValue             : No
+PossibleValues           : {No, Yes}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_31
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : At least one number is required in Administrator and User passwords
+Path                     : \Security\Administrator Tools\Password Policies
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 5030
+Value                    : *No,Yes
+CurrentValue             : No
+PossibleValues           : {No, Yes}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_32
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : At least one upper case character is required in Administrator and User passwords
+Path                     : \Security\Administrator Tools\Password Policies
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 5040
+Value                    : *No,Yes
+CurrentValue             : No
+PossibleValues           : {No, Yes}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_33
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : At least one lower case character is required in Administrator and User passwords
+Path                     : \Security\Administrator Tools\Password Policies
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 5050
+Value                    : *No,Yes
+CurrentValue             : No
+PossibleValues           : {No, Yes}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_34
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Are spaces allowed in Administrator and User passwords?
+Path                     : \Security\Administrator Tools\Password Policies
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 5060
+Value                    : *No,Yes
+CurrentValue             : No
+PossibleValues           : {No, Yes}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_35
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Allow User to Modify Power-on Password
+Path                     : \Security\Administrator Tools\Password Policies
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 5061
+Value                    : No,Change Only,*Change or Delete
+CurrentValue             : Change or Delete
+PossibleValues           : {No, Change Only, Change or Delete}
+Size                     : 3
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_36
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Wake on LAN Power-on Password Policy
+Path                     : \Security\Administrator Tools\Password Policies
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 5062
+Value                    : Bypass Password,*Require Password
+CurrentValue             : Require Password
+PossibleValues           : {Bypass Password, Require Password}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_37
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Prompt for Admin authentication on F9 (Boot Menu)
+Path                     : \Security\Administrator Tools\Password Policies
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 5070
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_38
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Prompt for Admin authentication on F11 (System Recovery)
+Path                     : \Security\Administrator Tools\Password Policies
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 5080
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_39
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Prompt for Admin authentication on F12 (Network Boot)
+Path                     : \Security\Administrator Tools\Password Policies
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 5090
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_40
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Prompt for Admin authentication on Capsule Update
+Path                     : \Security\Administrator Tools\Password Policies
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 5100
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_41
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : BIOS Administrator visible at Power-on Authentication
+Path                     : \Security\Administrator Tools\Password Policies
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 5110
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_42
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Force Check on Reboot
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27806
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_43
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Update BIOS via Network
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27806
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_44
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Update Source
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27802
+Value                    : *HP,Custom
+CurrentValue             : HP
+PossibleValues           : {HP, Custom}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_45
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Automatically Check for Updates
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27803
+Value                    : Daily,Weekly,*Monthly
+CurrentValue             : Monthly
+PossibleValues           : {Daily, Weekly, Monthly}
+Size                     : 3
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_46
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Automatic BIOS Update Setting
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27804
+Value                    : *Disable,Let user decide whether to install updates,Install all updates automatically,Install only important updates automatically,Download and install normal BIOS 
+                           updates automatically without prompts,Download and install important BIOS updates automatically without prompts
+CurrentValue             : Disable
+PossibleValues           : {Disable, Let user decide whether to install updates, Install all updates automatically, Install only important updates automatically...}
+Size                     : 6
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_47
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Use Proxy
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27850
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_48
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : IPv4 Configuration
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27856
+Value                    : *Automatic,Manual
+CurrentValue             : Automatic
+PossibleValues           : {Automatic, Manual}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_49
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : DNS Configuration
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27853
+Value                    : *Automatic,Manual
+CurrentValue             : Automatic
+PossibleValues           : {Automatic, Manual}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_50
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Force HTTP no-cache
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27857
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_51
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Force Default IP Configuration
+Path                     : \Advanced\Configurations
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 27858
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_52
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Prompt on Memory Size Change
+Path                     : \Advanced\Boot Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21051
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_53
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Prompt on Fixed Storage Change
+Path                     : \Advanced\Boot Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21061
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_54
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Audio Device
+Path                     : \Advanced\Built-In Device Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 24000
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_55
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Microphone
+Path                     : \Advanced\Built-In Device Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 24002
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_56
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Internal Speakers
+Path                     : \Advanced\Built-In Device Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 24003
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_57
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Headphone Output
+Path                     : \Advanced\Built-In Device Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 24004
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_58
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : SVM CPU Virtualization
+Path                     : \Advanced\Device Configuration
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21205
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_59
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : PSPP (PCIe Speed Power Policy)
+Path                     : \Advanced\System Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 23031
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_60
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : HP Application Driver
+Path                     : \Advanced\System Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 23100
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_61
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Left USB Ports
+Path                     : \Advanced\Port Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 25120
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_62
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Right USB Ports
+Path                     : \Advanced\Port Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 25121
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_63
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Right USB Port 1
+Path                     : \Advanced\Port Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 25122
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_64
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Right USB Port 2
+Path                     : \Advanced\Port Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 25123
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_65
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Right USB Port 3
+Path                     : \Advanced\Port Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 25124
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_66
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : E-label
+Path                     : \Advanced\E Label
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 28000
+Value                    : Not Present,*Present
+CurrentValue             : Present
+PossibleValues           : {Not Present, Present}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_67
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Integrated Camera
+Path                     : \Advanced\Built-In Device Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 24020
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_68
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Fingerprint Device
+Path                     : \Advanced\Built-In Device Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 24021
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_69
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Prompt on Battery Errors
+Path                     : \Advanced\Boot Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21071
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_70
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Media Card Reader
+Path                     : \Advanced\Port Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 25080
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_71
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Battery Safety Mode
+Path                     : \Advanced\Built-In Device Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 24023
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_72
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Bluetooth
+Path                     : \Advanced\Built in Device
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21900
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_73
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Wireless Network Device (WLAN)
+Path                     : \Advanced\Built in Device
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21901
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_74
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : LAN / WLAN Auto Switching
+Path                     : \Advanced\Built in Device
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21906
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_75
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Lock Wireless Button
+Path                     : \Advanced\Built in Device
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21907
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_76
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Wake on WLAN
+Path                     : \Advanced\Built in Device
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21910
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_77
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : BT Wake from S3
+Path                     : \Advanced\Built in Device
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21912
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_78
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Host Based MAC Address
+Path                     : \Advanced
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 18010
+Value                    : Disable,*System,Custom
+CurrentValue             : System
+PossibleValues           : {Disable, System, Custom}
+Size                     : 3
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_79
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Reuse Embedded LAN Address
+Path                     : \Advanced
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 18017
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_80
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Pre-boot HBMA Support
+Path                     : \Advanced
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 18014
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_81
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Windows HBMA Support
+Path                     : \Advanced
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 18015
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_82
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Single NIC Operation (Disable All Other NICs when HBMA is active on one NIC)
+Path                     : \Advanced
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 18016
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_83
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Launch Hotkeys without Fn Keypress
+Path                     : \Advanced\Device Configuration
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21204
+Value                    : Disable,Enable,*Auto
+CurrentValue             : Auto
+PossibleValues           : {Disable, Enable, Auto}
+Size                     : 3
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_84
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Swap Fn and Ctrl (Keys)
+Path                     : \Advanced\Device Configuration
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21205
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_85
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Fast Charge
+Path                     : \Advanced\Device Configuration
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21206
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_86
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : USB Type-C Connector System Software Interface (UCSI)
+Path                     : \Advanced\Device Configuration
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21208
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_87
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Enable High Resolution mode when connected to a USB-C DP alt mode dock
+Path                     : \Advanced\Device Configuration
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21209
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_88
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Special Keys mapped to Fn + keypress
+Path                     : \Advanced\Device Configuration
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21210
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_89
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Fan Always on while on AC Power
+Path                     : \Advanced\Built in Device
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21601
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_90
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Wake on LAN on DC mode
+Path                     : \Advanced\Built in Device
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21602
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_91
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Boost Converter
+Path                     : \Advanced\Built in Device
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21607
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_92
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Backlit keyboard timeout
+Path                     : \Advanced\Built in Device
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21608
+Value                    : 5 secs.,*15 secs.,30 secs.,1 min..,5 mins.,Never.
+CurrentValue             : 15 secs.
+PossibleValues           : {5 secs., 15 secs., 30 secs., 1 min.....}
+Size                     : 6
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_93
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Lid Sensor Disable
+Path                     : \Advanced\Built in Device
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21610
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_94
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Wake when Lid is Opened
+Path                     : \Advanced\Built-In Device Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 24004
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_95
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Wake When AC is Detected
+Path                     : \Advanced\Built-In Device Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 24005
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_96
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Battery Health Manager
+Path                     : \Advanced\Built-In Device Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 24005
+Value                    : Maximize my battery health,*Let HP manage my battery charging,Maximize my battery duration
+CurrentValue             : Let HP manage my battery charging
+PossibleValues           : {Maximize my battery health, Let HP manage my battery charging, Maximize my battery duration}
+Size                     : 3
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_97
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : HP will balance your battery health and battery duration (read-only)
+Path                     : \Advanced\Built-In Device Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 24006
+Value                    : *Enabled,Enabled & Activated
+CurrentValue             : Enabled
+PossibleValues           : {Enabled, Enabled & Activated}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_98
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Power On When AC Detected
+Path                     : \Advanced\Boot Options
+Prerequisites            : {SELECT * FROM HP_BIOSEnumeration WHERE Name='Power Control' AND CurrentValue='Disable'}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21001
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_99
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Power On When Lid is Opened
+Path                     : \Advanced\Boot Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21002
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_100
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Disable Battery On Next Boot
+Path                     : \Advanced\Built-In Device Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 24008
+Value                    : *Do not disable,Next shut down
+CurrentValue             : Do not disable
+PossibleValues           : {Do not disable, Next shut down}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_101
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Wake on USB
+Path                     : \Advanced\Built-In Device Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 24005
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_102
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Custom Logo
+Path                     : \Main\System Information
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 500
+Value                    : *Not Present,Present
+CurrentValue             : Not Present
+PossibleValues           : {Not Present, Present}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_103
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Power Control
+Path                     : \Advanced\Device Configuration
+Prerequisites            : {SELECT * FROM HP_BIOSEnumeration WHERE Name='Power ON When AC Detected' AND CurrentValue='Disable'}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21205
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_104
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Sunday
+Path                     : \Advanced\Scheduled Power-On
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 20010
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_105
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Monday
+Path                     : \Advanced\Scheduled Power-On
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 20011
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_106
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Tuesday
+Path                     : \Advanced\Scheduled Power-On
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 20012
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_107
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Wednesday
+Path                     : \Advanced\Scheduled Power-On
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 20013
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_108
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Thursday
+Path                     : \Advanced\Scheduled Power-On
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 20014
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_109
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Friday
+Path                     : \Advanced\Scheduled Power-On
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 20015
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_110
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Saturday
+Path                     : \Advanced\Scheduled Power-On
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 20016
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_111
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Save Custom Defaults
+Path                     : \Main
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 65532
+Value                    : *Do not Save,Save
+CurrentValue             : Do not Save
+PossibleValues           : {Do not Save, Save}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_112
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Apply Custom Defaults and Exit
+Path                     : \Main
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 65533
+Value                    : *No,Yes
+CurrentValue             : No
+PossibleValues           : {No, Yes}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_113
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Apply Factory Defaults and Exit
+Path                     : \Main
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 65534
+Value                    : *No,Yes
+CurrentValue             : No
+PossibleValues           : {No, Yes}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_114
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Configure Legacy Support and Secure Boot
+Path                     : \Security\Secure Boot Configuration
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 1
+SecurityLevel            : 1
+Sequence                 : 22010
+Value                    : Legacy Support Enable and Secure Boot Disable,*Legacy Support Disable and Secure Boot Enable,Legacy Support Disable and Secure Boot Disable
+CurrentValue             : Legacy Support Disable and Secure Boot Enable
+PossibleValues           : {Legacy Support Enable and Secure Boot Disable, Legacy Support Disable and Secure Boot Enable, Legacy Support Disable and Secure Boot Disable}
+Size                     : 3
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_115
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Import Custom Secure Boot keys
+Path                     : \Security\Secure Boot Configuration
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 1
+SecurityLevel            : 1
+Sequence                 : 22020
+Value                    : *Do Nothing,On next boot
+CurrentValue             : Do Nothing
+PossibleValues           : {Do Nothing, On next boot}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_116
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Clear Secure Boot keys
+Path                     : \Security\Secure Boot Configuration
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 1
+SecurityLevel            : 1
+Sequence                 : 22030
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_117
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Reset Secure Boot keys to factory defaults
+Path                     : \Security\Secure Boot Configuration
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 1
+SecurityLevel            : 1
+Sequence                 : 22040
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_118
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Enable MS UEFI CA key
+Path                     : \Security\Secure Boot Configuration
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 22050
+Value                    : No,*Yes
+CurrentValue             : Yes
+PossibleValues           : {No, Yes}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_119
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Custom Keys Image Verification State
+Path                     : \Security\Secure Boot Configuration
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 22060
+Value                    : *No Custom Keys,Fail,Success
+CurrentValue             : No Custom Keys
+PossibleValues           : {No Custom Keys, Fail, Success}
+Size                     : 3
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_120
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 1
+Name                     : Ready to disable MS UEFI CA Key
+Path                     : \Security\Secure Boot Configuration
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 22055
+Value                    : Not Ready,*Ready
+CurrentValue             : Ready
+PossibleValues           : {Not Ready, Ready}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_121
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Verify Boot Block on every boot
+Path                     : \Security\Security Configuration\BIOS SureStart
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 7030
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_122
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : BIOS Data Recovery Policy
+Path                     : \Security\Security Configuration\BIOS SureStart
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 7040
+Value                    : *Automatic,Manual
+CurrentValue             : Automatic
+PossibleValues           : {Automatic, Manual}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_123
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Lock BIOS Version
+Path                     : \Main\Update System BIOS
+Prerequisites            : {SELECT * FROM HP_BIOSPassword WHERE Name='Setup Password' AND IsSet=1}
+PrerequisiteSize         : 1
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 2005
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_124
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Configure Option ROM Launch Policy
+Path                     : \Advanced\Option ROM Launch Policy
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 26000
+Value                    : All Legacy,*All UEFI,All UEFI Except Video
+CurrentValue             : All UEFI
+PossibleValues           : {All Legacy, All UEFI, All UEFI Except Video}
+Size                     : 3
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_125
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : NumLock on at boot
+Path                     : \Advanced\Boot Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21040
+Value                    : *Disable,Enable
+CurrentValue             : Disable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_126
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Wake On LAN
+Path                     : \Advanced\Built-In Device Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 24001
+Value                    : Disabled,Boot to Network,*Boot to Hard Drive,Boot to Normal Boot Order
+CurrentValue             : Boot to Hard Drive
+PossibleValues           : {Disabled, Boot to Network, Boot to Hard Drive, Boot to Normal Boot Order}
+Size                     : 4
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_127
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Embedded LAN controller
+Path                     : \Advanced\Built-In Device Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 24000
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_128
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Save/Restore GPT of System Hard Drive
+Path                     : \Security\Utilities\Hard Drive Utilities
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 13010
+Value                    : *Disabled,Enabled
+CurrentValue             : Disabled
+PossibleValues           : {Disabled, Enabled}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_129
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Legacy Boot Options
+Path                     : \Advanced\Boot Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21100
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_130
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : UEFI Boot Options
+Path                     : \Advanced\Boot Options
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 0
+SecurityLevel            : 0
+Sequence                 : 21110
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_131
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : TPM Device
+Path                     : \Security\Security Configuration\TPM Embedded Security
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 1
+SecurityLevel            : 1
+Sequence                 : 6010
+Value                    : Hidden,*Available
+CurrentValue             : Available
+PossibleValues           : {Hidden, Available}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_132
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : TPM State
+Path                     : \Security\Security Configuration\TPM Embedded Security
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 1
+SecurityLevel            : 1
+Sequence                 : 6020
+Value                    : Disable,*Enable
+CurrentValue             : Enable
+PossibleValues           : {Disable, Enable}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_133
+PSComputerName           : 
+
+DisplayInUI              : 1
+IsReadOnly               : 0
+Name                     : Clear TPM
+Path                     : \Security\Security Configuration\TPM Embedded Security
+Prerequisites            : 
+PrerequisiteSize         : 0
+RequiresPhysicalPresence : 1
+SecurityLevel            : 1
+Sequence                 : 6030
+Value                    : *No,On next boot
+CurrentValue             : No
+PossibleValues           : {No, On next boot}
+Size                     : 2
+Active                   : True
+InstanceName             : ACPI\PNP0C14\1_134
+PSComputerName           : 
+
+
+
