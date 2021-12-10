@@ -9,9 +9,10 @@
 # Define Variables
 $Setting = "Configure Legacy Support and Secure Boot"
 $ExpectedValue = "Legacy Support Disable and Secure Boot Enable"
+$BIOSPwd = ""
 
 try {
-    Set-HPBIOSSettingValue -name $Setting -Value $ExpectedValue
+    Set-HPBIOSSettingValue -name $Setting -Value $ExpectedValue -Password $BIOSPwd
     #Suspend bitlocker otherwise you'll be prompted for recovery keys
     Suspend-BitLocker -MountPoint "C:"
 
