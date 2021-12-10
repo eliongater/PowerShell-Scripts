@@ -12,6 +12,8 @@ $ExpectedValue = "Legacy Support Disable and Secure Boot Enable"
 
 try {
     Set-HPBIOSSettingValue -name $Setting -Value $ExpectedValue
+    #Suspend bitlocker otherwise you'll be prompted for recovery keys
+    Suspend-BitLocker -MountPoint "C:"
 
     $result = Get-HPBIOSSettingValue -name $Setting
         
