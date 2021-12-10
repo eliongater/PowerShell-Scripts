@@ -9,9 +9,10 @@
 # Define Variables
 $Setting = "Bluetooth"
 $ExpectedValue = "Disable"
+$BIOSPwd = ""
 
 try {
-    Set-HPBIOSSettingValue -name $Setting -Value $ExpectedValue
+    Set-HPBIOSSettingValue -name $Setting -Value $ExpectedValue -Password $BIOSPwd
 
     $result = Get-HPBIOSSettingValue -name $Setting
         
