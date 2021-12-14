@@ -1,3 +1,6 @@
+#See https://docs.microsoft.com/en-us/microsoftteams/rooms/xml-config-file
+#and also see https://blog.chiffers.com/2020/11/16/managing-a-microsoft-teams-room-mtr-device-with-intune-part-1-theme/
+
 $BackgroundFile = "C:\Users\Skype\AppData\Local\Packages\Microsoft.SkypeRoomSystem_8wekyb3d8bbwe\LocalState\mtr-wallpaper.jpg"
 $ConfigFile = "C:\Users\Skype\AppData\Local\Packages\Microsoft.SkypeRoomSystem_8wekyb3d8bbwe\LocalState\SkypeSettings.xml"
 
