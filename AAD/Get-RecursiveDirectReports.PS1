@@ -17,5 +17,7 @@ $domain = ""
 $UPN = "$User@$domain"
 $Filename = "$User Reports.CSV"
 
+Connect-AzureAD
+
 $DirectReports = Get-RecursiveDirectReports($UPN)
 $DirectReports | Export-csv $Filename
