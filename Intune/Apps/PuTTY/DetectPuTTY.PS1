@@ -1,2 +1,5 @@
 $appID = "XPFNZKSKLBP7RJ"
-$InstalledApps = winget list
+[String]$CheckForApp = winget list --id $appID
+If($CheckForApp.contains($appid)){
+    write-host "App is installed"
+}
