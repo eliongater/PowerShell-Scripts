@@ -65,7 +65,7 @@ $UninstallCommandLine = "winget uninstall --id '$appID' -h --accept-package-agre
 $UninstallCommandLine | Out-File -FilePath $UninstallScript
 
 #Create detection script
-"If((Out-String -InputObject (winget list --id '$appID')).contains('$appid')){write-host 'App is installed'}" | Out-File -FilePath $DetectionScript
+"If((Out-String -InputObject (winget list --id '$appID' --accept-package-agreements)).contains('$appid')){write-host 'App is installed'}" | Out-File -FilePath $DetectionScript
 
 #Create intune.win file
 & .\IntuneWinAppUtil.exe -c "$SourceFolder" -s "$InstallScriptName" -o "$OutputFolder" -q
