@@ -6,6 +6,15 @@ $GroupID = ""
 $URL = "https://apps.microsoft.com/store/detail/$appID"
 $LogoFileName = "Logo.png"
 $Path = (Get-Location).path
+$Winget = 'C:\Program Files\WindowsApps\Microsoft.DesktopAppInstaller_*_x64__8wekyb3d8bbwe\winget.exe'
+$WingetLocal
+#If running as admin get the full path to winget, else just return winget as a standard user can resolve that
+If([bool](([System.Security.Principal.WindowsIdentity]::GetCurrent()).groups -match "S-1-5-32-544")){
+    $WingetLocal = (Resolve-Path "C:\Program Files\WindowsApps\Microsoft.DesktopAppInstaller_*_x64__8wekyb3d8bbwe\winget.exe")[-1].path
+} else {
+    $WingetLocal = "winget"
+}
+
 [String]$Description
 [String]$Title
 
@@ -21,10 +30,10 @@ $WebResponse = Invoke-WebRequest $URL
 $Description = ($WebResponse.AllElements | Where-Object { $_.Property -like "og:description" }).Content
 #Get Title
 $Title = ($WebResponse.AllElements | Where-Object { $_.Property -like "og:title" }).Content
-$Title = $Title.trim("Get $").trim(" from the Microsoft Store")
+$Title = $Title.trimstart("Get $").trimend("the Microsoft Store").trimend(" from")
 
 #Get Publisher
-$AppDetails = winget show --id $AppID
+$AppDetails = & $WingetLocal show --id $AppID
 $Publisher = ($AppDetails -like "Publisher:*").trim("Publisher: ")
 
 #Modify Variables
@@ -57,15 +66,15 @@ $ImageURL = ($WebResponse.AllElements | Where-Object { $_.Property -like "og:ima
 Invoke-WebRequest -Uri $ImageURL -OutFile $LogoFileName
 
 #Create install script
-$InstallCommandLine = "winget install --id '$appID' -h --accept-package-agreements"
+$InstallCommandLine = "&(Resolve-Path `"$winget`")[-1].path install --id '$appID' --silent --accept-package-agreements --accept-source-agreements"
 $InstallCommandLine | Out-File -FilePath $InstallScript
 
 #Create uninstall script
-$UninstallCommandLine = "winget uninstall --id '$appID' -h --accept-package-agreements"
+$UninstallCommandLine = "&(Resolve-Path `"$winget`")[-1].path uninstall --id '$appID' -h --accept-package-agreements"
 $UninstallCommandLine | Out-File -FilePath $UninstallScript
 
 #Create detection script
-"If((Out-String -InputObject (winget list --id '$appID' --accept-package-agreements)).contains('$appid')){write-host 'App is installed'}" | Out-File -FilePath $DetectionScript
+"If((Out-String -InputObject (&(Resolve-Path `"$winget`")[-1].path list --id '$appID' --accept-package-agreements)).contains('$appid')){write-host 'App is installed'}" | Out-File -FilePath $DetectionScript
 
 #Create intune.win file
 & .\IntuneWinAppUtil.exe -c "$SourceFolder" -s "$InstallScriptName" -o "$OutputFolder" -q
@@ -81,7 +90,10 @@ $DetectionRule = New-IntuneWin32AppDetectionRuleScript  -ScriptFile "$DetectionS
 $RequirementRule = New-IntuneWin32AppRequirementRule -Architecture All -MinimumSupportedWindowsRelease 1909
 
 #Upload to Intune
-$PublishedApp = Add-IntuneWin32App -FilePath $IntuneWinFile -DisplayName "$DisplayName" -Description "$Description" -Publisher "$Publisher" -InstallExperience system -RestartBehavior suppress -DetectionRule $DetectionRule -RequirementRule $RequirementRule -InstallCommandLine $InstallCommandLine -UninstallCommandLine $UninstallCommandLine -Icon $Icon -Verbose
+$Win32InstallCommandLine = "powershell.exe -windowstyle hidden -executionpolicy bypass -command .\$InstallScriptName"
+$Win32UninstallCommandLine = "powershell.exe -windowstyle hidden -executionpolicy bypass -command .\$UnInstallScriptName"
+
+$PublishedApp = Add-IntuneWin32App -FilePath $IntuneWinFile -DisplayName "$DisplayName" -Description "$Description" -Publisher "$Publisher" -InstallExperience system -RestartBehavior suppress -DetectionRule $DetectionRule -RequirementRule $RequirementRule -InstallCommandLine $Win32InstallCommandLine -UninstallCommandLine $Win32UninstallCommandLine -Icon $Icon -Verbose
 
 #Get Group ID
 
