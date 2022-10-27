@@ -1,5 +1,10 @@
+
+
+function PackageStoreApp {
+    param (
+        $AppID
+    )
 #Set Variables
-$AppID = "XPFNZKSKLBP7RJ"
 $TenantName = ""
 $GroupName = ""
 $GroupID = ""
@@ -70,11 +75,11 @@ $InstallCommandLine = "&(Resolve-Path `"$winget`")[-1].path install --id '$appID
 $InstallCommandLine | Out-File -FilePath $InstallScript
 
 #Create uninstall script
-$UninstallCommandLine = "&(Resolve-Path `"$winget`")[-1].path uninstall --id '$appID' -h --accept-package-agreements"
+$UninstallCommandLine = "&(Resolve-Path `"$winget`")[-1].path uninstall --id '$appID' -h --accept-source-agreements"
 $UninstallCommandLine | Out-File -FilePath $UninstallScript
 
 #Create detection script
-"If((Out-String -InputObject (&(Resolve-Path `"$winget`")[-1].path list --id '$appID' --accept-package-agreements)).contains('$appid')){write-host 'App is installed'}" | Out-File -FilePath $DetectionScript
+"If((Out-String -InputObject (&(Resolve-Path `"$winget`")[-1].path list --id '$appID' --accept-source-agreements)).contains('$appid')){write-host 'App is installed'}" | Out-File -FilePath $DetectionScript
 
 #Create intune.win file
 & .\IntuneWinAppUtil.exe -c "$SourceFolder" -s "$InstallScriptName" -o "$OutputFolder" -q
@@ -90,8 +95,8 @@ $DetectionRule = New-IntuneWin32AppDetectionRuleScript  -ScriptFile "$DetectionS
 $RequirementRule = New-IntuneWin32AppRequirementRule -Architecture All -MinimumSupportedWindowsRelease 1909
 
 #Upload to Intune
-$Win32InstallCommandLine = "powershell.exe -windowstyle hidden -executionpolicy bypass -command .\$InstallScriptName"
-$Win32UninstallCommandLine = "powershell.exe -windowstyle hidden -executionpolicy bypass -command .\$UnInstallScriptName"
+$Win32InstallCommandLine = "powershell.exe -windowstyle hidden -executionpolicy bypass -file .\$InstallScriptName"
+$Win32UninstallCommandLine = "powershell.exe -windowstyle hidden -executionpolicy bypass -file .\$UnInstallScriptName"
 
 $PublishedApp = Add-IntuneWin32App -FilePath $IntuneWinFile -DisplayName "$DisplayName" -Description "$Description" -Publisher "$Publisher" -InstallExperience system -RestartBehavior suppress -DetectionRule $DetectionRule -RequirementRule $RequirementRule -InstallCommandLine $Win32InstallCommandLine -UninstallCommandLine $Win32UninstallCommandLine -Icon $Icon -Verbose
 
@@ -103,3 +108,15 @@ $AppID = $PublishedApp.id
 Add-IntuneWin32AppAssignmentGroup  -ID "$AppID" -include -GroupID "$GroupID" -Intent "available"
 
 #Done!
+}
+
+$AppIDs = "XPFNZKSKLBP7RJ","9NZVDKPMR9RD"#,"9NBLGGH51P19","9WZDNCRFJ2KJ"
+$AppIDs = "9NBLGGH51P19",""#"9WZDNCRFJ2KJ"
+#$AppIDs = "9WZDNCRFJ2KJ",""
+ForEach($App in $AppIDs){
+    PackageStoreApp $App
+    start-sleep -s 10
+}
+
+
+Write-Host "done"
