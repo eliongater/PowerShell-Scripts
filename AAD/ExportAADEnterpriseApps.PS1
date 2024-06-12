@@ -28,7 +28,7 @@ pecuniary loss) arising out of the use of or inability to use the sample or docu
 Microsoft has been advised of the possibility of such damages.
 #################################################################################>
 
-Connect-MgGraph -Scopes 'Application.ReadWrite.All'
+Connect-MgGraph -Scopes 'Application.ReadWrite.All','Group.Read.All'
 
 $Messages = @{
     DurationNotice = @{
@@ -65,7 +65,24 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
     $ServicePrincipalType = $EnterpriseApp.ServicePrincipalType
     $assignments = Get-MgServicePrincipalAppRoleAssignedTo -ServicePrincipalId $EnterpriseApp.Id -all
     $assignments = $assignments.PrincipalDisplayName
-    if($assignments -ne $null){
+    $assignmentGroupMembers = $null
+    foreach($assignment in $assignments){
+        $assignment = $assignment.replace("'","''")
+        $group = Get-MgGroup -Filter "DisplayName eq '$assignment'"
+        if($null -ne $group){
+            $groupMembers = Get-MgGroupMemberAsUser -GroupId $group.Id
+            if($null -ne $groupMembers){
+                $groupMembers = $groupMembers.DisplayName
+                if($null -ne $assignmentGroupMembers){
+                    $assignmentGroupMembers = $assignmentGroupMembers + [system.String]::Join("; ",$groupMembers)
+                } else {
+                    $assignmentGroupMembers = [system.String]::Join("; ",$groupMembers)
+                }
+                
+            }
+        }
+    }
+    if($null -ne $assignments){
         $assignments = [system.String]::Join("; ",$assignments)
     }
     $AssignmentRequired = $EnterpriseApp.AppRoleAssignmentRequired
@@ -83,6 +100,7 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
     ############################################
     $Logs += [PSCustomObject]@{
         'ApplicationName'        = $AppName
+        'ID'                     = $AppID
         'ApplicationID'          = $ApplID
         'ServicePrincipalType'   = $ServicePrincipalType
         'Secret Name'            = $Null
@@ -96,6 +114,7 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
         'NotificationEmailAddresses' = $Null
         'Assignments'            = $assignments
         'AssignmentRequired'     = $AssignmentRequired
+        'Assignment Group Members' = $assignmentGroupMembers
         'LoginURL'               = $LoginURL
     }
     ############################################
@@ -119,6 +138,7 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
 
         $Logs += [PSCustomObject]@{
             'ApplicationName'        = $AppName
+            'ID'                     = $AppID
             'ApplicationID'          = $ApplID
             'ServicePrincipalType'   = $ServicePrincipalType
             'Secret Name'            = $SecretName
@@ -132,6 +152,7 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
             'NotificationEmailAddresses' = $Null
             'Assignments'            = $Null
             'AssignmentRequired'     = $Null
+            'Assignment Group Members' = $Null
             'LoginURL'               = $Null
         }
     }
@@ -157,6 +178,7 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
 
         $Logs += [PSCustomObject]@{
             'ApplicationName'        = $AppName
+            'ID'                     = $AppID
             'ApplicationID'          = $ApplID
             'ServicePrincipalType'   = $ServicePrincipalType
             'Secret Name'            = $Null
@@ -168,6 +190,129 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
             'NotificationEmailAddresses' = $NotificationEmailAddresses
             'Assignments'            = $Null
             'AssignmentRequired'     = $Null
+            'Assignment Group Members' = $Null
+            'LoginURL'               = $Null
+        }
+    }
+}
+
+$Applications = Get-MgApplication -All
+$Count = 0
+
+foreach ($App in $Applications) {
+    $Completed = ($count/$Applications.count) * 100
+    $count ++
+    # Use Write-Progress to output a progress bar.
+    # The Activity and Status parameters create the first and second lines of the progress bar
+    # heading, respectively.
+    Write-Progress -Activity "Getting App registrations" -Status "Progress:" -PercentComplete $Completed
+    $AppName = $App.DisplayName
+    $AppID   = $App.Id
+    $ApplID  = $App.AppId
+
+    $ServicePrincipalType = "App Registraion"
+
+    $AppCreds = Get-MgApplication -ApplicationId $AppID |
+        Select-Object PasswordCredentials, KeyCredentials
+
+    $Secrets = $AppCreds.PasswordCredentials
+    $Certs   = $AppCreds.KeyCredentials
+
+    ############################################
+    $Logs += [PSCustomObject]@{
+        'ApplicationName'        = $AppName
+        'ID'                     = $AppID
+        'ApplicationID'          = $ApplID
+        'ServicePrincipalType'   = $ServicePrincipalType
+        'Secret Name'            = $Null
+        'Secret Start Date'      = $Null
+        'Secret End Date'        = $Null
+        'Certificate Name'       = $Null
+        'Certificate Start Date' = $Null
+        'Certificate End Date'   = $Null
+        'Owner'                  = $Null
+        'Owner_ObjectID'         = $Null
+        'NotificationEmailAddresses' = $Null
+        'Assignments'            = $Null
+        'AssignmentRequired'     = $Null
+        'Assignment Group Members' = $Null
+        'LoginURL'               = $Null
+    }
+    ############################################
+    foreach ($Secret in $Secrets) {
+        $StartDate  = $Secret.StartDateTime
+        $EndDate    = $Secret.EndDateTime
+        $SecretName = $Secret.DisplayName
+
+        $Owner    = Get-MgApplicationOwner -ApplicationId $App.Id
+        $Username = $Owner.AdditionalProperties.userPrincipalName -join ';'
+        $OwnerID  = $Owner.Id -join ';'
+
+        if ($null -eq $Owner.AdditionalProperties.userPrincipalName) {
+            $Username = @(
+                $Owner.AdditionalProperties.displayName
+                '**<This is an Application>**'
+            ) -join ' '
+        }
+        if ($null -eq $Owner.AdditionalProperties.displayName) {
+            $Username = '<<No Owner>>'
+        }
+
+        $Logs += [PSCustomObject]@{
+            'ApplicationName'        = $AppName
+            'ID'                     = $AppID
+            'ApplicationID'          = $ApplID
+            'ServicePrincipalType'   = $ServicePrincipalType
+            'Secret Name'            = $SecretName
+            'Secret Start Date'      = $StartDate
+            'Secret End Date'        = $EndDate
+            'Certificate Name'       = $Null
+            'Certificate Start Date' = $Null
+            'Certificate End Date'   = $Null
+            'Owner'                  = $Username
+            'Owner_ObjectID'         = $OwnerID
+            'NotificationEmailAddresses' = $Null
+            'Assignments'            = $Null
+            'AssignmentRequired'     = $Null
+            'Assignment Group Members' = $Null
+            'LoginURL'               = $Null
+        }
+    }
+
+    foreach ($Cert in $Certs) {
+        $StartDate = $Cert.StartDateTime
+        $EndDate   = $Cert.EndDateTime
+        $CertName  = $Cert.DisplayName
+
+        $Owner    = Get-MgApplicationOwner -ApplicationId $App.Id
+        $Username = $Owner.AdditionalProperties.userPrincipalName -join ';'
+        $OwnerID  = $Owner.Id -join ';'
+
+        if ($null -eq $Owner.AdditionalProperties.userPrincipalName) {
+            $Username = @(
+                $Owner.AdditionalProperties.displayName
+                '**<This is an Application>**'
+            ) -join ' '
+        }
+        if ($null -eq $Owner.AdditionalProperties.displayName) {
+            $Username = '<<No Owner>>'
+        }
+
+        $Logs += [PSCustomObject]@{
+            'ApplicationName'        = $AppName
+            'ID'                     = $AppID
+            'ApplicationID'          = $ApplID
+            'ServicePrincipalType'   = $ServicePrincipalType
+            'Secret Name'            = $Null
+            'Certificate Name'       = $CertName
+            'Certificate Start Date' = $StartDate
+            'Certificate End Date'   = $EndDate
+            'Owner'                  = $Username
+            'Owner_ObjectID'         = $OwnerID
+            'NotificationEmailAddresses' = $Null
+            'Assignments'            = $Null
+            'AssignmentRequired'     = $Null
+            'Assignment Group Members' = $Null
             'LoginURL'               = $Null
         }
     }
