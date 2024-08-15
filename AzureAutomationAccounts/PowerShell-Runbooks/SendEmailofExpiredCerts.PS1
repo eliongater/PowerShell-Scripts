@@ -140,18 +140,53 @@ function Send-Email {
 }
 
 
+
+#Potential for webhooks to be added later?
+#https://github.com/bwya77/PSAlerts/blob/main/Azure/AppSecretExpiration_SendtoTeams.ps1
+
 #Functions end
 #**************************************************************************************
+
 #Initialise variables
+$AlertingInterval = 30
+$AlertDate = (get-date).AddDays(-1*$AlertingInterval)
+$Today = get-date
+
+$PriorAlerts = @{}
+#ID and Date last alerted on
+#$PriorAlerts.add('71078dec-d452-4c8a-9251-97f070faa3a6','16/08/2024')
+try
+{
+    $PriorAlerts = Get-AutomationVariable -name "PriorAlerts"
+}
+catch {
+    Write-Error -Message $_.Exception
+    throw $_.Exception
+}
 
 #Test email functionality
 Send-Email -MsgBody "It works?"
+
+#Remove old prior alerts from prior alert list
+$AlertsToRemove = @()
+foreach ($PriorAlert in $PriorAlerts.GetEnumerator()){
+    $DateToCompare = get-date $PriorAlert.value
+    if ($DateToCompare -lt $AlertDate) {
+        $AlertsToRemove += $PriorAlert.key
+    }
+}
+#Note, cannot modify a hashtable whilst it is being enumerated. 
+foreach ($AlertToRemove in $AlertsToRemove){
+    $PriorAlerts.Remove($AlertToRemove)
+}
 
 #Get expiring App registraion (Get-MgApplication -all) certs and secrets
 
 #Get expiring Enterprise (Get-MgServicePrincipal -all) app certs
 
 #Send email per expiring cert/secret
+
+
 
 #Send-Email -MsgBody
 
