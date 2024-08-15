@@ -148,6 +148,9 @@ function Send-Email {
 #**************************************************************************************
 
 #Initialise variables
+$ReportMailTo = "elijah.smart@datacom.com"
+
+$ExpirationThreshold = 60
 $AlertingInterval = 30
 $AlertDate = (get-date).AddDays(-1*$AlertingInterval)
 $Today = get-date
@@ -160,12 +163,13 @@ try
     $PriorAlerts = Get-AutomationVariable -name "PriorAlerts"
 }
 catch {
+    Write-Error "Failed to retrive prior alerts"
     Write-Error -Message $_.Exception
     throw $_.Exception
 }
 
 #Test email functionality
-Send-Email -MsgBody "It works?"
+#Send-Email -MsgBody "It works?"
 
 #Remove old prior alerts from prior alert list
 $AlertsToRemove = @()
@@ -185,10 +189,37 @@ foreach ($AlertToRemove in $AlertsToRemove){
 #Get expiring Enterprise (Get-MgServicePrincipal -all) app certs
 
 #Send email per expiring cert/secret
+foreach ($Expiration in $Expirations){
+    $EmailBody = "$($Expiration.ID),$($Expiration.Name),$($Expiration.Date)"
+    Send-Email -MsgBody $EmailBody
+}
+
+#Add sent alerts to Prior Alerts
+foreach ($Expiration in $Expirations){
+    $PriorAlerts.Add($($Expiration.ID),$Today)
+}
 
 
+#Update Prior Alerts
+"Updating PriorAlerts variable"
+try
+{
+    Set-AutomationVariable -Name "PriorAlerts" -Value $PriorAlerts
+}
+catch {
+    Write-Error "Failed to update prior alerts"
+    Write-Error -Message $_.Exception
+    throw $_.Exception
+}
 
-#Send-Email -MsgBody
 
 #Send report email
-#Will be added later
+$ReportEmailBody
+foreach ($Expiration in $Expirations){
+    $ReportEmailBody = "$($Expiration.ID),$($Expiration.Name),$($Expiration.Date)`n"
+}
+#Remove last new line
+$ReportEmailBody = $ReportEmailBody -replace ".$"
+
+#Send report email
+Send-Email -MsgBody $ReportEmailBody -MailTo $ReportMailTo
