@@ -1,4 +1,6 @@
 #Source: https://www.thelazyadministrator.com/2023/12/16/automated-alerts-on-azure-entra-id-application-secret-expirations/
+#Run this as your admin account through an interactive PowerShell
+
 
 #Connect to Azure
 Connect-AzAccount
