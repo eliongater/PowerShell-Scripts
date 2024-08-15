@@ -13,6 +13,7 @@ try
 {
     "Logging in to Azure..."
     Connect-MgGraph -Identity
+    Connect-AzAccount -Identity
 }
 catch {
     Write-Error -Message $_.Exception
