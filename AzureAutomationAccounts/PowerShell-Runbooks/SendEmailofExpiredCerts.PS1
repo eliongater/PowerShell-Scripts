@@ -360,7 +360,7 @@ catch {
 #Send report email
 $ReportEmailBody
 foreach ($Expiration in $Expirations){
-    $ReportEmailBody = "$($Expiration.ObjectID),$($Expiration.AppName),$($Expiration.Date)`n"
+    $ReportEmailBody += "$($Expiration.ObjectID),$($Expiration.AppName),$($Expiration.Date)`n"
 }
 #Remove last new line
 $ReportEmailBody = $ReportEmailBody -replace ".$"
