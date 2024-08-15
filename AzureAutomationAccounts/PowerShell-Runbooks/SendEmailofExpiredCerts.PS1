@@ -17,13 +17,14 @@
         https://stackoverflow.com/questions/69080522/send-mail-via-microsoft-graph-as-application-any-user
         https://learn.microsoft.com/en-us/graph/permissions-reference
         https://woshub.com/send-email-microsoft-graph-api-powershell/
+        https://learn.microsoft.com/en-us/powershell/module/microsoft.graph.users.actions/send-mgusermail?view=graph-powershell-1.0
 
 
 
 
         .NOTES
         AUTHOR: Elijah Smart
-        LASTEDIT: Aug 15, 2024
+        LASTEDIT: Aug 16, 2024
         VERSION: 0.1
 
 
@@ -46,7 +47,74 @@ catch {
     Write-Error -Message $_.Exception
     throw $_.Exception
 }
+#Initialise Global variables
+$Global:MailTo = "elijah.smart@datacom.com"
+$Global:MailFrom = "elijah.smart@now4you.nz"
 
+
+#Define any functions
+function Send-Email {
+    param (
+        [system.string]$MailTo = $Global:MailTo,
+        [system.string]$MailFrom = $Global:MailFrom,
+        [system.string]$Subject = "App Secret Expiration Notice",
+        [system.string]$Body ="",
+        [system.string]$Attachment
+    )
+    #Initialise Variables
+    $Message
+
+    #If a file path to an attachment is passed as a parameter, then send with an attachment, else send without one
+    if ($PSBoundParameters.ContainsKey('Attachment')) {
+        $AttachmentContentBytes = [System.IO.File]::ReadAllBytes($Attachment)
+        $AttachmentBase64 = [System.Convert]::ToBase64String($AttachmentContentBytes)
+        $Message = @{
+            Subject = "$Subject"
+            Body = @{
+                ContentType = "HTML"
+                Content = $msgBody
+                }
+            ToRecipients = @(
+                @{
+                    EmailAddress = @{
+                    Address = $MailTo
+                    }
+                }
+                )
+                Attachments = @(
+            @{
+                "@odata.type" = "#microsoft.graph.fileAttachment"
+                Name = (Split-Path $Attachment -Leaf)
+                ContentType = "application/octet-stream"
+                ContentBytes = $AttachmentBase64
+                }
+            )
+        }
+    } else {
+        $Message = @{
+            Subject = "$Subject"
+            Body = @{
+                ContentType = "HTML"
+                Content = $msgBody
+                }
+            ToRecipients = @(
+                @{
+                    EmailAddress = @{
+                    Address = $MailTo
+                    }
+                }
+            )
+        }
+
+    }
+
+    #Send email
+    Send-MgUserMail -UserId $MailFrom -Message $Message
+}
+
+
+#Functions end
+#**************************************************************************************
 #Initialise variables
 
 #Get expiring App registraion (Get-MgApplication -all) certs and secrets
@@ -56,3 +124,4 @@ catch {
 #Send email per expiring cert/secret
 
 #Send report email
+#For later...
