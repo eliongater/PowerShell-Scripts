@@ -37,7 +37,7 @@
 try
 {
     "Logging in to Microsoft Graph"
-    Connect-MgGraph -scopes 'Application.Read.All','mail.send' -Identity
+    Connect-MgGraph -Identity
     "Logged into Microsoft Graph"
 }
 catch {
