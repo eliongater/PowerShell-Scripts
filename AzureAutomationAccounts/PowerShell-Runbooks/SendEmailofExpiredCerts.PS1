@@ -2,6 +2,9 @@
     .DESCRIPTION
         This PowerShell script is intended to be run via an Azure Automation account runbook. This script will query all Enterprise apps and App registrations and then send an email per expired certificate and secret to your ticketing system to generate a ticket.
         Note, you must import the Microsoft.Graph PowerShell module to your automation account first.
+        This will also utilise Azure Automation (AA) variables to store a list of 30* days worth of by using a hash table. First we will retrive the AA variable containing the hash table, then any expiring app alert already in the hash table older than 30 days will be deleted, if it is newer than 30 days it will not be alerted on again. 
+
+
         You must also assign the system assigned identity of your automation account the relevant permissions, in this case mail.send and Application.Read.All
 
         .References:
@@ -19,6 +22,10 @@
         https://woshub.com/send-email-microsoft-graph-api-powershell/
         https://learn.microsoft.com/en-us/powershell/module/microsoft.graph.users.actions/send-mgusermail?view=graph-powershell-1.0
 
+        Automation account:
+        https://learn.microsoft.com/en-us/azure/automation/shared-resources/variables?tabs=azure-powershell
+        https://learn.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-hashtable?view=powershell-7.4
+
 
 
 
@@ -33,7 +40,7 @@
 "Please enable appropriate RBAC permissions to the system identity of this automation account. Otherwise, the runbook may fail..."
 
 
-#Connecting to MgGraph and Azure (this may be surplus to requirements)
+#Connecting to MgGraph
 try
 {
     "Logging in to Microsoft Graph"
@@ -44,6 +51,8 @@ catch {
     Write-Error -Message $_.Exception
     throw $_.Exception
 }
+
+#Connecting to Azure
 try
 {
     "Logging in to Azure"
@@ -147,4 +156,4 @@ Send-Email -MsgBody "It works?"
 #Send-Email -MsgBody
 
 #Send report email
-#For later...
+#Will be added later
