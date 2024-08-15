@@ -37,8 +37,8 @@
 try
 {
     "Logging in to Microsoft Graph"
-    Connect-MgGraph -Identity
-    "Logged into icrosoft Graph"
+    Connect-MgGraph -scopes 'Application.Read.All','mail.send' -Identity
+    "Logged into Microsoft Graph"
     "Logging in to Azure"
     Connect-AzAccount -Identity
     "Logged in to Azure"
@@ -123,6 +123,8 @@ function Send-Email {
 #Get expiring Enterprise (Get-MgServicePrincipal -all) app certs
 
 #Send email per expiring cert/secret
+
+Send-Email -MsgBody
 
 #Send report email
 #For later...
