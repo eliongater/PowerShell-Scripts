@@ -42,7 +42,7 @@ $graph = Get-MgServicePrincipal -Filter "AppId eq '00000003-0000-0000-c000-00000
 
 foreach ($graphScope in $graphScopes) {
     # Get the graph app role for the scope that we want to grant
-    $graphAppRole = $graph.AppRoles | ? Value -eq $graphScope
+    $graphAppRole = $graph.AppRoles | Where-Object Value -eq $graphScope
 
     # Prepare the app role assignment
     $appRoleAssignment = @{
