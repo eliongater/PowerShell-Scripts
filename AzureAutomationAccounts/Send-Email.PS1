@@ -55,5 +55,14 @@ function Send-Email {
     }
 
     #Send email
-    Send-MgUserMail -UserId $MailFrom -Message $Message
+    try
+    {
+        "Sending email from $MailFrom to $MailTo, with the subject $Subject"
+        Send-MgUserMail -UserId $MailFrom -Message $Message
+    }
+    catch {
+        Write-Error -Message $_.Exception
+        throw $_.Exception
+    }
+    
 }
