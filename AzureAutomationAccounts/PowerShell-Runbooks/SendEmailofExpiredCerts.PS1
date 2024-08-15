@@ -198,11 +198,6 @@ catch [System.ArgumentNullException]{
         throw $_.Exception
     }
 }
-catch{
-    Write-Error "Failed to find prior alerts variable"
-    Write-Error -Message $_.Exception
-    throw $_.Exception
-}
 finally{
     try{
         $PriorAlerts = Get-AutomationVariable -name "PriorAlerts"
