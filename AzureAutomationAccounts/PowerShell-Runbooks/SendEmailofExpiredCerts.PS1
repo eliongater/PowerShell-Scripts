@@ -25,6 +25,7 @@
         Automation account variables:
         https://learn.microsoft.com/en-us/azure/automation/shared-resources/variables?tabs=azure-powershell
         https://learn.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-hashtable?view=powershell-7.4
+        https://omgdebugging.com/2019/02/25/convert-a-psobject-to-a-hashtable-in-powershell/
 
 
 
@@ -32,7 +33,7 @@
         .NOTES
         AUTHOR: Elijah Smart
         LASTEDIT: Aug 16, 2024
-        VERSION: 1.1
+        VERSION: 1.2
 
 
 #>
@@ -139,6 +140,26 @@ function Send-Email {
     
 }
 
+function ConvertTo-HashtableFromPsCustomObject { 
+    param ( 
+        [Parameter(  
+            Position = 0,   
+            Mandatory = $true,   
+            ValueFromPipeline = $true,  
+            ValueFromPipelineByPropertyName = $true  
+        )] [object] $psCustomObject 
+    );
+    Write-Verbose "[Start]:: ConvertTo-HashtableFromPsCustomObject"
+
+    $output = @{}; 
+    $psCustomObject | Get-Member -MemberType *Property | % {
+        $output.($_.name) = $psCustomObject.($_.name); 
+    } 
+    
+    Write-Verbose "[Exit]:: ConvertTo-HashtableFromPsCustomObject"
+
+    return  $output;
+}
 
 
 #Potential for webhooks to be added later?
@@ -177,9 +198,27 @@ catch [System.ArgumentNullException]{
         throw $_.Exception
     }
 }
+catch{
+    Write-Error "Failed to find prior alerts variable"
+    Write-Error -Message $_.Exception
+    throw $_.Exception
+}
 finally{
     try{
         $PriorAlerts = Get-AutomationVariable -name "PriorAlerts"
+    }
+    catch [System.Management.Automation.ArgumentTransformationMetadataException]{
+        Write-Warning "Problem retrieving prior alerts as a hash table, will attempt to convert."
+        Write-Warning -Message $_.Exception
+        try{
+            $PSObjectPriorAlerts = Get-AutomationVariable -name "PriorAlerts"
+            $PriorAlerts = ConvertTo-HashtableFromPsCustomObject -psCustomObject $PSObjectPriorAlerts
+        }
+        catch {
+            Write-Error "Failed to convert prior alerts from powershell custom object"
+            Write-Error -Message $_.Exception
+            throw $_.Exception
+        }
     }
     catch {
         Write-Error "Failed to retrive prior alerts"
