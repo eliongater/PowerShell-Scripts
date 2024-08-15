@@ -39,6 +39,13 @@ try
     "Logging in to Microsoft Graph"
     Connect-MgGraph -scopes 'Application.Read.All','mail.send' -Identity
     "Logged into Microsoft Graph"
+}
+catch {
+    Write-Error -Message $_.Exception
+    throw $_.Exception
+}
+try
+{
     "Logging in to Azure"
     Connect-AzAccount -Identity
     "Logged in to Azure"
@@ -47,6 +54,7 @@ catch {
     Write-Error -Message $_.Exception
     throw $_.Exception
 }
+
 #Initialise Global variables
 $Global:MailTo = "elijah.smart@datacom.com"
 $Global:MailFrom = "elijah.smart@now4you.nz"
