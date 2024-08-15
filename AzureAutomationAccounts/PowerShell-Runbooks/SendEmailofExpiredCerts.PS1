@@ -32,7 +32,7 @@
         .NOTES
         AUTHOR: Elijah Smart
         LASTEDIT: Aug 16, 2024
-        VERSION: 1.0
+        VERSION: 1.1
 
 
 #>
@@ -257,11 +257,11 @@ foreach ($App in $Applications) {
     [Array]::Sort($EndDates)
 
     #If closest expiration is in the x day period we care about
-    if($EndDates[0] -lt $ExpirationDateToCheck){
+    if($EndDates[0] -lt $ExpirationDateToCheck -and $EndDates.Length -gt 0){
         ############################################
         $Expirations += [PSCustomObject]@{
             'AppName'                = $AppName
-            'ID'                     = $ObjectID
+            'ObjectID'                     = $ObjectID
             'ApplicationID'          = $AppID
             'Date'                   = $EndDates[0]
         }
@@ -317,11 +317,11 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
     [Array]::Sort($EndDates)
 
     #If closest expiration is in the x day period we care about
-    if($EndDates[0] -lt $ExpirationDateToCheck){
+    if($EndDates[0] -lt $ExpirationDateToCheck -and $EndDates.Length -gt 0){
         ############################################
         $Expirations += [PSCustomObject]@{
             'AppName'                = $AppName
-            'ID'                     = $ObjectID
+            'ObjectID'                     = $ObjectID
             'ApplicationID'          = $AppID
             'Date'                   = $EndDates[0]
         }
