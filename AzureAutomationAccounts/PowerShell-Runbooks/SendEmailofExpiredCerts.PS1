@@ -261,7 +261,7 @@ foreach ($App in $Applications) {
         ############################################
         $Expirations += [PSCustomObject]@{
             'AppName'                = $AppName
-            'ObjectID'                     = $ObjectID
+            'ObjectID'               = $ObjectID
             'ApplicationID'          = $AppID
             'Date'                   = $EndDates[0]
         }
@@ -321,7 +321,7 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
         ############################################
         $Expirations += [PSCustomObject]@{
             'AppName'                = $AppName
-            'ObjectID'                     = $ObjectID
+            'ObjectID'               = $ObjectID
             'ApplicationID'          = $AppID
             'Date'                   = $EndDates[0]
         }
