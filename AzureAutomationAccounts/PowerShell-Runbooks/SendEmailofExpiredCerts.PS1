@@ -126,13 +126,16 @@ function Send-Email {
 #**************************************************************************************
 #Initialise variables
 
+#Test email functionality
+Send-Email -MsgBody "It works?"
+
 #Get expiring App registraion (Get-MgApplication -all) certs and secrets
 
 #Get expiring Enterprise (Get-MgServicePrincipal -all) app certs
 
 #Send email per expiring cert/secret
 
-Send-Email -MsgBody
+#Send-Email -MsgBody
 
 #Send report email
 #For later...
