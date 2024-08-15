@@ -22,7 +22,7 @@
         https://woshub.com/send-email-microsoft-graph-api-powershell/
         https://learn.microsoft.com/en-us/powershell/module/microsoft.graph.users.actions/send-mgusermail?view=graph-powershell-1.0
 
-        Automation account:
+        Automation account variables:
         https://learn.microsoft.com/en-us/azure/automation/shared-resources/variables?tabs=azure-powershell
         https://learn.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-hashtable?view=powershell-7.4
 
