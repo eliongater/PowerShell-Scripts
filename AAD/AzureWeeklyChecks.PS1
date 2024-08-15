@@ -154,10 +154,13 @@ function Invoke-GraphAPI {
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 $ReportStartTime = get-date
 
+$SubscriptionName = "Production_Subscription"
+$Tenant = "azure.onmicrosoft.com"
+
 Write-Output "Please connect to Azure."
 Connect-AzAccount `
-    -SubscriptionName "DIA_Production_Subscription"  `
-    -Tenant "azurediagovt.onmicrosoft.com"     | Out-Null
+    -SubscriptionName "$SubscriptionName"  `
+    -Tenant "$Tenant"     | Out-Null
 Write-Output "`tConnected
     "
 
@@ -761,15 +764,15 @@ Write-Output "`t`t`tDone"
 # add as a comma-delimited list
 # eg ... = ("email1","email2","email3") ....
 
-$DIAEmailAddress = ("email@example.com","email@example.com","email@example.com").split(",")
+$OutputEmailAddress = ("email@example.com","email@example.com","email@example.com").split(",")
+$Customer = ""
 
-
-$toJSON = $DIAEmailAddress | ForEach-Object {
+$toJSON = $OutputEmailAddress | ForEach-Object {
     '{"EmailAddress": {"Address": "' + $_ + '"}},'
 }
 $toJSON = ([string]$toJSON).Substring(0, ([string]$toJSON).Length - 1)
 
-$mailSubject = "DIA Azure Daily Checks"
+$mailSubject = "$Customer Azure Daily Checks"
 
 $sendMailURI = "https://graph.microsoft.com/v1.0/me/microsoft.graph.sendMail"
 
@@ -794,7 +797,7 @@ $body = @"
 "@
 
 
-Write-Output "`tEmailing Report to $($DIAEmailAddress -join "`n`r")"
+Write-Output "`tEmailing Report to $($OutputEmailAddress -join "`n`r")"
 
 Invoke-MgGraphRequest -Method POST -Uri $sendMailURI -Body $body
 
