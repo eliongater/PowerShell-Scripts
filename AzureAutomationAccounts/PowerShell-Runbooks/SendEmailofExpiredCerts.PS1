@@ -195,11 +195,18 @@ finally{
 
 #Remove old prior alerts from prior alert list
 $AlertsToRemove = @()
-foreach ($PriorAlert in $PriorAlerts.GetEnumerator()){
-    $DateToCompare = get-date $PriorAlert.value
-    if ($DateToCompare -lt $AlertDate) {
-        $AlertsToRemove += $PriorAlert.key
+try{
+    foreach ($PriorAlert in $PriorAlerts.GetEnumerator()){
+        $DateToCompare = get-date $PriorAlert.value
+        if ($DateToCompare -lt $AlertDate) {
+            $AlertsToRemove += $PriorAlert.key
+        }
     }
+}
+catch{
+    Write-Error "Failed to enumerate Prior Alerts, check that it is indeed a hash table"
+    Write-Error -Message $_.Exception
+    throw $_.Excepti
 }
 #Note, cannot modify a hashtable whilst it is being enumerated. 
 foreach ($AlertToRemove in $AlertsToRemove){
