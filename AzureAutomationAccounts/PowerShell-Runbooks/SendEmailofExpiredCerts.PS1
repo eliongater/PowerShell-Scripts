@@ -32,7 +32,7 @@
         .NOTES
         AUTHOR: Elijah Smart
         LASTEDIT: Aug 16, 2024
-        VERSION: 0.2
+        VERSION: 1.0
 
 
 #>
@@ -150,7 +150,10 @@ function Send-Email {
 #Initialise variables
 $ReportMailTo = "elijah.smart@datacom.com"
 
+$Expirations = @()
+
 $ExpirationThreshold = 60
+$ExpirationDateToCheck = (get-date).AddDays($ExpirationThreshold)
 $AlertingInterval = 30
 $AlertDate = (get-date).AddDays(-1*$AlertingInterval)
 $Today = get-date
@@ -158,15 +161,34 @@ $Today = get-date
 $PriorAlerts = @{}
 #ID and Date last alerted on
 #$PriorAlerts.add('71078dec-d452-4c8a-9251-97f070faa3a6','16/08/2024')
-try
-{
+try{
     $PriorAlerts = Get-AutomationVariable -name "PriorAlerts"
 }
-catch {
-    Write-Error "Failed to retrive prior alerts"
-    Write-Error -Message $_.Exception
-    throw $_.Exception
+catch [System.ArgumentNullException]{
+    Write-Warning "Prior Alerts is currently null"
+    Write-Warning -Message $_.Exception
+    try{
+        "Attempting to initialise Prior Alerts"
+        Set-AutomationVariable -Name "PriorAlerts" -Value $PriorAlerts
+    }
+    catch {
+        Write-Error "Failed to initialise prior alerts"
+        Write-Error -Message $_.Exception
+        throw $_.Exception
+    }
 }
+finally{
+    try{
+        $PriorAlerts = Get-AutomationVariable -name "PriorAlerts"
+    }
+    catch {
+        Write-Error "Failed to retrive prior alerts"
+        Write-Error -Message $_.Exception
+        throw $_.Exception
+    }
+}
+
+
 
 #Test email functionality
 #Send-Email -MsgBody "It works?"
@@ -185,18 +207,116 @@ foreach ($AlertToRemove in $AlertsToRemove){
 }
 
 #Get expiring App registraion (Get-MgApplication -all) certs and secrets
+$Applications = Get-MgApplication -All
+$Count = 0
+foreach ($EnterpriseApp in $EnterpriseApps) {
+    $Completed = ($count/$Applications.count) * 100
+    $count ++
+    # Use Write-Progress to output a progress bar.
+    # The Activity and Status parameters create the first and second lines of the progress bar
+    # heading, respectively.
+    Write-Progress -Activity "Getting App registrations" -Status "Progress:" -PercentComplete $Completed
+    $AppName = $App.DisplayName
+    $ObjectID   = $App.Id
+    $AppID  = $App.AppId
 
-#Get expiring Enterprise (Get-MgServicePrincipal -all) app certs
+    $AppCreds = Get-MgApplication -ServicePrincipalId $ObjectID |
+        Select-Object PasswordCredentials, KeyCredentials
 
-#Send email per expiring cert/secret
-foreach ($Expiration in $Expirations){
-    $EmailBody = "$($Expiration.ID),$($Expiration.Name),$($Expiration.Date)"
-    Send-Email -MsgBody $EmailBody
+    $Secrets = $AppCreds.PasswordCredentials
+    $Certs   = $AppCreds.KeyCredentials
+
+    [DateTime[]]$EndDates = @()
+
+    foreach ($Cert in $Certs){
+        $EndDate   = $Cert.EndDateTime
+        $EndDates += $EndDate
+    }
+    foreach ($Secret in $Secrets){
+        $EndDate    = $Secret.EndDateTime
+        $EndDates += $EndDate
+    }
+
+    #Sort end dates to soonest first
+    [Array]::Sort($EndDates)
+
+    #If closest expiration is in the x day period we care about
+    if($EndDates[0] -lt $ExpirationDateToCheck){
+        ############################################
+        $Expirations += [PSCustomObject]@{
+            'AppName'                = $AppName
+            'ID'                     = $ObjectID
+            'ApplicationID'          = $AppID
+            'Date'                   = $EndDates[0]
+        }
+        ############################################
+    }
+    
 }
 
-#Add sent alerts to Prior Alerts
+
+
+
+#Get expiring Enterprise (Get-MgServicePrincipal -all) app certs
+$EnterpriseApps = Get-MgServicePrincipal -all
+$Count = 0
+foreach ($EnterpriseApp in $EnterpriseApps) {
+    $Completed = ($count/$EnterpriseApps.count) * 100
+    $count ++
+    # Use Write-Progress to output a progress bar.
+    # The Activity and Status parameters create the first and second lines of the progress bar
+    # heading, respectively.
+    Write-Progress -Activity "Getting Enterprise apps" -Status "Progress:" -PercentComplete $Completed
+
+    $AppName = $EnterpriseApp.DisplayName
+    $ObjectID   = $EnterpriseApp.Id
+    $AppID  = $EnterpriseApp.AppId
+
+    $AppCreds = Get-MgServicePrincipal -ServicePrincipalId $ObjectID |
+        Select-Object PasswordCredentials, KeyCredentials
+
+    $Secrets = $AppCreds.PasswordCredentials
+    $Certs   = $AppCreds.KeyCredentials
+
+    [DateTime[]]$EndDates = @()
+
+    foreach ($Cert in $Certs){
+        $EndDate   = $Cert.EndDateTime
+        $EndDates += $EndDate
+    }
+    foreach ($Secret in $Secrets){
+        $EndDate    = $Secret.EndDateTime
+        $EndDates += $EndDate
+    }
+
+    #Sort end dates to soonest first
+    [Array]::Sort($EndDates)
+
+    #If closest expiration is in the x day period we care about
+    if($EndDates[0] -lt $ExpirationDateToCheck){
+        ############################################
+        $Expirations += [PSCustomObject]@{
+            'AppName'                = $AppName
+            'ID'                     = $ObjectID
+            'ApplicationID'          = $AppID
+            'Date'                   = $EndDates[0]
+        }
+        ############################################
+    }
+    
+}
+
+
+
+#Send email/alert per expiring cert/secret
 foreach ($Expiration in $Expirations){
-    $PriorAlerts.Add($($Expiration.ID),$Today)
+    if($PriorAlerts.ContainsKey($($Expiration.ID))){
+        "$($Expiration.ID): Alert already sent within the last $AlertingInterval days, not sending"
+    } else {
+        $EmailBody = "$($Expiration.ObjectID),$($Expiration.AppName),$($Expiration.Date)"
+        Send-Email -MsgBody $EmailBody -Subject $EmailBody
+        $PriorAlerts.Add($($Expiration.ObjectID),$Today)
+    }
 }
 
 
@@ -216,7 +336,7 @@ catch {
 #Send report email
 $ReportEmailBody
 foreach ($Expiration in $Expirations){
-    $ReportEmailBody = "$($Expiration.ID),$($Expiration.Name),$($Expiration.Date)`n"
+    $ReportEmailBody = "$($Expiration.ObjectID),$($Expiration.AppName),$($Expiration.Date)`n"
 }
 #Remove last new line
 $ReportEmailBody = $ReportEmailBody -replace ".$"
