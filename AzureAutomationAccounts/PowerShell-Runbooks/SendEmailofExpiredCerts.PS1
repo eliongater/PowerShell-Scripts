@@ -25,7 +25,7 @@
         .NOTES
         AUTHOR: Elijah Smart
         LASTEDIT: Aug 16, 2024
-        VERSION: 0.1
+        VERSION: 0.2
 
 
 #>
