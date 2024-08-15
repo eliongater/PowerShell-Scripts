@@ -334,8 +334,8 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
 
 #Send email/alert per expiring cert/secret
 foreach ($Expiration in $Expirations){
-    if($PriorAlerts.ContainsKey($($Expiration.ID))){
-        "$($Expiration.ID): Alert already sent within the last $AlertingInterval days, not sending"
+    if($PriorAlerts.ContainsKey($($Expiration.ObjectID))){
+        "$($Expiration.ObjectID): Alert already sent within the last $AlertingInterval days, not sending"
     } else {
         $EmailBody = "$($Expiration.ObjectID),$($Expiration.AppName),$($Expiration.Date)"
         Send-Email -MsgBody $EmailBody -Subject $EmailBody
