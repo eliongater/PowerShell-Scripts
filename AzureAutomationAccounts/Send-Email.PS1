@@ -3,7 +3,7 @@ function Send-Email {
         [system.string]$MailTo,
         [system.string]$MailFrom,
         [system.string]$Subject = "",
-        [system.string]$Body ="",
+        [system.string]$MsgBody ="",
         [system.string]$Attachment
     )
     #Initialise Variables
@@ -18,7 +18,7 @@ function Send-Email {
             Subject = "$Subject"
             Body = @{
                 ContentType = "HTML"
-                Content = $msgBody
+                Content = $MsgBody
                 }
             ToRecipients = @(
                 @{
