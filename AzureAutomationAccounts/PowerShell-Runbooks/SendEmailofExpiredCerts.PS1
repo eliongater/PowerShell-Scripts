@@ -64,6 +64,7 @@ function Send-Email {
     #Initialise Variables
     $Message
 
+    #E.g. $Attachment = "C:\logs\mytestapp.log"
     #If a file path to an attachment is passed as a parameter, then send with an attachment, else send without one
     if ($PSBoundParameters.ContainsKey('Attachment')) {
         $AttachmentContentBytes = [System.IO.File]::ReadAllBytes($Attachment)
