@@ -158,7 +158,7 @@ $AlertingInterval = 30
 $AlertDate = (get-date).AddDays(-1*$AlertingInterval)
 $Today = get-date
 
-$PriorAlerts = @{}
+[hashtable]$PriorAlerts = @{}
 #ID and Date last alerted on
 #$PriorAlerts.add('71078dec-d452-4c8a-9251-97f070faa3a6','16/08/2024')
 try{
@@ -207,9 +207,18 @@ foreach ($AlertToRemove in $AlertsToRemove){
 }
 
 #Get expiring App registraion (Get-MgApplication -all) certs and secrets
-$Applications = Get-MgApplication -All
+$Applications
+try {
+    $Applications = Get-MgApplication -All
+}
+catch {
+    Write-Error "Failed to run Get-MgApplication, check you have the correct modules installed."
+    Write-Error -Message $_.Exception
+    throw $_.Exception
+}
+
 $Count = 0
-foreach ($EnterpriseApp in $EnterpriseApps) {
+foreach ($App in $Applications) {
     $Completed = ($count/$Applications.count) * 100
     $count ++
     # Use Write-Progress to output a progress bar.
@@ -258,7 +267,15 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
 
 
 #Get expiring Enterprise (Get-MgServicePrincipal -all) app certs
-$EnterpriseApps = Get-MgServicePrincipal -all
+$EnterpriseApps
+try {
+    $EnterpriseApps = Get-MgServicePrincipal -all
+}
+catch {
+    Write-Error "Failed to run Get-MgServicePrincipal, check you have the correct modules installed."
+    Write-Error -Message $_.Exception
+    throw $_.Exception
+}
 $Count = 0
 foreach ($EnterpriseApp in $EnterpriseApps) {
     $Completed = ($count/$EnterpriseApps.count) * 100
