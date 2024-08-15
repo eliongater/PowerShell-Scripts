@@ -761,7 +761,7 @@ Write-Output "`t`t`tDone"
 # add as a comma-delimited list
 # eg ... = ("email1","email2","email3") ....
 
-$DIAEmailAddress = ("ashleigh.stevens@datacom.com","iain.hardie@datacom.com","dexter.dar@datacom.com").split(",")
+$DIAEmailAddress = ("email@example.com","email@example.com","email@example.com").split(",")
 
 
 $toJSON = $DIAEmailAddress | ForEach-Object {
