@@ -2,6 +2,8 @@
 #Run this as your admin account through an interactive PowerShell
 #Reference: https://learn.microsoft.com/en-us/graph/permissions-reference
 
+#Assigns mail.send and Application.Read.All
+
 
 #Connect to Azure
 Connect-AzAccount

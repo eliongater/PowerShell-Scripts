@@ -2,12 +2,13 @@
     .DESCRIPTION
         This PowerShell script is intended to be run via an Azure Automation account runbook. This script will query all Enterprise apps and App registrations and then send an email per expired certificate and secret to your ticketing system to generate a ticket.
         Note, you must import the Microsoft.Graph PowerShell module to your automation account first.
+        You must also assign the system assigned identity of your automation account the relevant permissions, in this case mail.send and Application.Read.All
 
         .References:
         https://www.thelazyadministrator.com/2023/12/16/automated-alerts-on-azure-entra-id-application-secret-expirations/
         https://thesysadminchannel.com/graph-api-using-a-managed-identity-in-an-automation-runbook/
 
-        Old:
+        Logic app and power automate approach:
         https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/use-azure-logic-apps-to-notify-of-pending-aad-application-client/ba-p/3014603?fbclid=IwAR3ECopMRsitagEStKLC_yvAmFX4a1Ispn_a8ZFitapPquq9OZcZvQgKVOQ
         https://techcommunity.microsoft.com/t5/core-infrastructure-and-security/use-power-automate-to-notify-of-upcoming-azure-ad-app-client/ba-p/2406145
 
@@ -15,6 +16,7 @@
         https://lazyadmin.nl/powershell/send-email-powershell/
         https://stackoverflow.com/questions/69080522/send-mail-via-microsoft-graph-as-application-any-user
         https://learn.microsoft.com/en-us/graph/permissions-reference
+        https://woshub.com/send-email-microsoft-graph-api-powershell/
 
 
 
@@ -47,4 +49,10 @@ catch {
 
 #Initialise variables
 
-#Get Expiring certs
+#Get expiring App registraion (Get-MgApplication -all) certs and secrets
+
+#Get expiring Enterprise (Get-MgServicePrincipal -all) app certs
+
+#Send email per expiring cert/secret
+
+#Send report email
