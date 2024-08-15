@@ -236,7 +236,7 @@ foreach ($App in $Applications) {
     $ObjectID   = $App.Id
     $AppID  = $App.AppId
 
-    $AppCreds = Get-MgApplication -ServicePrincipalId $ObjectID |
+    $AppCreds = Get-MgApplication -ApplicationId $ObjectID |
         Select-Object PasswordCredentials, KeyCredentials
 
     $Secrets = $AppCreds.PasswordCredentials
