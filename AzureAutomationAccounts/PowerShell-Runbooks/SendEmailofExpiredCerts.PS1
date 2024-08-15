@@ -198,28 +198,23 @@ catch [System.ArgumentNullException]{
         throw $_.Exception
     }
 }
-finally{
+catch [System.Management.Automation.ArgumentTransformationMetadataException]{
+    Write-Warning "Problem retrieving prior alerts as a hash table, will attempt to convert."
+    Write-Warning -Message $_.Exception
     try{
-        $PriorAlerts = Get-AutomationVariable -name "PriorAlerts"
-    }
-    catch [System.Management.Automation.ArgumentTransformationMetadataException]{
-        Write-Warning "Problem retrieving prior alerts as a hash table, will attempt to convert."
-        Write-Warning -Message $_.Exception
-        try{
-            $PSObjectPriorAlerts = Get-AutomationVariable -name "PriorAlerts"
-            $PriorAlerts = ConvertTo-HashtableFromPsCustomObject -psCustomObject $PSObjectPriorAlerts
-        }
-        catch {
-            Write-Error "Failed to convert prior alerts from powershell custom object"
-            Write-Error -Message $_.Exception
-            throw $_.Exception
-        }
+        $PSObjectPriorAlerts = Get-AutomationVariable -name "PriorAlerts"
+        $PriorAlerts = ConvertTo-HashtableFromPsCustomObject -psCustomObject $PSObjectPriorAlerts
     }
     catch {
-        Write-Error "Failed to retrive prior alerts"
+        Write-Error "Failed to convert prior alerts from powershell custom object"
         Write-Error -Message $_.Exception
         throw $_.Exception
     }
+}
+catch {
+    Write-Error "Failed to retrive prior alerts"
+    Write-Error -Message $_.Exception
+    throw $_.Exception
 }
 
 
