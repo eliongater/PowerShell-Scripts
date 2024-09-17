@@ -1,7 +1,7 @@
 # PowerShell script to copy users from one Entra ID group to another Entra ID group
 
-# Connect to Azure AD
-Connect-AzureAD
+# Connect to Graph
+Connect-MgGraph
 
 # Define the source and destination group names
 $sourceGroupName = "Azure_Snaphire_Hiring_Manager"
@@ -16,6 +16,6 @@ $members = Get-MgGroupMember -GroupId $sourceGroup.Id
 
 # Add each member to the destination group
 foreach ($member in $members) {
-    Add-MgGroupMember -GroupId $destinationGroup.Id -DirectoryObjectId $member.Id
+    New-MgGroupMember -GroupId $destinationGroup.Id -DirectoryObjectId $member.Id
 }
 Write-Output "Users have been copied from the source group to the destination group."
