@@ -4,8 +4,8 @@
 Connect-MgGraph
 
 # Define the source and destination group names
-$sourceGroupName = "Azure_Snaphire_Hiring_Manager"
-$destinationGroupName = "zApp-SnapHire-M-P-Hiring-Manager"
+$sourceGroupName = "Azure_SMX_Archiving"
+$destinationGroupName = "zSMX-365-M-P-Archiving"
 
 # Get the source and destination group IDs
 $sourceGroup = Get-MgGroup -Filter "displayName eq '$sourceGroupName'"
@@ -19,3 +19,5 @@ foreach ($member in $members) {
     New-MgGroupMember -GroupId $destinationGroup.Id -DirectoryObjectId $member.Id
 }
 Write-Output "Users have been copied from the source group to the destination group."
+
+$members = $null
