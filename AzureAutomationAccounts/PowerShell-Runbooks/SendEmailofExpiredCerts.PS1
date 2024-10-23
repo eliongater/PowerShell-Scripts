@@ -33,7 +33,7 @@
         .NOTES
         AUTHOR: Elijah Smart
         LASTEDIT: Oct 23, 2024
-        VERSION: 1.3
+        VERSION: 1.4
 
 
 #>
@@ -192,8 +192,8 @@ try{
     $PriorAlerts = Get-AutomationVariable -name $AutomationVariableName
 }
 catch [System.ArgumentNullException]{
-    Write-Output "Prior Alerts is currently null"
-    Write-Output -Message $_.Exception
+    Write-Verbose "Prior Alerts is currently null"
+    Write-Verbose -Message $_.Exception
     try{
         "Attempting to initialise Prior Alerts"
         Set-AutomationVariable -Name $AutomationVariableName -Value $PriorAlerts
@@ -205,8 +205,8 @@ catch [System.ArgumentNullException]{
     }
 }
 catch [System.Management.Automation.ArgumentTransformationMetadataException]{
-    Write-Output "Problem retrieving prior alerts as a hash table, will attempt to convert."
-    Write-Output -Message $_.Exception
+    Write-Verbose "Problem retrieving prior alerts as a hash table, will attempt to convert."
+    Write-Verbose -Message $_.Exception
     try{
         $PSObjectPriorAlerts = Get-AutomationVariable -name $AutomationVariableName
         $PriorAlerts = ConvertTo-HashtableFromPsCustomObject -psCustomObject $PSObjectPriorAlerts
