@@ -344,7 +344,7 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
     $AppName = $EnterpriseApp.DisplayName
     $ObjectID   = $EnterpriseApp.Id
     $AppID  = $EnterpriseApp.AppId
-    $ownersList = Get-MgServicePrincipalOwner -ServicePrincipalId  $app.Id
+    $ownersList = Get-MgServicePrincipalOwner -ServicePrincipalId  $EnterpriseApp.Id
     $owners = ""
     if($ownersList) {
         try{
