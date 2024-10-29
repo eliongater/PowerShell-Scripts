@@ -427,12 +427,13 @@ catch {
 
 
 #Send report email
-$ReportEmailBody = "ObjectID,AppName,ExpirationDate <br />"
+$ReportEmailBody = "<table><tr><th>ObjectID</th><th>AppName</th><th>Owner(s)</th><th>ExpirationDate</th></tr>"
 foreach ($Expiration in $Expirations){
-    $ReportEmailBody += "$($Expiration.ObjectID),$($Expiration.AppName),$($Expiration.Date)<br />"
+    $ReportEmailBody += "<tr><td>$($Expiration.ObjectID)</td><td>$($Expiration.AppName)</td><td>$($Expiration.Owners)</td><td>$($Expiration.Date)</td></tr>"
 }
+$ReportEmailBody += "</table>"
 #Remove last new line
-$ReportEmailBody = $ReportEmailBody -replace ".$"
+#$ReportEmailBody = $ReportEmailBody -replace ".$"
 
 #Send report email
 $SendReportAlways = $True
