@@ -273,9 +273,14 @@ foreach ($App in $Applications) {
     $ownersList = Get-MgApplicationOwner -ApplicationId $app.Id
     $owners = ""
     if($ownersList) {
-        foreach ($owner in $ownersList){
-            $mail = (Get-MgUser -UserId $owner.id).mail
-            $owners += "$mail;"
+        try{
+            foreach ($owner in $ownersList){
+                $mail = (Get-MgUser -UserId $owner.id).mail
+                $owners += "$mail;"
+            }
+        } catch {
+            Write-Warning "Failed to get User from Graph, check if Microsoft.Graph.Users module is installed"
+            Write-Warning -Message $_.Exception
         }
     }
 
@@ -342,9 +347,14 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
     $ownersList = Get-MgServicePrincipalOwner -ServicePrincipalId  $app.Id
     $owners = ""
     if($ownersList) {
-        foreach ($owner in $ownersList){
-            $mail = (Get-MgUser -UserId $owner.id).mail
-            $owners += "$mail;"
+        try{
+            foreach ($owner in $ownersList){
+                $mail = (Get-MgUser -UserId $owner.id).mail
+                $owners += "$mail;"
+            }
+        } catch {
+            Write-Warning "Failed to get User from Graph, check if Microsoft.Graph.Users module is installed"
+            Write-Warning -Message $_.Exception
         }
     }
 
