@@ -270,6 +270,14 @@ foreach ($App in $Applications) {
     $AppName = $App.DisplayName
     $ObjectID   = $App.Id
     $AppID  = $App.AppId
+    $ownersList = Get-MgApplicationOwner -ApplicationId $app.Id
+    $owners = ""
+    if($ownersList) {
+        foreach ($owner in $ownersList){
+            $mail = (Get-MgUser -UserId $owner.id).mail
+            $owners += "$mail;"
+        }
+    }
 
     $AppCreds = Get-MgApplication -ApplicationId $ObjectID |
         Select-Object PasswordCredentials, KeyCredentials
@@ -299,6 +307,7 @@ foreach ($App in $Applications) {
             'ObjectID'               = $ObjectID
             'ApplicationID'          = $AppID
             'Date'                   = $EndDates[0]
+            'Owners'                 = $owners
         }
         ############################################
     }
@@ -330,6 +339,15 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
     $AppName = $EnterpriseApp.DisplayName
     $ObjectID   = $EnterpriseApp.Id
     $AppID  = $EnterpriseApp.AppId
+    $ownersList = Get-MgServicePrincipalOwner -ServicePrincipalId  $app.Id
+    $owners = ""
+    if($ownersList) {
+        foreach ($owner in $ownersList){
+            $mail = (Get-MgUser -UserId $owner.id).mail
+            $owners += "$mail;"
+        }
+    }
+
 
     $AppCreds = Get-MgServicePrincipal -ServicePrincipalId $ObjectID |
         Select-Object PasswordCredentials, KeyCredentials
@@ -359,6 +377,7 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
             'ObjectID'               = $ObjectID
             'ApplicationID'          = $AppID
             'Date'                   = $EndDates[0]
+            'Owners'                 = $owners
         }
         ############################################
     }
@@ -372,9 +391,13 @@ foreach ($Expiration in $Expirations){
     if($PriorAlerts.ContainsKey($($Expiration.ObjectID))){
         "$($Expiration.ObjectID): Alert already sent within the last $AlertingInterval days, not sending"
     } else {
+        $recipients = $Global:MailTo
+        if ($Expiration.Owners.Length -gt 0){
+            $recipients += ";$($Expiration.Owners)"
+        }
         $EmailSubject = "Upcoming Enterprise App/App Registration Expiry: $($Expiration.AppName)"
         $EmailBody = "The following Enterprise App or App registration has an upcoming cert/secret expiry.<br />ObjectID: $($Expiration.ObjectID)<br />AppName: #$($Expiration.AppName)/#<br />ExpirationDate: $($Expiration.Date)<br />Enterprise App Link: https://portal.azure.com/#view/Microsoft_AAD_IAM/ManagedAppMenuBlade/~/Overview/objectId/$($Expiration.ObjectID)<br />App registration Link: https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationMenuBlade/~/Overview/appId/$($Expiration.ObjectID)"
-        Send-Email -MsgBody $EmailBody -Subject $EmailSubject
+        Send-Email -MsgBody $EmailBody -Subject $EmailSubject -MailTo $recipients
         $PriorAlerts.Add($($Expiration.ObjectID),$Today)
     }
 }
