@@ -344,6 +344,7 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
     $AppName = $EnterpriseApp.DisplayName
     $ObjectID   = $EnterpriseApp.Id
     $AppID  = $EnterpriseApp.AppId
+    $AppType = $EnterpriseApp.ServicePrincipalType
     $ownersList = Get-MgServicePrincipalOwner -ServicePrincipalId  $EnterpriseApp.Id
     $owners = ""
     if($ownersList) {
@@ -380,7 +381,7 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
     [Array]::Sort($EndDates)
 
     #If closest expiration is in the x day period we care about
-    if($EndDates[0] -lt $ExpirationDateToCheck -and $EndDates.Length -gt 0){
+    if($EndDates[0] -lt $ExpirationDateToCheck -and $EndDates.Length -gt 0 -and $AppType -eq "Application"){
         ############################################
         $Expirations += [PSCustomObject]@{
             'AppName'                = $AppName
