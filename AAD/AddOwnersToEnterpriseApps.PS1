@@ -114,7 +114,7 @@ foreach ($appName in $appNames) {
 
     if ($app) {
         # Get the current owners of the application
-        $owners = Get-MgServicePrincipalOwner -ApplicationId $app.Id
+        $owners = Get-MgServicePrincipalOwner -ServicePrincipalId  $app.Id
 
         # Check if the email address is already an owner
         $ownerExists = $owners | Where-Object { $_.UserPrincipalName -eq $emailToAdd }
