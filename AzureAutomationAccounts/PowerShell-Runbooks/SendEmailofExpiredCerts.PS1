@@ -33,7 +33,7 @@
         .NOTES
         AUTHOR: Elijah Smart
         LASTEDIT: Oct 30, 2024
-        VERSION: 1.6
+        VERSION: 1.7
 
 
 #>
@@ -96,11 +96,6 @@ function Send-Email {
                 Content = $MsgBody
                 }
             ToRecipients = @(
-                @{
-                    EmailAddress = @{
-                    Address = $MailTo
-                    }
-                }
                 )
                 Attachments = @(
             @{
@@ -119,14 +114,20 @@ function Send-Email {
                 Content = $msgBody
                 }
             ToRecipients = @(
-                @{
-                    EmailAddress = @{
-                    Address = $MailTo
-                    }
+            )
                 }
             )
         }
 
+    }
+
+    $EmailAddresses = $MailTo.split(";")
+    foreach ($EmailAddress in $EmailAddress){
+        $Message.ToRecipients += @{
+            EmailAddress = @{
+                Address = $EmailAddress
+            }
+        }
     }
 
     #Send email
