@@ -306,13 +306,13 @@ foreach ($App in $Applications) {
     [Array]::Sort($EndDates)
 
     #If closest expiration is in the x day period we care about
-    if($EndDates[0] -lt $ExpirationDateToCheck -and $EndDates.Length -gt 0){
+    if($EndDates[-1] -lt $ExpirationDateToCheck -and $EndDates.Length -gt 0){
         ############################################
         $Expirations += [PSCustomObject]@{
             'AppName'                = $AppName
             'ObjectID'               = $ObjectID
             'ApplicationID'          = $AppID
-            'Date'                   = $EndDates[0]
+            'Date'                   = $EndDates[-1]
             'Owners'                 = $owners
         }
         ############################################
@@ -389,13 +389,13 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
     [Array]::Sort($EndDates)
 
     #If closest expiration is in the x day period we care about
-    if($EndDates[0] -lt $ExpirationDateToCheck -and $EndDates.Length -gt 0 -and $AppType -eq "Application"){
+    if($EndDates[-1] -lt $ExpirationDateToCheck -and $EndDates.Length -gt 0 -and $AppType -eq "Application"){
         ############################################
         $Expirations += [PSCustomObject]@{
             'AppName'                = $AppName
             'ObjectID'               = $ObjectID
             'ApplicationID'          = $AppID
-            'Date'                   = $EndDates[0]
+            'Date'                   = $EndDates[-1]
             'Owners'                 = $owners
         }
         ############################################
