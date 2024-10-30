@@ -118,7 +118,8 @@ function Send-Email {
     }
 
     $EmailAddresses = $MailTo.split(";")
-    foreach ($EmailAddress in $EmailAddress){
+    foreach ($EmailAddress in $EmailAddresses){
+        Write-Output "Adding $EmailAddress to recipients"
         $Message.ToRecipients += @{
             EmailAddress = @{
                 Address = $EmailAddress
@@ -257,6 +258,7 @@ catch {
 }
 
 $Count = 0
+$CheckError = ""
 foreach ($App in $Applications) {
     $Completed = ($count/$Applications.count) * 100
     $count ++
@@ -269,6 +271,7 @@ foreach ($App in $Applications) {
     $AppID  = $App.AppId
     $ownersList = Get-MgApplicationOwner -ApplicationId $app.Id
     $owners = ""
+
     if($ownersList) {
         try{
             foreach ($owner in $ownersList){
@@ -276,8 +279,9 @@ foreach ($App in $Applications) {
                 $owners += "$mail;"
             }
         } catch {
-            Write-Warning "Failed to get User from Graph, check if Microsoft.Graph.Users module is installed"
-            Write-Warning -Message $_.Exception
+            Write-Verbose "Failed to get User from Graph, check if Microsoft.Graph.Users module is installed"
+            Write-Verbose -Message $_.Exception
+            $CheckError = $_.Exception
         }
     }
 
@@ -315,6 +319,10 @@ foreach ($App in $Applications) {
     }
     
 }
+if($CheckError.Length -gt 0){
+    Write-Warning "Failed to get User from Graph, check if Microsoft.Graph.Users module is installed"
+    Write-Warning $CheckError
+}
 
 
 
@@ -329,7 +337,9 @@ catch {
     Write-Error -Message $_.Exception
     throw $_.Exception
 }
+
 $Count = 0
+$CheckError = ""
 foreach ($EnterpriseApp in $EnterpriseApps) {
     $Completed = ($count/$EnterpriseApps.count) * 100
     $count ++
@@ -351,8 +361,9 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
                 $owners += "$mail;"
             }
         } catch {
-            Write-Warning "Failed to get User from Graph, check if Microsoft.Graph.Users module is installed"
-            Write-Warning -Message $_.Exception
+            Write-Verbose "Failed to get User from Graph, check if Microsoft.Graph.Users module is installed"
+            Write-Verbose -Message $_.Exception
+            $CheckError = $_.Exception
         }
     }
 
@@ -390,6 +401,9 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
         ############################################
     }
     
+}
+if($CheckError.Length -gt 0){
+    Write-Warning $CheckError
 }
 
 
