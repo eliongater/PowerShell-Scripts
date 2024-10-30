@@ -66,10 +66,10 @@ catch {
 }
 
 #Initialise Global variables
-$Global:MailTo = "elijah.smart@datacom.com"
+$Global:MailTo = "elijah.smart@datacom.com;nzemmtest@datacom.com"
 #$Global:MailTo = "nhcazurecertautomation@datacom.com"
-$Global:MailFrom = "elijah.smart@now4you.nz"
-#$Global:MailFrom = "azurecertautomation@naturalhazards.govt.nz"
+#$Global:MailFrom = "elijah.smart@now4you.nz"
+$Global:MailFrom = "azurecertautomation@naturalhazards.govt.nz"
 
 
 #Define any functions
@@ -96,6 +96,11 @@ function Send-Email {
                 Content = $MsgBody
                 }
             ToRecipients = @(
+                @{
+                    EmailAddress = @{
+                    Address = $MailTo
+                    }
+                }
                 )
                 Attachments = @(
             @{
@@ -114,20 +119,14 @@ function Send-Email {
                 Content = $msgBody
                 }
             ToRecipients = @(
-            )
+                @{
+                    EmailAddress = @{
+                    Address = $MailTo
+                    }
                 }
             )
         }
 
-    }
-
-    $EmailAddresses = $MailTo.split(";")
-    foreach ($EmailAddress in $EmailAddress){
-        $Message.ToRecipients += @{
-            EmailAddress = @{
-                Address = $EmailAddress
-            }
-        }
     }
 
     #Send email
@@ -183,8 +182,8 @@ $AlertingInterval = 60
 $AlertDate = (get-date).AddDays(-1*$AlertingInterval)
 $Today = get-date
 
-$AutomationVariableName = "PriorAlerts"
-#$AutomationVariableName = "EntraID-EntAppCert-RPT-PriorAlerts"
+#$AutomationVariableName = "PriorAlerts"
+$AutomationVariableName = "EntraID-EntAppCert-RPT-PriorAlerts"
 
 [hashtable]$PriorAlerts = @{}
 #ID and Date last alerted on
