@@ -32,8 +32,8 @@
 
         .NOTES
         AUTHOR: Elijah Smart
-        LASTEDIT: Aug 16, 2024
-        VERSION: 1.2
+        LASTEDIT: Oct 30, 2024
+        VERSION: 1.6
 
 
 #>
@@ -67,7 +67,9 @@ catch {
 
 #Initialise Global variables
 $Global:MailTo = "elijah.smart@datacom.com"
+#$Global:MailTo = "nhcazurecertautomation@datacom.com"
 $Global:MailFrom = "elijah.smart@now4you.nz"
+#$Global:MailFrom = "azurecertautomation@naturalhazards.govt.nz"
 
 
 #Define any functions
@@ -170,27 +172,31 @@ function ConvertTo-HashtableFromPsCustomObject {
 
 #Initialise variables
 $ReportMailTo = "elijah.smart@datacom.com"
+#$ReportMailTo = "Security@eqc.govt.nz;sysops_reports@naturalhazards.govt.nz"
 
 $Expirations = @()
 
 $ExpirationThreshold = 60
 $ExpirationDateToCheck = (get-date).AddDays($ExpirationThreshold)
-$AlertingInterval = 30
+$AlertingInterval = 60
 $AlertDate = (get-date).AddDays(-1*$AlertingInterval)
 $Today = get-date
+
+$AutomationVariableName = "PriorAlerts"
+#$AutomationVariableName = "EntraID-EntAppCert-RPT-PriorAlerts"
 
 [hashtable]$PriorAlerts = @{}
 #ID and Date last alerted on
 #$PriorAlerts.add('71078dec-d452-4c8a-9251-97f070faa3a6','16/08/2024')
 try{
-    $PriorAlerts = Get-AutomationVariable -name "PriorAlerts"
+    $PriorAlerts = Get-AutomationVariable -name $AutomationVariableName
 }
 catch [System.ArgumentNullException]{
-    Write-Warning "Prior Alerts is currently null"
-    Write-Warning -Message $_.Exception
+    Write-Verbose "Prior Alerts is currently null"
+    Write-Verbose -Message $_.Exception
     try{
         "Attempting to initialise Prior Alerts"
-        Set-AutomationVariable -Name "PriorAlerts" -Value $PriorAlerts
+        Set-AutomationVariable -Name $AutomationVariableName -Value $PriorAlerts
     }
     catch {
         Write-Error "Failed to initialise prior alerts"
@@ -199,10 +205,10 @@ catch [System.ArgumentNullException]{
     }
 }
 catch [System.Management.Automation.ArgumentTransformationMetadataException]{
-    Write-Warning "Problem retrieving prior alerts as a hash table, will attempt to convert."
-    Write-Warning -Message $_.Exception
+    Write-Verbose "Problem retrieving prior alerts as a hash table, will attempt to convert."
+    Write-Verbose -Message $_.Exception
     try{
-        $PSObjectPriorAlerts = Get-AutomationVariable -name "PriorAlerts"
+        $PSObjectPriorAlerts = Get-AutomationVariable -name $AutomationVariableName
         $PriorAlerts = ConvertTo-HashtableFromPsCustomObject -psCustomObject $PSObjectPriorAlerts
     }
     catch {
@@ -264,6 +270,19 @@ foreach ($App in $Applications) {
     $AppName = $App.DisplayName
     $ObjectID   = $App.Id
     $AppID  = $App.AppId
+    $ownersList = Get-MgApplicationOwner -ApplicationId $app.Id
+    $owners = ""
+    if($ownersList) {
+        try{
+            foreach ($owner in $ownersList){
+                $mail = (Get-MgUser -UserId $owner.id).mail
+                $owners += "$mail;"
+            }
+        } catch {
+            Write-Warning "Failed to get User from Graph, check if Microsoft.Graph.Users module is installed"
+            Write-Warning -Message $_.Exception
+        }
+    }
 
     $AppCreds = Get-MgApplication -ApplicationId $ObjectID |
         Select-Object PasswordCredentials, KeyCredentials
@@ -293,6 +312,7 @@ foreach ($App in $Applications) {
             'ObjectID'               = $ObjectID
             'ApplicationID'          = $AppID
             'Date'                   = $EndDates[0]
+            'Owners'                 = $owners
         }
         ############################################
     }
@@ -324,6 +344,21 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
     $AppName = $EnterpriseApp.DisplayName
     $ObjectID   = $EnterpriseApp.Id
     $AppID  = $EnterpriseApp.AppId
+    $AppType = $EnterpriseApp.ServicePrincipalType
+    $ownersList = Get-MgServicePrincipalOwner -ServicePrincipalId  $EnterpriseApp.Id
+    $owners = ""
+    if($ownersList) {
+        try{
+            foreach ($owner in $ownersList){
+                $mail = (Get-MgUser -UserId $owner.id).mail
+                $owners += "$mail;"
+            }
+        } catch {
+            Write-Warning "Failed to get User from Graph, check if Microsoft.Graph.Users module is installed"
+            Write-Warning -Message $_.Exception
+        }
+    }
+
 
     $AppCreds = Get-MgServicePrincipal -ServicePrincipalId $ObjectID |
         Select-Object PasswordCredentials, KeyCredentials
@@ -346,13 +381,14 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
     [Array]::Sort($EndDates)
 
     #If closest expiration is in the x day period we care about
-    if($EndDates[0] -lt $ExpirationDateToCheck -and $EndDates.Length -gt 0){
+    if($EndDates[0] -lt $ExpirationDateToCheck -and $EndDates.Length -gt 0 -and $AppType -eq "Application"){
         ############################################
         $Expirations += [PSCustomObject]@{
             'AppName'                = $AppName
             'ObjectID'               = $ObjectID
             'ApplicationID'          = $AppID
             'Date'                   = $EndDates[0]
+            'Owners'                 = $owners
         }
         ############################################
     }
@@ -366,8 +402,13 @@ foreach ($Expiration in $Expirations){
     if($PriorAlerts.ContainsKey($($Expiration.ObjectID))){
         "$($Expiration.ObjectID): Alert already sent within the last $AlertingInterval days, not sending"
     } else {
-        $EmailBody = "$($Expiration.ObjectID),$($Expiration.AppName),$($Expiration.Date)"
-        Send-Email -MsgBody $EmailBody -Subject $EmailBody
+        $recipients = $Global:MailTo
+        if ($Expiration.Owners.Length -gt 0){
+            $recipients += ";$($Expiration.Owners)"
+        }
+        $EmailSubject = "Upcoming Enterprise App/App Registration Expiry: $($Expiration.AppName)"
+        $EmailBody = "The following Enterprise App or App registration has an upcoming cert/secret expiry.<br />ObjectID: $($Expiration.ObjectID)<br />AppName: #$($Expiration.AppName)/#<br />ExpirationDate: $($Expiration.Date)<br />Enterprise App Link: https://portal.azure.com/#view/Microsoft_AAD_IAM/ManagedAppMenuBlade/~/Overview/objectId/$($Expiration.ObjectID)<br />App registration Link: https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationMenuBlade/~/Overview/appId/$($Expiration.ObjectID)"
+        Send-Email -MsgBody $EmailBody -Subject $EmailSubject -MailTo $recipients
         $PriorAlerts.Add($($Expiration.ObjectID),$Today)
     }
 }
@@ -377,7 +418,7 @@ foreach ($Expiration in $Expirations){
 "Updating PriorAlerts variable"
 try
 {
-    Set-AutomationVariable -Name "PriorAlerts" -Value $PriorAlerts
+    Set-AutomationVariable -Name $AutomationVariableName -Value $PriorAlerts
 }
 catch {
     Write-Error "Failed to update prior alerts"
@@ -387,12 +428,17 @@ catch {
 
 
 #Send report email
-$ReportEmailBody
+$ReportEmailBody = "<table><tr><th>ObjectID</th><th>AppName</th><th>Owner(s)</th><th>ExpirationDate</th></tr>"
 foreach ($Expiration in $Expirations){
-    $ReportEmailBody += "$($Expiration.ObjectID),$($Expiration.AppName),$($Expiration.Date)`n"
+    $ReportEmailBody += "<tr><td>$($Expiration.ObjectID)</td><td>$($Expiration.AppName)</td><td>$($Expiration.Owners)</td><td>$($Expiration.Date)</td></tr>"
 }
+$ReportEmailBody += "</table>"
 #Remove last new line
-$ReportEmailBody = $ReportEmailBody -replace ".$"
+#$ReportEmailBody = $ReportEmailBody -replace ".$"
 
 #Send report email
-Send-Email -MsgBody $ReportEmailBody -MailTo $ReportMailTo
+$SendReportAlways = $True
+#If it's the first of the month or $SendReportAlways = $True, send a list of all upcoming expirations
+if(((Get-Date).Day -eq 1) -or $SendReportAlways){
+    Send-Email -MsgBody $ReportEmailBody -MailTo $ReportMailTo
+}
