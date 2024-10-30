@@ -118,7 +118,8 @@ function Send-Email {
     }
 
     $EmailAddresses = $MailTo.split(";")
-    foreach ($EmailAddress in $EmailAddress){
+    foreach ($EmailAddress in $EmailAddresses){
+        Write-Output "Adding $EmailAddress to recipients"
         $Message.ToRecipients += @{
             EmailAddress = @{
                 Address = $EmailAddress
