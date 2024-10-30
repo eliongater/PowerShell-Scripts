@@ -95,8 +95,7 @@ function Send-Email {
                 ContentType = "HTML"
                 Content = $MsgBody
                 }
-            ToRecipients = @(
-                )
+            ToRecipients = @()
                 Attachments = @(
             @{
                 "@odata.type" = "#microsoft.graph.fileAttachment"
@@ -113,10 +112,7 @@ function Send-Email {
                 ContentType = "HTML"
                 Content = $msgBody
                 }
-            ToRecipients = @(
-            )
-                }
-            )
+            ToRecipients = @()
         }
 
     }
