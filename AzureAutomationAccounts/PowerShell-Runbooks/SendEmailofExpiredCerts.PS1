@@ -33,7 +33,7 @@
         .NOTES
         AUTHOR: Elijah Smart
         LASTEDIT: Oct 30, 2024
-        VERSION: 1.6
+        VERSION: 1.7
 
 
 #>
