@@ -118,6 +118,7 @@ function Send-Email {
     }
 
     $EmailAddresses = $MailTo.split(";")
+    Write-Verbose "$EmailAddresses"
     foreach ($EmailAddress in $EmailAddresses){
         Write-Output "Adding $EmailAddress to recipients"
         $Message.ToRecipients += @{
@@ -239,7 +240,7 @@ try{
 catch{
     Write-Error "Failed to enumerate Prior Alerts, check that it is indeed a hash table"
     Write-Error -Message $_.Exception
-    throw $_.Excepti
+    throw $_.Exception
 }
 #Note, cannot modify a hashtable whilst it is being enumerated. 
 foreach ($AlertToRemove in $AlertsToRemove){
@@ -270,6 +271,9 @@ foreach ($App in $Applications) {
     $AppID  = $App.AppId
     $ownersList = Get-MgApplicationOwner -ApplicationId $app.Id
     $owners = $ownersList.AdditionalProperties.mail -join ';'
+    Write-Verbose "AppName: $AppName"
+    Write-Verbose "OwnersList: $ownersList"
+    Write-Verbose "Owners: $owners"
 
     $AppCreds = Get-MgApplication -ApplicationId $ObjectID |
         Select-Object PasswordCredentials, KeyCredentials
@@ -336,6 +340,9 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
     $AppType = $EnterpriseApp.ServicePrincipalType
     $ownersList = Get-MgServicePrincipalOwner -ServicePrincipalId  $EnterpriseApp.Id
     $owners = $ownersList.AdditionalProperties.mail -join ';'
+    Write-Verbose "AppName: $AppName"
+    Write-Verbose "OwnersList: $ownersList"
+    Write-Verbose "Owners: $owners"
 
 
     $AppCreds = Get-MgServicePrincipal -ServicePrincipalId $ObjectID |
