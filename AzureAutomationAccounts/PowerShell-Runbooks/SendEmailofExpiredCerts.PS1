@@ -258,7 +258,6 @@ catch {
 }
 
 $Count = 0
-$CheckError = ""
 foreach ($App in $Applications) {
     $Completed = ($count/$Applications.count) * 100
     $count ++
@@ -270,20 +269,7 @@ foreach ($App in $Applications) {
     $ObjectID   = $App.Id
     $AppID  = $App.AppId
     $ownersList = Get-MgApplicationOwner -ApplicationId $app.Id
-    $owners = ""
-
-    if($ownersList) {
-        try{
-            foreach ($owner in $ownersList){
-                $mail = (Get-MgUser -UserId $owner.id).mail
-                $owners += "$mail;"
-            }
-        } catch {
-            Write-Verbose "Failed to get User from Graph, check if Microsoft.Graph.Users module is installed"
-            Write-Verbose -Message $_.Exception
-            $CheckError = $_.Exception
-        }
-    }
+    $owners = $ownersList.AdditionalProperties.mail -join ';'
 
     $AppCreds = Get-MgApplication -ApplicationId $ObjectID |
         Select-Object PasswordCredentials, KeyCredentials
@@ -319,10 +305,6 @@ foreach ($App in $Applications) {
     }
     
 }
-if($CheckError.Length -gt 0){
-    Write-Warning "Failed to get User from Graph, check if Microsoft.Graph.Users module is installed"
-    Write-Warning $CheckError
-}
 
 
 
@@ -337,8 +319,9 @@ catch {
     Write-Error -Message $_.Exception
     throw $_.Exception
 }
+
 $Count = 0
-$CheckError = ""
+
 foreach ($EnterpriseApp in $EnterpriseApps) {
     $Completed = ($count/$EnterpriseApps.count) * 100
     $count ++
@@ -352,19 +335,7 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
     $AppID  = $EnterpriseApp.AppId
     $AppType = $EnterpriseApp.ServicePrincipalType
     $ownersList = Get-MgServicePrincipalOwner -ServicePrincipalId  $EnterpriseApp.Id
-    $owners = ""
-    if($ownersList) {
-        try{
-            foreach ($owner in $ownersList){
-                $mail = (Get-MgUser -UserId $owner.id).mail
-                $owners += "$mail;"
-            }
-        } catch {
-            Write-Verbose "Failed to get User from Graph, check if Microsoft.Graph.Users module is installed"
-            Write-Verbose -Message $_.Exception
-            $CheckError = $_.Exception
-        }
-    }
+    $owners = $ownersList.AdditionalProperties.mail -join ';'
 
 
     $AppCreds = Get-MgServicePrincipal -ServicePrincipalId $ObjectID |
@@ -400,9 +371,6 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
         ############################################
     }
     
-}
-if($CheckError.Length -gt 0){
-    Write-Warning $CheckError
 }
 
 
