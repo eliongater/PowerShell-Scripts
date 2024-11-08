@@ -54,7 +54,7 @@ catch {
 }
 
 #Connecting to Azure
-try
+<#try
 {
     "Logging in to Azure"
     Connect-AzAccount -Identity
@@ -63,7 +63,7 @@ try
 catch {
     Write-Error -Message $_.Exception
     throw $_.Exception
-}
+}#>
 
 #Initialise Global variables
 #$Global:MailTo = "elijah.smart@datacom.com;nzemmtest@datacom.com"
