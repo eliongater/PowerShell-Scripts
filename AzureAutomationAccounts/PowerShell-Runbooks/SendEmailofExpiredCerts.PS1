@@ -417,7 +417,8 @@ $ReportEmailBody += "</table>"
 
 #Send report email
 $SendReportAlways = $True
+$ReportSubject = "Report of Expired/Expiring Enterprise app and App registraion Certs/Secrets"
 #If it's the first of the month or $SendReportAlways = $True, send a list of all upcoming expirations
 if(((Get-Date).Day -eq 1) -or $SendReportAlways){
-    Send-Email -MsgBody $ReportEmailBody -MailTo $ReportMailTo
+    Send-Email -MsgBody $ReportEmailBody -MailTo $ReportMailTo -Subject $ReportSubject
 }
