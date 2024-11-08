@@ -274,9 +274,11 @@ foreach ($App in $Applications) {
     $test = @()
     foreach ($owner in $ownersList){
         $test += $owner.AdditionalProperties.mail
+        Write-Output $owner
         Write-Output $owner.AdditionalProperties
         Write-Output $owner.AdditionalProperties.mail
         Write-Output $owner.AdditionalProperties.userPrincipalName
+        Write-Output $($owner.AdditionalProperties.userPrincipalName)
         Write-Output $owner.AdditionalProperties.displayName
     }
     $test2 = $test -join ';'
