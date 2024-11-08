@@ -32,8 +32,8 @@
 
         .NOTES
         AUTHOR: Elijah Smart
-        LASTEDIT: Oct 30, 2024
-        VERSION: 1.6
+        LASTEDIT: Nov 1, 2024
+        VERSION: 1.8
 
 
 #>
@@ -95,13 +95,7 @@ function Send-Email {
                 ContentType = "HTML"
                 Content = $MsgBody
                 }
-            ToRecipients = @(
-                @{
-                    EmailAddress = @{
-                    Address = $MailTo
-                    }
-                }
-                )
+            ToRecipients = @()
                 Attachments = @(
             @{
                 "@odata.type" = "#microsoft.graph.fileAttachment"
@@ -118,15 +112,19 @@ function Send-Email {
                 ContentType = "HTML"
                 Content = $msgBody
                 }
-            ToRecipients = @(
-                @{
-                    EmailAddress = @{
-                    Address = $MailTo
-                    }
-                }
-            )
+            ToRecipients = @()
         }
 
+    }
+
+    $EmailAddresses = $MailTo.split(";")
+    foreach ($EmailAddress in $EmailAddresses){
+        Write-Output "Adding $EmailAddress to recipients"
+        $Message.ToRecipients += @{
+            EmailAddress = @{
+                Address = $EmailAddress
+            }
+        }
     }
 
     #Send email
@@ -241,7 +239,7 @@ try{
 catch{
     Write-Error "Failed to enumerate Prior Alerts, check that it is indeed a hash table"
     Write-Error -Message $_.Exception
-    throw $_.Excepti
+    throw $_.Exception
 }
 #Note, cannot modify a hashtable whilst it is being enumerated. 
 foreach ($AlertToRemove in $AlertsToRemove){
@@ -271,18 +269,7 @@ foreach ($App in $Applications) {
     $ObjectID   = $App.Id
     $AppID  = $App.AppId
     $ownersList = Get-MgApplicationOwner -ApplicationId $app.Id
-    $owners = ""
-    if($ownersList) {
-        try{
-            foreach ($owner in $ownersList){
-                $mail = (Get-MgUser -UserId $owner.id).mail
-                $owners += "$mail;"
-            }
-        } catch {
-            Write-Warning "Failed to get User from Graph, check if Microsoft.Graph.Users module is installed"
-            Write-Warning -Message $_.Exception
-        }
-    }
+    $owners = $ownersList.AdditionalProperties.mail -join ';'
 
     $AppCreds = Get-MgApplication -ApplicationId $ObjectID |
         Select-Object PasswordCredentials, KeyCredentials
@@ -305,13 +292,13 @@ foreach ($App in $Applications) {
     [Array]::Sort($EndDates)
 
     #If closest expiration is in the x day period we care about
-    if($EndDates[0] -lt $ExpirationDateToCheck -and $EndDates.Length -gt 0){
+    if($EndDates[-1] -lt $ExpirationDateToCheck -and $EndDates.Length -gt 0){
         ############################################
         $Expirations += [PSCustomObject]@{
             'AppName'                = $AppName
             'ObjectID'               = $ObjectID
             'ApplicationID'          = $AppID
-            'Date'                   = $EndDates[0]
+            'Date'                   = $EndDates[-1]
             'Owners'                 = $owners
         }
         ############################################
@@ -332,7 +319,9 @@ catch {
     Write-Error -Message $_.Exception
     throw $_.Exception
 }
+
 $Count = 0
+
 foreach ($EnterpriseApp in $EnterpriseApps) {
     $Completed = ($count/$EnterpriseApps.count) * 100
     $count ++
@@ -346,18 +335,7 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
     $AppID  = $EnterpriseApp.AppId
     $AppType = $EnterpriseApp.ServicePrincipalType
     $ownersList = Get-MgServicePrincipalOwner -ServicePrincipalId  $EnterpriseApp.Id
-    $owners = ""
-    if($ownersList) {
-        try{
-            foreach ($owner in $ownersList){
-                $mail = (Get-MgUser -UserId $owner.id).mail
-                $owners += "$mail;"
-            }
-        } catch {
-            Write-Warning "Failed to get User from Graph, check if Microsoft.Graph.Users module is installed"
-            Write-Warning -Message $_.Exception
-        }
-    }
+    $owners = $ownersList.AdditionalProperties.mail -join ';'
 
 
     $AppCreds = Get-MgServicePrincipal -ServicePrincipalId $ObjectID |
@@ -381,19 +359,20 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
     [Array]::Sort($EndDates)
 
     #If closest expiration is in the x day period we care about
-    if($EndDates[0] -lt $ExpirationDateToCheck -and $EndDates.Length -gt 0 -and $AppType -eq "Application"){
+    if($EndDates[-1] -lt $ExpirationDateToCheck -and $EndDates.Length -gt 0 -and $AppType -eq "Application"){
         ############################################
         $Expirations += [PSCustomObject]@{
             'AppName'                = $AppName
             'ObjectID'               = $ObjectID
             'ApplicationID'          = $AppID
-            'Date'                   = $EndDates[0]
+            'Date'                   = $EndDates[-1]
             'Owners'                 = $owners
         }
         ############################################
     }
     
 }
+
 
 
 
@@ -438,7 +417,8 @@ $ReportEmailBody += "</table>"
 
 #Send report email
 $SendReportAlways = $True
+$ReportSubject = "Report of Expired/Expiring Enterprise app and App registraion Certs/Secrets"
 #If it's the first of the month or $SendReportAlways = $True, send a list of all upcoming expirations
 if(((Get-Date).Day -eq 1) -or $SendReportAlways){
-    Send-Email -MsgBody $ReportEmailBody -MailTo $ReportMailTo
+    Send-Email -MsgBody $ReportEmailBody -MailTo $ReportMailTo -Subject $ReportSubject
 }
