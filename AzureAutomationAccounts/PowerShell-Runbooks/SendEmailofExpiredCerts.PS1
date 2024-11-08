@@ -66,8 +66,8 @@ catch {
 }
 
 #Initialise Global variables
-$Global:MailTo = "elijah.smart@datacom.com;nzemmtest@datacom.com"
-#$Global:MailTo = "nhcazurecertautomation@datacom.com"
+#$Global:MailTo = "elijah.smart@datacom.com;nzemmtest@datacom.com"
+$Global:MailTo = "elijah.smart@datacom.com;nhcazurecertautomation@datacom.com"
 #$Global:MailFrom = "elijah.smart@now4you.nz"
 $Global:MailFrom = "azurecertautomation@naturalhazards.govt.nz"
 
