@@ -336,9 +336,6 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
     $AppType = $EnterpriseApp.ServicePrincipalType
     $ownersList = Get-MgServicePrincipalOwner -ServicePrincipalId  $EnterpriseApp.Id
     $owners = $ownersList.AdditionalProperties.mail -join ';'
-    Write-Verbose "AppName: $AppName"
-    Write-Verbose "OwnersList: $ownersList"
-    Write-Verbose "Owners: $owners"
 
 
     $AppCreds = Get-MgServicePrincipal -ServicePrincipalId $ObjectID |
@@ -375,6 +372,7 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
     }
     
 }
+
 
 
 
