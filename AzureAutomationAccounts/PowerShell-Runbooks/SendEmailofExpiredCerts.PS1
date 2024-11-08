@@ -32,8 +32,8 @@
 
         .NOTES
         AUTHOR: Elijah Smart
-        LASTEDIT: Nov 1, 2024
-        VERSION: 1.8
+        LASTEDIT: Nov 8, 2024
+        VERSION: 1.9
 
 
 #>
