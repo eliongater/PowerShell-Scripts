@@ -9,7 +9,7 @@
 #Connect to Azure
 Connect-AzAccount
 
-$AppObjectID = "71078dec-d452-4c8a-9251-97f070faa3a6"
+$AppObjectID = "980a32c6-66ee-4326-beb9-84af7b6d69d2"
 #$AppID = "a011ccc0-799e-4adf-ba37-64047e611c31"
 
 #Next, we need to give the application the permission, Application.Read.All which is the following ID: 9a5d68dd-52b0-4cc2-bd40-abcf44ac3a30. Luckily, during the process of creating the application we stored the application information in the variable, $AzureADApp so we can call the objectID property of the application by using “$AzureADApp.ID“.
@@ -33,9 +33,9 @@ Connect-MgGraph -Scope AppRoleAssignment.ReadWrite.All
 
 
 # The object id of the enterprise application 
-$ObjectId = "71078dec-d452-4c8a-9251-97f070faa3a6"
+$ObjectId = "980a32c6-66ee-4326-beb9-84af7b6d69d2"
 # Add the correct Graph scope to grant (e.g. User.Read)
-$graphScopes = "Application.Read.All","Mail.Send"
+$graphScopes = "User.ReadBasic.All"#,"Application.Read.All","Mail.Send"
 
 # Get the Microsoft Graph service principal
 $graph = Get-MgServicePrincipal -Filter "AppId eq '00000003-0000-0000-c000-000000000000'"
