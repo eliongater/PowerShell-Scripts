@@ -271,9 +271,18 @@ foreach ($App in $Applications) {
     $AppID  = $App.AppId
     $ownersList = Get-MgApplicationOwner -ApplicationId $app.Id
     $owners = $ownersList.AdditionalProperties.mail -join ';'
-    Write-Verbose "AppName: $AppName"
-    Write-Verbose "OwnersList: $ownersList"
-    Write-Verbose "Owners: $owners"
+    $test = @()
+    foreach ($owner in $ownersList){
+        $test += $owner.AdditionalProperties.mail
+        Write-Output $owner.AdditionalProperties
+        Write-Output $owner.AdditionalProperties.mail
+        Write-Output $owner.AdditionalProperties.userPrincipalName
+        Write-Output $owner.AdditionalProperties.displayName
+    }
+    $test2 = $test -join ';'
+    Write-Output "AppName: $AppName"
+    Write-Output "OwnersList: $ownersList"
+    Write-Output $ownersList.AdditionalProperties
 
     $AppCreds = Get-MgApplication -ApplicationId $ObjectID |
         Select-Object PasswordCredentials, KeyCredentials
