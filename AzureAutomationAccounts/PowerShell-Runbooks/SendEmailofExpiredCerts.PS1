@@ -118,7 +118,6 @@ function Send-Email {
     }
 
     $EmailAddresses = $MailTo.split(";")
-    Write-Verbose "$EmailAddresses"
     foreach ($EmailAddress in $EmailAddresses){
         Write-Output "Adding $EmailAddress to recipients"
         $Message.ToRecipients += @{
@@ -271,20 +270,6 @@ foreach ($App in $Applications) {
     $AppID  = $App.AppId
     $ownersList = Get-MgApplicationOwner -ApplicationId $app.Id
     $owners = $ownersList.AdditionalProperties.mail -join ';'
-    $test = @()
-    foreach ($owner in $ownersList){
-        $test += $owner.AdditionalProperties.mail
-        Write-Output $owner
-        Write-Output $owner.AdditionalProperties
-        Write-Output $owner.AdditionalProperties.mail
-        Write-Output $owner.AdditionalProperties.userPrincipalName
-        Write-Output $($owner.AdditionalProperties.userPrincipalName)
-        Write-Output $owner.AdditionalProperties.displayName
-    }
-    $test2 = $test -join ';'
-    Write-Output "AppName: $AppName"
-    Write-Output "OwnersList: $ownersList"
-    Write-Output $ownersList.AdditionalProperties
 
     $AppCreds = Get-MgApplication -ApplicationId $ObjectID |
         Select-Object PasswordCredentials, KeyCredentials
