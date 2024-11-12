@@ -67,7 +67,7 @@ catch {
 
 #Initialise Global variables
 #$Global:MailTo = "elijah.smart@datacom.com;nzemmtest@datacom.com"
-$Global:MailTo = "elijah.smart@datacom.com;nhcazurecertautomation@datacom.com"
+$Global:MailTo = "nhcazurecertautomation@datacom.com"
 #$Global:MailFrom = "elijah.smart@now4you.nz"
 $Global:MailFrom = "azurecertautomation@naturalhazards.govt.nz"
 
@@ -169,8 +169,8 @@ function ConvertTo-HashtableFromPsCustomObject {
 #**************************************************************************************
 
 #Initialise variables
-$ReportMailTo = "elijah.smart@datacom.com"
-#$ReportMailTo = "Security@eqc.govt.nz;sysops_reports@naturalhazards.govt.nz"
+#$ReportMailTo = "elijah.smart@datacom.com"
+$ReportMailTo = "Security@eqc.govt.nz;sysops_reports@naturalhazards.govt.nz"
 
 $Expirations = @()
 
@@ -416,7 +416,7 @@ $ReportEmailBody += "</table>"
 #$ReportEmailBody = $ReportEmailBody -replace ".$"
 
 #Send report email
-$SendReportAlways = $True
+$SendReportAlways = $False
 $ReportSubject = "Report of Expired/Expiring Enterprise app and App registraion Certs/Secrets"
 #If it's the first of the month or $SendReportAlways = $True, send a list of all upcoming expirations
 if(((Get-Date).Day -eq 1) -or $SendReportAlways){
