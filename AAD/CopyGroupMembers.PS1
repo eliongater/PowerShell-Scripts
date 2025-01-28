@@ -1,7 +1,7 @@
 # PowerShell script to copy users from one Entra ID group to another Entra ID group
 
 # Connect to Graph
-Connect-MgGraph
+Connect-MgGraph -Scopes "application.readwrite.all","group.readwrite.all","user.read.all"
 
 # Define the source and destination group names
 $sourceGroupName = "Azure_SMX_Archiving"
