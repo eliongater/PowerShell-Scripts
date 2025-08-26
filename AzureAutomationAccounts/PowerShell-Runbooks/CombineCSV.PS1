@@ -123,7 +123,7 @@ $ShareContainer = "csvdata"
 
 #Set and store context
 $AzureContext = Set-AzContext -SubscriptionName $AzureContext.Subscription -DefaultProfile $AzureContext
-$StorageAccountContextManagedIdentity = New-AzStorageContext -StorageAccountName $StorageAccount -UseConnectedAccount
+$StorageAccountContextManagedIdentity = New-AzStorageContext -StorageAccountName $StorageAccount -UseConnectedAccount -EnableFileBackupRequestIntent
 
 #Create SAS token for gp01sasftpprdsa01
 $objStartTime = Get-Date
@@ -236,17 +236,18 @@ catch {
 }
 
 #Combine the data based on a common field, posidnumber in user.csv and idnumber in pos.csv
+$CombinedData = @()
 try {
-    $CombinedData = foreach ($user in $UserData) {
-        $pos = $PosData | Where-Object { $_.EmployeeID -eq $user.posidnumber }
+    foreach ($user in $UserData) {
+        $pos = $PosData | Where-Object { $_.idnumber -eq $user.posidnumber }
         if ($pos) {
             # Create a new object combining user and pos data
-            [PSCustomObject]@{
+            $CombinedUser = [PSCustomObject]@{
                 WorkerID     = $user.idnumber
                 WorkerStatus = "Active"
                 City         = $pos.Description
-                CountryCode  = if($null -eq $pos.Country -or $pos.Country -eq "") {"NZ"} else {$pos.Country}
-                Department   = $pos.customfield_emphrdivision
+                CountryCode  = if($null -eq $user.Country -or $user.Country -eq "") {"NZ"} else {$user.Country}
+                Department   = $user.customfield_emphrdivision
                 FullName     = "$($user.FirstName) $($user.LastName)"
                 FirstName    = $user.FirstName
                 JobTitle     = $pos.fullname
@@ -260,8 +261,9 @@ try {
                 Division     = $user.customfield_emphrdivision
                 HasChanges   = $false
             }
+            $CombinedData += $CombinedUser
         } else {
-            Write-Output "No matching position found for posidnumber: $($user.posidnumber), idnumber: $($user.idnumber)"
+            Write-Warning "No matching position found for posidnumber: $($user.posidnumber), idnumber: $($user.idnumber)"
         }
     }
     Write-Output "Data combined successfully."
@@ -273,14 +275,50 @@ catch {
 }
 
 #Enumerate the combined data and compare the data with Entra ID, for each user with differences, increment $UpdateCount, then log the differences and update $HasChanges to $true
-$CombinedandComparedData =@{}
+$CombinedandComparedData = @()
 $UpdateCount = 0
+
+#Populate list of additional properties to retrieve from Entra ID: 
+$AdditionalProperties = "Id","employeeId","IsSoftDeleted","accountEnabled","streetAddress","city","state","postalCode","country","department","displayName","facsimileTelephoneNumber","givenName","jobTitle","mail","mailNickname","manager","mobile","physicalDeliveryOfficeName","preferredLanguage","surname","telephoneNumber","userPrincipalName","otherMails","companyName"
 foreach ($entry in $CombinedData) {
     try {
-        $user = Get-MgUser -UserId $entry.UserID -ErrorAction Stop
+        $user = $null
+        try {
+            #Attempt to get the user by EmployeeID first
+            $user = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "EmployeeID eq '$($entry.WorkerID)'" -Top 1 -Property $AdditionalProperties
+        }
+        catch {
+            try {
+                #Attempt to get the user by UserPrincipalName second
+                $user = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(UserPrincipalName, '$($entry.UserID)@')" -Top 1 -Property $AdditionalProperties
+            }
+            catch {
+                $user = $null
+            }
+        }
+        
         if ($null -ne $user) {
             #Compare fields and log differences
             $differences = @()
+
+            #Get new manager
+            try{
+                $NewManager = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "EmployeeID eq '$($entry.ManagerID)@'" -Top 1 -Property $AdditionalProperties
+                $NewManager = $NewManager.DisplayName
+            }
+            catch {
+                $NewManager = ""
+            }
+
+            #Get current manager
+            try{
+                $CurrentManager = Get-MgUserManager -UserId $user.Id
+                $CurrentManager = $CurrentManager.DisplayName
+            } catch {
+                $CurrentManager = ""
+            }
+            
+            <#
             if ($user.DisplayName -ne $entry.FullName) {
                 $differences += "DisplayName: '$($user.DisplayName)' -> '$($entry.FullName)'"
             }
@@ -290,23 +328,35 @@ foreach ($entry in $CombinedData) {
             if ($user.Surname -ne $entry.LastName) {
                 $differences += "Surname: '$($user.Surname)' -> '$($entry.LastName)'"
             }
+            #>
             if ($user.JobTitle -ne $entry.JobTitle) {
                 $differences += "JobTitle: '$($user.JobTitle)' -> '$($entry.JobTitle)'"
             }
+            <#
             if ($user.Mail -ne $entry.Email) {
                 $differences += "Mail: '$($user.Mail)' -> '$($entry.Email)'"
             }
+            #>
             if ($user.Department -ne $entry.Department) {
                 $differences += "Department: '$($user.Department)' -> '$($entry.Department)'"
             }
             if ($user.CompanyName -ne $entry.Company) {
                 $differences += "CompanyName: '$($user.CompanyName)' -> '$($entry.Company)'"
             }
-            if ($user.CountryLetterCode -ne $entry.CountryCode) {
-                $differences += "CountryLetterCode: '$($user.CountryLetterCode)' -> '$($entry.CountryCode)'"
+            if ($user.Country -ne $entry.CountryCode) {
+                $differences += "Country: '$($user.Country)' -> '$($entry.CountryCode)'"
             }
             if ($user.City -ne $entry.City) {
                 $differences += "City: '$($user.City)' -> '$($entry.City)'"
+            }
+            if ($user.EmployeeId -ne $entry.WorkerID) {
+                $differences += "EmployeeId: '$($user.EmployeeId)' -> '$($entry.WorkerID)'"
+            }
+            if ($CurrentManager -ne $NewManager) {
+                $differences += "Manager: '$($Currentmanager)' -> '$($NewManager)'"
+            }
+            if ($user.UserPrincipalName.StartsWith($entry.UserID) -eq $false) {
+                $differences += "UserPrincipalName: '$($user.UserPrincipalName)' -> '$($entry.UserID)'"
             }
 
             #If there are differences, increment the update count and log the differences
@@ -322,6 +372,10 @@ foreach ($entry in $CombinedData) {
             $CombinedandComparedData += $entry
         } else {
             Write-Output "User with UserID $($entry.UserID) not found in Entra ID."
+            $UpdateCount++
+            $entry.HasChanges = $true
+            #add the entry to the combined and compared data
+            $CombinedandComparedData += $entry
         }
     }
     catch {
@@ -353,7 +407,6 @@ if ($UpdateCount -gt $AutomaticUpdateLimit) {
 } elseif ($TestEmail -eq $true) {
     $MsgBody = "<p>Hello,</p><p>There are a total of $UpdateCount changes that will be applied to Entra ID.</p><p>Please review the attached CSV file containing the proposed changes</p><p>Thank you,<br/>Entra ID Provisioning Automation</p>"
     Send-Email -MailTo $Global:MailTo -Subject "HR Data Changes Pending Approval" -MsgBody $MsgBody -Attachment $TempCSVFilePath -MailFrom $Global:MailFrom
-    $AzureShareFileName = $PendingCSV
     Write-Output "Update count of $UpdateCount. Changes sent for review."
 }
 
