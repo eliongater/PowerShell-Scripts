@@ -112,7 +112,7 @@ $CombinedCSV = "HRData.csv"
 $PendingCSV = "HRData-Pending.csv"
 
 # Set the maximum number of automatic updates. If there are more than this, results are sent to Service Desk for approval.
-$AutomaticUpdateLimit = 20
+$AutomaticUpdateLimit = 4
 
 #Storage Account
 $StorageAccount = "gd01sasftpprdsa01"
@@ -246,7 +246,7 @@ try {
                 WorkerID     = $user.idnumber
                 WorkerStatus = "Active"
                 City         = $pos.Description
-                CountryCode  = if($null -eq $user.Country -or $user.Country -eq "") {"NZ"} else {$user.Country}
+                CountryCode  = if($null -eq $user.Country -or $user.Country -eq "") {"New Zealand"} else {$user.Country}
                 Department   = $user.customfield_emphrdivision
                 FullName     = "$($user.FirstName) $($user.LastName)"
                 FirstName    = $user.FirstName
@@ -369,6 +369,7 @@ foreach ($entry in $CombinedData) {
                 }
             }
             #add the entry to the combined and compared data
+            Write-Verbose "No Differences for UserID $($entry.UserID):"
             $CombinedandComparedData += $entry
         } else {
             Write-Output "User with UserID $($entry.UserID) not found in Entra ID."
@@ -406,7 +407,7 @@ if ($UpdateCount -gt $AutomaticUpdateLimit) {
     Write-Output "Update count $UpdateCount exceeds automatic update limit of $AutomaticUpdateLimit. Changes sent for approval."
 } elseif ($TestEmail -eq $true) {
     $MsgBody = "<p>Hello,</p><p>There are a total of $UpdateCount changes that will be applied to Entra ID.</p><p>Please review the attached CSV file containing the proposed changes</p><p>Thank you,<br/>Entra ID Provisioning Automation</p>"
-    Send-Email -MailTo $Global:MailTo -Subject "HR Data Changes Pending Approval" -MsgBody $MsgBody -Attachment $TempCSVFilePath -MailFrom $Global:MailFrom
+    Send-Email -MailTo $Global:MailTo -Subject "HR Data Changes for Review" -MsgBody $MsgBody -Attachment $TempCSVFilePath -MailFrom $Global:MailFrom
     Write-Output "Update count of $UpdateCount. Changes sent for review."
 }
 
