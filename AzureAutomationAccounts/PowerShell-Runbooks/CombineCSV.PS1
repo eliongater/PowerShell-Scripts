@@ -123,13 +123,13 @@ $ShareContainer = "csvdata"
 
 #Set and store context
 $AzureContext = Set-AzContext -SubscriptionName $AzureContext.Subscription -DefaultProfile $AzureContext
-$StorageAccountContextManagedIdentity = New-AzStorageContext -StorageAccountName $StorageAccount -UseConnectedAccount -EnableFileBackupRequestIntent
+#$StorageAccountContextManagedIdentity = New-AzStorageContext -StorageAccountName $StorageAccount -UseConnectedAccount -EnableFileBackupRequestIntent
 
 #Create SAS token for gp01sasftpprdsa01
 $objStartTime = Get-Date
 $objEndTime = $objStartTime.AddHours(1.0)
 $objSFTPStgAccount = Get-AzStorageAccount -Name $StorageAccount -ResourceGroupName $StorageAccountResourceGroup
-$objSFTPSASToken = New-AzStorageAccountSASToken -Service Blob,File -ResourceType Service,Container,Object -Permission "rld" -startTime $objStartTime -ExpiryTime $objEndTime -Context $objSFTPStgAccount.Context
+$objSFTPSASToken = New-AzStorageAccountSASToken -Service Blob,File -ResourceType Service,Container,Object -Permission "rwld" -startTime $objStartTime -ExpiryTime $objEndTime -Context $objSFTPStgAccount.Context
 $StorageAccountContextSAS = New-AzStorageContext -storageAccountName $StorageAccount -SasToken $objSFTPSASToken
 
 
