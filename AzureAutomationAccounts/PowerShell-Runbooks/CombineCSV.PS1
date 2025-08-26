@@ -317,7 +317,7 @@ foreach ($entry in $CombinedData) {
         try{
             Write-Output "Getting current manager for UserID $($entry.UserID), user Entra ID: $($user.Id)"
             $CurrentManager = Get-MgUserManager -UserId $user.Id
-            $CurrentManager = $CurrentManager.DisplayName
+            $CurrentManager = (Get-MgUser -UserId $CurrentManager).DisplayName
         } catch {
             $CurrentManager = ""
             Write-Warning "Current manager for UserID $($entry.UserID), user Entra ID: $($user.Id) not found."
@@ -415,7 +415,7 @@ if ($UpdateCount -gt $AutomaticUpdateLimit) {
 
 #Upload the combined CSV back to Azure file share
 try {
-    Write-Output "Uploading combined CSV to Azure File Share: $ShareContainer, path: $AzureShareFileName, source: $TempCSVFilePath with storage account context: $StorageAccountContextSAS"
+    Write-Output "Uploading combined CSV to Azure File Share: $ShareContainer, storage account: $StorageAccount path: $AzureShareFileName, source: $TempCSVFilePath with storage account context: $StorageAccountContextSAS"
     Set-AzStorageFileContent -ShareName $ShareContainer -Path $AzureShareFileName -Source $TempCSVFilePath -Context $StorageAccountContextSAS -Force
     Write-Output "Combined CSV uploaded successfully to Azure File Share."
 } 
