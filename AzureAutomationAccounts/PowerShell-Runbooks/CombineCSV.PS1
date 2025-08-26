@@ -42,7 +42,7 @@ function Send-Email {
         [system.string]$Attachment
     )
     #Initialise Variables
-    $Message
+    $Message = $null
 
     #E.g. $Attachment = "C:\logs\mytestapp.log"
     #If a file path to an attachment is passed as a parameter, then send with an attachment, else send without one
@@ -90,7 +90,7 @@ function Send-Email {
     #Send email
     try
     {
-        "Sending email from $MailFrom to $MailTo, with the subject $Subject"
+        Write-Output "Sending email from $MailFrom to $MailTo, with the subject $Subject"
         Send-MgUserMail -UserId $MailFrom -Message $Message
     }
     catch {
