@@ -316,7 +316,7 @@ foreach ($entry in $CombinedData) {
         #Get current manager
         try{
             Write-Output "Getting current manager for UserID $($entry.UserID), user Entra ID: $($user.Id)"
-            $CurrentManager = Get-MgUserManager -UserId $user.Id
+            $CurrentManager = Get-MgUserManager -UserId $user.Id -ErrorAction Stop
             $CurrentManager = (Get-MgUser -UserId $CurrentManager).DisplayName
         } catch {
             $CurrentManager = ""
