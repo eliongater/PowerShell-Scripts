@@ -306,6 +306,10 @@ foreach ($entry in $CombinedData) {
         try{
             Write-Output "Getting new manager for UserID $($entry.UserID), Manager EmployeeID: $($entry.ManagerID)"
             $NewManager = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "EmployeeID eq '$($entry.ManagerID)@'" -Top 1 -Property $AdditionalProperties
+            if ($null -eq $NewManager) {
+                $NewManager = ""
+                throw "Manager with EmployeeID $($entry.ManagerID) not found."
+            }
             $NewManager = $NewManager.DisplayName
             Write-Output "New manager for UserID $($entry.UserID), Manager EmployeeID: $($entry.ManagerID) is $NewManager"
         }
