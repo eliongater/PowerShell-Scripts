@@ -281,110 +281,108 @@ $UpdateCount = 0
 #Populate list of additional properties to retrieve from Entra ID: 
 $AdditionalProperties = "Id","employeeId","IsSoftDeleted","accountEnabled","streetAddress","city","state","postalCode","country","department","displayName","facsimileTelephoneNumber","givenName","jobTitle","mail","mailNickname","manager","mobile","physicalDeliveryOfficeName","preferredLanguage","surname","telephoneNumber","userPrincipalName","otherMails","companyName"
 foreach ($entry in $CombinedData) {
+    $user = $null
     try {
-        $user = $null
-        try {
-            #Attempt to get the user by EmployeeID first
-            $user = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "EmployeeID eq '$($entry.WorkerID)'" -Top 1 -Property $AdditionalProperties
-        }
-        catch {
-            try {
-                #Attempt to get the user by UserPrincipalName second
-                $user = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(UserPrincipalName, '$($entry.UserID)@')" -Top 1 -Property $AdditionalProperties
-            }
-            catch {
-                $user = $null
-            }
-        }
-        
-        if ($null -ne $user) {
-            #Compare fields and log differences
-            $differences = @()
-
-            #Get new manager
-            try{
-                $NewManager = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "EmployeeID eq '$($entry.ManagerID)@'" -Top 1 -Property $AdditionalProperties
-                $NewManager = $NewManager.DisplayName
-            }
-            catch {
-                $NewManager = ""
-                Write-Warning $_.Exception
-            }
-
-            #Get current manager
-            try{
-                Write-Output "Getting current manager for UserID $($entry.UserID), user Entra ID: $($user.Id)"
-                $CurrentManager = Get-MgUserManager -UserId $user.Id
-                $CurrentManager = $CurrentManager.DisplayName
-            } catch {
-                $CurrentManager = ""
-                Write-Warning $_.Exception
-            }
-            
-            <#
-            if ($user.DisplayName -ne $entry.FullName) {
-                $differences += "DisplayName: '$($user.DisplayName)' -> '$($entry.FullName)'"
-            }
-            if ($user.GivenName -ne $entry.FirstName) {
-                $differences += "GivenName: '$($user.GivenName)' -> '$($entry.FirstName)'"
-            }
-            if ($user.Surname -ne $entry.LastName) {
-                $differences += "Surname: '$($user.Surname)' -> '$($entry.LastName)'"
-            }
-            #>
-            if ($user.JobTitle -ne $entry.JobTitle) {
-                $differences += "JobTitle: '$($user.JobTitle)' -> '$($entry.JobTitle)'"
-            }
-            <#
-            if ($user.Mail -ne $entry.Email) {
-                $differences += "Mail: '$($user.Mail)' -> '$($entry.Email)'"
-            }
-            #>
-            if ($user.Department -ne $entry.Department) {
-                $differences += "Department: '$($user.Department)' -> '$($entry.Department)'"
-            }
-            if ($user.CompanyName -ne $entry.Company) {
-                $differences += "CompanyName: '$($user.CompanyName)' -> '$($entry.Company)'"
-            }
-            if ($user.Country -ne $entry.CountryCode) {
-                $differences += "Country: '$($user.Country)' -> '$($entry.CountryCode)'"
-            }
-            if ($user.City -ne $entry.City) {
-                $differences += "City: '$($user.City)' -> '$($entry.City)'"
-            }
-            if ($user.EmployeeId -ne $entry.WorkerID) {
-                $differences += "EmployeeId: '$($user.EmployeeId)' -> '$($entry.WorkerID)'"
-            }
-            if ($CurrentManager -ne $NewManager) {
-                $differences += "Manager: '$($Currentmanager)' -> '$($NewManager)'"
-            }
-            if ($user.UserPrincipalName.StartsWith($entry.UserID) -eq $false) {
-                $differences += "UserPrincipalName: '$($user.UserPrincipalName)' -> '$($entry.UserID)'"
-            }
-
-            #If there are differences, increment the update count and log the differences
-            if ($differences.Count -gt 0) {
-                $UpdateCount++
-                $entry.HasChanges = $true
-                Write-Output "Differences for UserID $($entry.UserID):"
-                foreach ($diff in $differences) {
-                    Write-Output "  - $diff"
-                }
-            }
-            #add the entry to the combined and compared data
-            Write-Verbose "No Differences for UserID $($entry.UserID):"
-            $CombinedandComparedData += $entry
-        } else {
-            Write-Output "User with UserID $($entry.UserID) not found in Entra ID."
-            $UpdateCount++
-            $entry.HasChanges = $true
-            #add the entry to the combined and compared data
-            $CombinedandComparedData += $entry
-        }
+        #Attempt to get the user by EmployeeID first
+        $user = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "EmployeeID eq '$($entry.WorkerID)'" -Top 1 -Property $AdditionalProperties
     }
     catch {
-        Write-Error -Message "Error retrieving user with UserID $($entry.UserID): $_"
-        throw $_.Exception
+        try {
+            #Attempt to get the user by UserPrincipalName second
+            $user = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(UserPrincipalName, '$($entry.UserID)@')" -Top 1 -Property $AdditionalProperties
+        }
+        catch {
+            $user = $null
+            Write-Warning "User with EmployeeID $($entry.WorkerID) or UserPrincipalName starting with $($entry.UserID) not found."
+            Write-Warning $_.Exception
+        }
+    }
+    
+    if ($null -ne $user) {
+        #Compare fields and log differences
+        $differences = @()
+
+        #Get new manager
+        try{
+            $NewManager = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "EmployeeID eq '$($entry.ManagerID)@'" -Top 1 -Property $AdditionalProperties
+            $NewManager = $NewManager.DisplayName
+        }
+        catch {
+            $NewManager = ""
+            Write-Warning "Manager with EmployeeID $($entry.ManagerID) not found."
+            Write-Warning $_.Exception
+        }
+
+        #Get current manager
+        try{
+            Write-Output "Getting current manager for UserID $($entry.UserID), user Entra ID: $($user.Id)"
+            $CurrentManager = Get-MgUserManager -UserId $user.Id
+            $CurrentManager = $CurrentManager.DisplayName
+        } catch {
+            $CurrentManager = ""
+            Write-Warning "Current manager for UserID $($entry.UserID), user Entra ID: $($user.Id) not found."
+            Write-Warning $_.Exception
+        }
+        
+        <#
+        if ($user.DisplayName -ne $entry.FullName) {
+            $differences += "DisplayName: '$($user.DisplayName)' -> '$($entry.FullName)'"
+        }
+        if ($user.GivenName -ne $entry.FirstName) {
+            $differences += "GivenName: '$($user.GivenName)' -> '$($entry.FirstName)'"
+        }
+        if ($user.Surname -ne $entry.LastName) {
+            $differences += "Surname: '$($user.Surname)' -> '$($entry.LastName)'"
+        }
+        #>
+        if ($user.JobTitle -ne $entry.JobTitle) {
+            $differences += "JobTitle: '$($user.JobTitle)' -> '$($entry.JobTitle)'"
+        }
+        <#
+        if ($user.Mail -ne $entry.Email) {
+            $differences += "Mail: '$($user.Mail)' -> '$($entry.Email)'"
+        }
+        #>
+        if ($user.Department -ne $entry.Department) {
+            $differences += "Department: '$($user.Department)' -> '$($entry.Department)'"
+        }
+        if ($user.CompanyName -ne $entry.Company) {
+            $differences += "CompanyName: '$($user.CompanyName)' -> '$($entry.Company)'"
+        }
+        if ($user.Country -ne $entry.CountryCode) {
+            $differences += "Country: '$($user.Country)' -> '$($entry.CountryCode)'"
+        }
+        if ($user.City -ne $entry.City) {
+            $differences += "City: '$($user.City)' -> '$($entry.City)'"
+        }
+        if ($user.EmployeeId -ne $entry.WorkerID) {
+            $differences += "EmployeeId: '$($user.EmployeeId)' -> '$($entry.WorkerID)'"
+        }
+        if ($CurrentManager -ne $NewManager) {
+            $differences += "Manager: '$($Currentmanager)' -> '$($NewManager)'"
+        }
+        if ($user.UserPrincipalName.StartsWith($entry.UserID) -eq $false) {
+            $differences += "UserPrincipalName: '$($user.UserPrincipalName)' -> '$($entry.UserID)'"
+        }
+
+        #If there are differences, increment the update count and log the differences
+        if ($differences.Count -gt 0) {
+            $UpdateCount++
+            $entry.HasChanges = $true
+            Write-Output "Differences for UserID $($entry.UserID):"
+            foreach ($diff in $differences) {
+                Write-Output "  - $diff"
+            }
+        }
+        #add the entry to the combined and compared data
+        Write-Output "No Differences for UserID $($entry.UserID):"
+        $CombinedandComparedData += $entry
+    } else {
+        Write-Output "User with UserID $($entry.UserID) not found in Entra ID."
+        $UpdateCount++
+        $entry.HasChanges = $true
+        #add the entry to the combined and compared data
+        $CombinedandComparedData += $entry
     }
 }
 
