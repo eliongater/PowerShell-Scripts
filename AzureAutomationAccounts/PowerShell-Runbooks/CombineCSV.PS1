@@ -121,6 +121,7 @@ $StorageAccountContext = New-AzStorageContext -StorageAccountName $StorageAccoun
 
 
 #Get Blob content
+<#
 try {
     $BlobFolderContent = Get-AzStorageBlob -Container $StorageContainer -Context $StorageAccountContext
     Write-Log " Retrieved Blob content."
@@ -129,6 +130,7 @@ catch {
     Write-Error -Message $_.Exception
     throw $_.Exception
 }
+#>
 
 
 #Get the user.csv and pos.csv files
