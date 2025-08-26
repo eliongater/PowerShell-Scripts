@@ -14,7 +14,10 @@ catch {
 $AzureContext = $null
 #Connect using a Managed Service Identity
 try {
+    "Logging in to Azure"
     $AzureContext = (Connect-AzAccount -Identity -ErrorAction Stop).context
+    "Logged into Azure"
+    Write-Output "Azure Context: $AzureContext"
 }
 catch{
     Write-Output "There is no system-assigned user identity. Aborting."; 
@@ -25,7 +28,7 @@ catch{
 #Initialise Global variables
 $Global:MailTo = "elijah.smart@datacom.com"
 #$Global:MailTo = "nhcazurecertautomation@datacom.com"
-$Global:MailFrom = "elijah.smart@now4you.nz"
+$Global:MailFrom = "elijah.smart@eqcnztst.xyz"
 #$Global:MailFrom = "azurecertautomation@naturalhazards.govt.nz"
 
 
@@ -112,12 +115,22 @@ $PendingCSV = "HRData-Pending.csv"
 $AutomaticUpdateLimit = 20
 
 #Storage Account
-$StorageAccount = "gp01sasftpprdsa01"
+$StorageAccount = "gd01sasftpprdsa01"
 $StorageContainer = "fusion5jadestaradprod"
+$StorageAccountResourceGroup = "generalprod01-prd-sasftp-ae-rg"
+
+$ShareContainer = "csvdata"
 
 #Set and store context
 $AzureContext = Set-AzContext -SubscriptionName $AzureContext.Subscription -DefaultProfile $AzureContext
-$StorageAccountContext = New-AzStorageContext -StorageAccountName $StorageAccount -UseConnectedAccount
+$StorageAccountContextManagedIdentity = New-AzStorageContext -StorageAccountName $StorageAccount -UseConnectedAccount
+
+#Create SAS token for gp01sasftpprdsa01
+$objStartTime = Get-Date
+$objEndTime = $objStartTime.AddHours(1.0)
+$objSFTPStgAccount = Get-AzStorageAccount -Name $StorageAccount -ResourceGroupName $StorageAccountResourceGroup
+$objSFTPSASToken = New-AzStorageAccountSASToken -Service Blob -ResourceType Service,Container,Object -Permission "rld" -startTime $objStartTime -ExpiryTime $objEndTime -Context $objSFTPStgAccount.Context
+$StorageAccountContextSAS = New-AzStorageContext -storageAccountName $StorageAccount -SasToken $objSFTPSASToken
 
 
 #Get Blob content
@@ -154,7 +167,8 @@ catch {
 #>
 
 try{
-    $UserFile = Get-AzStorageBlob -Container $StorageContainer -Context $StorageAccountContext -Blob $UserCSV
+    Write-Output "Retrieving User CSV file: $UserCSV from container: $StorageContainer, with storage account context: $StorageAccountContextSAS"
+    $UserFile = Get-AzStorageBlob -Container $StorageContainer -Context $StorageAccountContextSAS -Blob $UserCSV
     if ($null -eq $UserFile) {
         throw "User CSV file not found in the blob storage."
     }
@@ -166,7 +180,8 @@ catch {
 }
 
 try{
-    $PosFile = Get-AzStorageBlob -Container $StorageContainer -Context $StorageAccountContext -Blob $PosCSV
+    Write-Output "Retrieving POS CSV file: $PosCSV from container: $StorageContainer, with storage account context: $StorageAccountContextSAS"
+    $PosFile = Get-AzStorageBlob -Container $StorageContainer -Context $StorageAccountContextSAS -Blob $PosCSV
     if ($null -eq $PosFile) {
         throw "POS CSV file not found in the blob storage."
     }
@@ -328,8 +343,14 @@ catch {
 
 #If $UpdateCount is greater than $AutomaticUpdateLimit, send the CSV to Service Desk and HR for approval, change the filename from $CombinedCSV to $PendingCSV, else proceed
 $AzureShareFileName = $CombinedCSV
+$TestEmail = $true
 if ($UpdateCount -gt $AutomaticUpdateLimit) {
     $MsgBody = "<p>Hello,</p><p>The number of changes detected in the HR data exceeds the automatic update limit of $AutomaticUpdateLimit. There are a total of $UpdateCount changes that require your approval before they can be applied to Entra ID.</p><p>Please review the attached CSV file containing the proposed changes and approve or reject them as necessary.</p><p>Thank you,<br/>Entra ID Provisioning Automation</p>"
+    Send-Email -MailTo $Global:MailTo -Subject "HR Data Changes Pending Approval" -MsgBody $MsgBody -Attachment $TempCSVFilePath -MailFrom $Global:MailFrom
+    $AzureShareFileName = $PendingCSV
+    Write-Output "Update count $UpdateCount exceeds automatic update limit of $AutomaticUpdateLimit. Changes sent for approval."
+} elseif ($TestEmail -eq $true) {
+    $MsgBody = "<p>Hello,</p><p>There are a total of $UpdateCount changes that will be applied to Entra ID.</p><p>Please review the attached CSV file containing the proposed changes</p><p>Thank you,<br/>Entra ID Provisioning Automation</p>"
     Send-Email -MailTo $Global:MailTo -Subject "HR Data Changes Pending Approval" -MsgBody $MsgBody -Attachment $TempCSVFilePath -MailFrom $Global:MailFrom
     $AzureShareFileName = $PendingCSV
     Write-Output "Update count $UpdateCount exceeds automatic update limit of $AutomaticUpdateLimit. Changes sent for approval."
@@ -338,7 +359,8 @@ if ($UpdateCount -gt $AutomaticUpdateLimit) {
 
 #Upload the combined CSV back to Azure file share
 try {
-    Set-AzStorageFileContent -ShareName $StorageContainer -Path $AzureShareFileName -Source $TempCSVFilePath -Context $StorageAccountContext -Force
+    Write-Output "Uploading combined CSV to Azure File Share: $ShareContainer, path: $AzureShareFileName, source: $TempCSVFilePath with storage account context: $StorageAccountContextManagedIdentity"
+    Set-AzStorageFileContent -ShareName $ShareContainer -Path $AzureShareFileName -Source $TempCSVFilePath -Context $StorageAccountContextManagedIdentity -Force
     Write-Output "Combined CSV uploaded successfully to Azure File Share."
 } 
 catch {

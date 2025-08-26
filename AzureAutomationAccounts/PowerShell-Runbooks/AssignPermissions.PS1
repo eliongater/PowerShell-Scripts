@@ -33,9 +33,9 @@ Connect-MgGraph -Scope AppRoleAssignment.ReadWrite.All
 
 
 # The object id of the enterprise application 
-$ObjectId = "71078dec-d452-4c8a-9251-97f070faa3a6"
+$ObjectId = "fa048a46-aea1-4cb3-b067-a0115ef10316"
 # Add the correct Graph scope to grant (e.g. User.Read)
-$graphScopes = "User.ReadBasic.All"#,"Application.Read.All","Mail.Send"
+$graphScopes = "User.ReadBasic.All",<#"Application.Read.All",#>"Mail.Send"
 
 # Get the Microsoft Graph service principal
 $graph = Get-MgServicePrincipal -Filter "AppId eq '00000003-0000-0000-c000-000000000000'"
