@@ -308,17 +308,17 @@ foreach ($entry in $CombinedData) {
             }
             catch {
                 $NewManager = ""
-                Write-Verbose $_.Exception
+                Write-Warning $_.Exception
             }
 
             #Get current manager
             try{
-                Write-Verbose "Getting current manager for UserID $($entry.UserID), user Entra ID: $($user.Id)"
+                Write-Output "Getting current manager for UserID $($entry.UserID), user Entra ID: $($user.Id)"
                 $CurrentManager = Get-MgUserManager -UserId $user.Id
                 $CurrentManager = $CurrentManager.DisplayName
             } catch {
                 $CurrentManager = ""
-                Write-Verbose $_.Exception
+                Write-Warning $_.Exception
             }
             
             <#
