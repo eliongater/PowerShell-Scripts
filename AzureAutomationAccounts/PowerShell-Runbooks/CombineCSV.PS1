@@ -326,6 +326,7 @@ foreach ($entry in $CombinedData) {
     }
     catch {
         Write-Error -Message "Error retrieving user with UserID $($entry.UserID): $_"
+        throw $_.Exception
     }
 }
 
@@ -353,7 +354,7 @@ if ($UpdateCount -gt $AutomaticUpdateLimit) {
     $MsgBody = "<p>Hello,</p><p>There are a total of $UpdateCount changes that will be applied to Entra ID.</p><p>Please review the attached CSV file containing the proposed changes</p><p>Thank you,<br/>Entra ID Provisioning Automation</p>"
     Send-Email -MailTo $Global:MailTo -Subject "HR Data Changes Pending Approval" -MsgBody $MsgBody -Attachment $TempCSVFilePath -MailFrom $Global:MailFrom
     $AzureShareFileName = $PendingCSV
-    Write-Output "Update count $UpdateCount exceeds automatic update limit of $AutomaticUpdateLimit. Changes sent for approval."
+    Write-Output "Update count of $UpdateCount. Changes sent for review."
 }
 
 
