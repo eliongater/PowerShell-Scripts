@@ -308,6 +308,7 @@ foreach ($entry in $CombinedData) {
             }
             catch {
                 $NewManager = ""
+                Write-Verbose $_.Exception
             }
 
             #Get current manager
@@ -316,6 +317,7 @@ foreach ($entry in $CombinedData) {
                 $CurrentManager = $CurrentManager.DisplayName
             } catch {
                 $CurrentManager = ""
+                Write-Verbose $_.Exception
             }
             
             <#
