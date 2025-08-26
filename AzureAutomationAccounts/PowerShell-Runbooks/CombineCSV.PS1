@@ -129,7 +129,7 @@ $StorageAccountContextManagedIdentity = New-AzStorageContext -StorageAccountName
 $objStartTime = Get-Date
 $objEndTime = $objStartTime.AddHours(1.0)
 $objSFTPStgAccount = Get-AzStorageAccount -Name $StorageAccount -ResourceGroupName $StorageAccountResourceGroup
-$objSFTPSASToken = New-AzStorageAccountSASToken -Service Blob -ResourceType Service,Container,Object -Permission "rld" -startTime $objStartTime -ExpiryTime $objEndTime -Context $objSFTPStgAccount.Context
+$objSFTPSASToken = New-AzStorageAccountSASToken -Service Blob,File -ResourceType Service,Container,Object -Permission "rld" -startTime $objStartTime -ExpiryTime $objEndTime -Context $objSFTPStgAccount.Context
 $StorageAccountContextSAS = New-AzStorageContext -storageAccountName $StorageAccount -SasToken $objSFTPSASToken
 
 
@@ -413,8 +413,8 @@ if ($UpdateCount -gt $AutomaticUpdateLimit) {
 
 #Upload the combined CSV back to Azure file share
 try {
-    Write-Output "Uploading combined CSV to Azure File Share: $ShareContainer, path: $AzureShareFileName, source: $TempCSVFilePath with storage account context: $StorageAccountContextManagedIdentity"
-    Set-AzStorageFileContent -ShareName $ShareContainer -Path $AzureShareFileName -Source $TempCSVFilePath -Context $StorageAccountContextManagedIdentity -Force
+    Write-Output "Uploading combined CSV to Azure File Share: $ShareContainer, path: $AzureShareFileName, source: $TempCSVFilePath with storage account context: $StorageAccountContextSAS"
+    Set-AzStorageFileContent -ShareName $ShareContainer -Path $AzureShareFileName -Source $TempCSVFilePath -Context $StorageAccountContextSAS -Force
     Write-Output "Combined CSV uploaded successfully to Azure File Share."
 } 
 catch {
