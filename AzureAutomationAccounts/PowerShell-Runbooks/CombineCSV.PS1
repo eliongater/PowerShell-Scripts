@@ -304,8 +304,10 @@ foreach ($entry in $CombinedData) {
 
         #Get new manager
         try{
+            Write-Output "Getting new manager for UserID $($entry.UserID), Manager EmployeeID: $($entry.ManagerID)"
             $NewManager = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "EmployeeID eq '$($entry.ManagerID)@'" -Top 1 -Property $AdditionalProperties
             $NewManager = $NewManager.DisplayName
+            Write-Output "New manager for UserID $($entry.UserID), Manager EmployeeID: $($entry.ManagerID) is $NewManager"
         }
         catch {
             $NewManager = ""
@@ -318,6 +320,7 @@ foreach ($entry in $CombinedData) {
             Write-Output "Getting current manager for UserID $($entry.UserID), user Entra ID: $($user.Id)"
             $CurrentManager = Get-MgUserManager -UserId $user.Id -ErrorAction Stop
             $CurrentManager = (Get-MgUser -UserId $CurrentManager).DisplayName
+            Write-Output "Current manager for UserID $($entry.UserID), user Entra ID: $($user.Id) is $CurrentManager"
         } catch {
             $CurrentManager = ""
             Write-Warning "Current manager for UserID $($entry.UserID), user Entra ID: $($user.Id) not found."
