@@ -373,10 +373,12 @@ foreach ($entry in $CombinedData) {
             foreach ($diff in $differences) {
                 Write-Output "  - $diff"
             }
+        } else {
+            #add the entry to the combined and compared data
+            Write-Output "No Differences for UserID $($entry.UserID):"
+            $CombinedandComparedData += $entry
         }
-        #add the entry to the combined and compared data
-        Write-Output "No Differences for UserID $($entry.UserID):"
-        $CombinedandComparedData += $entry
+        
     } else {
         Write-Output "User with UserID $($entry.UserID) not found in Entra ID."
         $UpdateCount++
