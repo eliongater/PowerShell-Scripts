@@ -326,7 +326,7 @@ foreach ($entry in $CombinedData) {
         }
 
         if($null -eq $NewManager -or $NewManager -eq "") {
-            $NewManagerData = $PosData | Where-Object { $_.idnumber -eq $user.ManagerID }
+            $NewManagerData = $PosData | Where-Object { $_.idnumber -eq $entry.ManagerID }
             $NewManagerUPN = $NewManagerData.UserID
             try{
                 Write-Output "Getting new manager for UserID $($entry.UserID), Manager UPN: $($NewManagerUPN)"
