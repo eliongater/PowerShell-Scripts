@@ -2,7 +2,7 @@
 Connect-AzAccount
 
 #Set variables
-$StorageAccount = "gD01sasftpprdsa01"
+$StorageAccount = "gd01sasftpprdsa01"
 $ResourceGroupName = "generalprod01-prd-sasftp-ae-rg"
 $SubscriptionName = "PAYG-AW"
 
