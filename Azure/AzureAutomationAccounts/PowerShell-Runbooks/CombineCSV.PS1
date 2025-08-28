@@ -325,11 +325,25 @@ foreach ($entry in $CombinedData) {
             Write-Warning $_.Exception
         }
 
+        if($null -eq $NewManager -or $NewManager -eq "") {
+            $NewManagerData = $PosData | Where-Object { $_.idnumber -eq $user.ManagerID }
+            $NewManagerUPN = $NewManagerData.UserID
+            try{
+                Write-Output "Getting new manager for UserID $($entry.UserID), Manager UPN: $($NewManagerUPN)"
+                $NewManager = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(UserPrincipalName, '$NewManagerUPN@')" -Top 1 -Property $AdditionalProperties
+            } catch {
+                $NewManager = $null
+                Write-Warning "Manager with UPN starting with $($NewManagerUPN) not found."
+                Write-Warning $_.Exception
+            }
+            
+        }
+
         #Get current manager
         try{
             Write-Output "Getting current manager for UserID $($entry.UserID), user Entra ID: $($user.Id)"
             $CurrentManager = Get-MgUserManager -UserId $user.Id -ErrorAction Stop
-            $CurrentManager = (Get-MgUser -UserId $CurrentManager).DisplayName
+            $CurrentManager = (Get-MgUser -UserId $CurrentManager.id).DisplayName
             Write-Output "Current manager for UserID $($entry.UserID), user Entra ID: $($user.Id) is $CurrentManager"
         } catch {
             $CurrentManager = ""
@@ -362,9 +376,11 @@ foreach ($entry in $CombinedData) {
         if ($user.CompanyName -ne $entry.Company) {
             $differences += "CompanyName: '$($user.CompanyName)' -> '$($entry.Company)'"
         }
+        <#
         if ($user.Country -ne $entry.CountryCode) {
             $differences += "Country: '$($user.Country)' -> '$($entry.CountryCode)'"
         }
+        #>
         if ($user.City -ne $entry.City) {
             $differences += "City: '$($user.City)' -> '$($entry.City)'"
         }
@@ -374,7 +390,7 @@ foreach ($entry in $CombinedData) {
         if ($CurrentManager -ne $NewManager) {
             $differences += "Manager: '$($Currentmanager)' -> '$($NewManager)'"
         }
-        if ($user.UserPrincipalName.StartsWith($entry.UserID) -eq $false) {
+        if ($user.UserPrincipalName -like $entry.UserID) {
             $differences += "UserPrincipalName: '$($user.UserPrincipalName)' -> '$($entry.UserID)'"
         }
 
