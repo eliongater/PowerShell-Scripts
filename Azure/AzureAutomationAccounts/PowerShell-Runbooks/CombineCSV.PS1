@@ -26,10 +26,10 @@ catch{
 }
 
 #Initialise Global variables
-$Global:MailTo = "elijah.smart@datacom.com"
-#$Global:MailTo = "nhcazurecertautomation@datacom.com"
-$Global:MailFrom = "elijah.smart@eqcnztst.xyz"
-#$Global:MailFrom = "azurecertautomation@naturalhazards.govt.nz"
+#$Global:MailTo = "elijah.smart@datacom.com"
+$Global:MailTo = "elijah.smart@naturalhazards.govt.nz"
+#$Global:MailFrom = "elijah.smart@eqcnztst.xyz"
+$Global:MailFrom = "servicedesk@naturalhazards.govt.nz"
 
 
 #Define any functions
@@ -115,11 +115,13 @@ $PendingCSV = "HRData-Pending.csv"
 $AutomaticUpdateLimit = 4
 
 #Storage Account
-$StorageAccount = "gd01sasftpprdsa01"
+#$StorageAccount = "gd01sasftpprdsa01"
+$StorageAccount = "gp01sasftpprdsa01"
 $StorageContainer = "fusion5jadestaradprod"
 $StorageAccountResourceGroup = "generalprod01-prd-sasftp-ae-rg"
 
-$ShareContainer = "csvdata"
+#$ShareContainer = "csvdata"
+$ShareContainer = "entraidprovisioningdata"
 
 $SubscriptionName = "General Production 01"
 #Set and store context
@@ -289,6 +291,9 @@ foreach ($entry in $CombinedData) {
         $user = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "EmployeeID eq '$($entry.WorkerID)'" -Top 1 -Property $AdditionalProperties
     }
     catch {
+        Write-Warning "User with EmployeeID $($entry.WorkerID) not found, attempting to find with UPN."
+    }
+    if ($null -eq $user -or $user -eq ""){
         try {
             #Attempt to get the user by UserPrincipalName second
             $user = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(UserPrincipalName, '$($entry.UserID)@')" -Top 1 -Property $AdditionalProperties
@@ -299,7 +304,6 @@ foreach ($entry in $CombinedData) {
             Write-Warning $_.Exception
         }
     }
-    
     if ($null -ne $user) {
         #Compare fields and log differences
         $differences = @()
