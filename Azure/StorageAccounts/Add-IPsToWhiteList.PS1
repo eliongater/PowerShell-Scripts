@@ -16,6 +16,9 @@ $IPsToAdd += "52.237.214.72", "13.72.243.10", "20.213.202.84", "20.213.202.51"
 
 $IPRangesToAdd = "13.70.72.192/28", "13.70.78.224/27", "20.70.220.224/28", "20.70.220.192/27"
 
+#Add Access endpoint IPs to the whitelist
+$IPsToAdd += "13.75.153.66", "104.210.89.222", "104.210.89.244", "52.187.231.161", "20.53.94.103", "20.53.107.215", "20.11.76.135", "20.11.77.54", "4.200.57.191", "20.11.77.111", "4.200.48.30", "4.198.185.192", "4.200.48.37", "4.200.57.70"
+
 #Set and store context
 $AzureContext = Set-AzContext -SubscriptionName $SubscriptionName
 Write-Output "Current Azure Context: $($AzureContext.Subscription.Name)"
