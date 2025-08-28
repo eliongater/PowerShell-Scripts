@@ -121,8 +121,10 @@ $StorageAccountResourceGroup = "generalprod01-prd-sasftp-ae-rg"
 
 $ShareContainer = "csvdata"
 
+$SubscriptionName = "General Production 01"
 #Set and store context
-$AzureContext = Set-AzContext -SubscriptionName $AzureContext.Subscription -DefaultProfile $AzureContext
+#$AzureContext = Set-AzContext -SubscriptionName $AzureContext.Subscription -DefaultProfile $AzureContext
+$AzureContext = Set-AzContext -SubscriptionName $SubscriptionName
 #$StorageAccountContextManagedIdentity = New-AzStorageContext -StorageAccountName $StorageAccount -UseConnectedAccount -EnableFileBackupRequestIntent
 
 #Create SAS token for gp01sasftpprdsa01
