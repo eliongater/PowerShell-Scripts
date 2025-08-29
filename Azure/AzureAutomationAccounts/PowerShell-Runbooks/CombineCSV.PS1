@@ -493,13 +493,14 @@ $Attachments = $TempCSVFilePathEmail, $TempDifferencesFilePath
 $AzureShareFileName = $CombinedCSV
 $TestEmail = $false
 if ($UpdateCount -gt $AutomaticUpdateLimit) {
-    $MsgBody = "<p>Hello,</p><p>The number of changes detected in the HR data exceeds the automatic update limit of $AutomaticUpdateLimit. There are a total of $UpdateCount changes that require your approval before they can be applied to Entra ID.</p><p>Please save the attached $TempCSVFilePathEmail as just a .csv file, filter on HasChanges=True and review the proposed changes and approve or reject them as necessary. The attached $TempDifferencesFilePath contains a log of each change per user.</p><p>Thank you,<br/>Service Desk</p>"
+    $AzureShareFileName = $PendingCSV
+    $MsgBody = "<p>Hello,</p><p>The number of changes detected in the HR data exceeds the automatic update limit of $AutomaticUpdateLimit. There are a total of $UpdateCount changes that require your approval before they can be applied to Entra ID.</p><p>Please save the attached $AzureShareFileName.txt as just a .csv file, filter on HasChanges=True and review the proposed changes and approve or reject them as necessary. The attached $DifferencesFile contains a log of each change per user.</p><p>Thank you,<br/>Service Desk</p>"
     Send-Email -MailTo $Global:MailTo -Subject "HR Data Changes Pending Approval" -MsgBody $MsgBody -Attachments $Attachments -MailFrom $Global:MailFrom
 
     #Email the differences log to Service Desk and HR for review
     #$MsgBody = "<p>Hello,</p><p>Please find attached the log file detailing the differences detected in the HR data that require your approval before they can be applied to Entra ID.</p><p>Thank you,<br/>Service Desk</p>"
     #Send-Email -MailTo $Global:MailTo -Subject "HR Data Changes Differences Log" -MsgBody $MsgBody -Attachment $TempDifferencesFilePath -MailFrom $Global:MailFrom
-    $AzureShareFileName = $PendingCSV
+    
     Write-Output "Update count $UpdateCount exceeds automatic update limit of $AutomaticUpdateLimit. Changes sent for approval."
 } elseif ($TestEmail -eq $true) {
     $MsgBody = "<p>Hello,</p><p>There are a total of $UpdateCount changes that will be applied to Entra ID.</p><p>Please review the attached CSV file containing the proposed changes</p><p>Thank you,<br/>Service Desk</p>"
