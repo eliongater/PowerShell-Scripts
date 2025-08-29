@@ -327,7 +327,7 @@ foreach ($entry in $CombinedData) {
 
         if($null -eq $NewManager -or $NewManager -eq "") {
             $NewManagerData = $UserData | Where-Object { $_.idnumber -eq $entry.ManagerID }
-            $NewManagerUPN = $NewManagerData.UserID
+            $NewManagerUPN = $NewManagerData.username
             try{
                 Write-Output "Getting new manager for UserID $($entry.UserID), Manager UPN: $($NewManagerUPN)"
                 $NewManager = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(UserPrincipalName, '$NewManagerUPN@')" -Top 1 -Property $AdditionalProperties
