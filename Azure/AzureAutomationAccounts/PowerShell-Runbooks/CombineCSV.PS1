@@ -331,6 +331,7 @@ foreach ($entry in $CombinedData) {
             try{
                 Write-Output "Getting new manager for UserID $($entry.UserID), Manager UPN: $($NewManagerUPN)"
                 $NewManager = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(UserPrincipalName, '$NewManagerUPN@')" -Top 1 -Property $AdditionalProperties
+                $NewManager = $NewManager.DisplayName
             } catch {
                 $NewManager = $null
                 Write-Warning "Manager with UPN starting with $($NewManagerUPN) not found."
