@@ -450,6 +450,7 @@ foreach ($entry in $CombinedData) {
         
     } else {
         Write-Output "User with UserID $($entry.UserID) not found in Entra ID."
+        $TotalDifferencesLog += "User with UserID $($entry.UserID) not found in Entra ID."
         $UpdateCount++
         $entry.HasChanges = $true
         #add the entry to the combined and compared data
@@ -487,14 +488,14 @@ catch {
 }
 
 #Consolidate the CSV and differences log into an array of file paths for emailing
-$Attachments = $TempCSVFilePathEmail, $TempDifferencesFilePath
+$Attachments = $TempCSVFilePath, $TempDifferencesFilePath
 
 #If $UpdateCount is greater than $AutomaticUpdateLimit, send the CSV to Service Desk and HR for approval, change the filename from $CombinedCSV to $PendingCSV, else proceed
 $AzureShareFileName = $CombinedCSV
 $TestEmail = $false
 if ($UpdateCount -gt $AutomaticUpdateLimit) {
     $AzureShareFileName = $PendingCSV
-    $MsgBody = "<p>Hello,</p><p>The number of changes detected in the HR data exceeds the automatic update limit of $AutomaticUpdateLimit. There are a total of $UpdateCount changes that require your approval before they can be applied to Entra ID.</p><p>Please save the attached $AzureShareFileName.txt as just a .csv file, filter on HasChanges=True and review the proposed changes and approve or reject them as necessary. The attached $DifferencesFile contains a log of each change per user.</p><p>Thank you,<br/>Service Desk</p>"
+    $MsgBody = "<p>Hello,</p><p>The number of changes detected in the HR data exceeds the automatic update limit of $AutomaticUpdateLimit. There are a total of $UpdateCount changes that require your approval before they can be applied to Entra ID.</p><p>Please review the attached $AzureShareFileName file, filter on HasChanges=True. The attached $DifferencesFile contains a log of each change per user or if the user was not found.</p><p>If you want the changes to proceeed as per the attached file, please respond to this email, otherwise update the information in JadeStar, and it will be retried tomorrow.</p><p>Thank you,<br/>Service Desk</p>"
     Send-Email -MailTo $Global:MailTo -Subject "HR Data Changes Pending Approval" -MsgBody $MsgBody -Attachments $Attachments -MailFrom $Global:MailFrom
 
     #Email the differences log to Service Desk and HR for review
