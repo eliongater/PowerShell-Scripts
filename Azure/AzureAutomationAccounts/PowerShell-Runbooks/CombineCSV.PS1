@@ -385,9 +385,11 @@ foreach ($entry in $CombinedData) {
         if ($user.City -ne $entry.City) {
             $differences += "City: '$($user.City)' -> '$($entry.City)'"
         }
+        <#>
         if ($user.EmployeeId -ne $entry.WorkerID) {
             $differences += "EmployeeId: '$($user.EmployeeId)' -> '$($entry.WorkerID)'"
         }
+        #>
         if ($CurrentManager -ne $NewManager) {
             $differences += "Manager: '$($Currentmanager)' -> '$($NewManager)'"
         }
