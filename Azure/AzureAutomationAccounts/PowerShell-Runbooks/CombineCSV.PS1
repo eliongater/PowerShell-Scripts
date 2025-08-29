@@ -426,7 +426,9 @@ if ($UpdateCount -gt $AutomaticUpdateLimit){
     $TempCSVFilePath = "$env:TEMP\$PendingCSV"
 }
 try {
+    $TempCSVFilePathEmail = "$TempCSVFilePath.txt"
     $CombinedandComparedData | Export-Csv -NoTypeInformation -Delimiter ',' -Encoding UTF8 -Force -Path $TempCSVFilePath
+    $CombinedandComparedData | Export-Csv -NoTypeInformation -Delimiter ',' -Encoding UTF8 -Force -Path $TempCSVFilePathEmail
     Write-Output "Combined and compared data exported to $CombinedCSV."
 }
 catch {
@@ -440,12 +442,12 @@ $AzureShareFileName = $CombinedCSV
 $TestEmail = $false
 if ($UpdateCount -gt $AutomaticUpdateLimit) {
     $MsgBody = "<p>Hello,</p><p>The number of changes detected in the HR data exceeds the automatic update limit of $AutomaticUpdateLimit. There are a total of $UpdateCount changes that require your approval before they can be applied to Entra ID.</p><p>Please review the attached CSV file containing the proposed changes and approve or reject them as necessary.</p><p>Thank you,<br/>Service Desk</p>"
-    Send-Email -MailTo $Global:MailTo -Subject "HR Data Changes Pending Approval" -MsgBody $MsgBody -Attachment $TempCSVFilePath -MailFrom $Global:MailFrom
+    Send-Email -MailTo $Global:MailTo -Subject "HR Data Changes Pending Approval" -MsgBody $MsgBody -Attachment $TempCSVFilePathEmail -MailFrom $Global:MailFrom
     $AzureShareFileName = $PendingCSV
     Write-Output "Update count $UpdateCount exceeds automatic update limit of $AutomaticUpdateLimit. Changes sent for approval."
 } elseif ($TestEmail -eq $true) {
     $MsgBody = "<p>Hello,</p><p>There are a total of $UpdateCount changes that will be applied to Entra ID.</p><p>Please review the attached CSV file containing the proposed changes</p><p>Thank you,<br/>Service Desk</p>"
-    Send-Email -MailTo $Global:MailTo -Subject "HR Data Changes for Review" -MsgBody $MsgBody -Attachment $TempCSVFilePath -MailFrom $Global:MailFrom
+    Send-Email -MailTo $Global:MailTo -Subject "HR Data Changes for Review" -MsgBody $MsgBody -Attachment $TempCSVFilePathEmail -MailFrom $Global:MailFrom
     Write-Output "Update count of $UpdateCount. Changes sent for review."
 }
 
