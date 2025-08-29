@@ -364,6 +364,9 @@ foreach ($entry in $CombinedData) {
             }
             
         }
+        if ($null -eq $NewManager){
+            $NewManager = ""
+        }
 
         #Get current manager
         try{
@@ -375,6 +378,9 @@ foreach ($entry in $CombinedData) {
             $CurrentManager = ""
             Write-Warning "Current manager for UserID $($entry.UserID), user Entra ID: $($user.Id) not found."
             Write-Warning $_.Exception
+        }
+        if ($null -eq $CurrentManager){
+            $CurrentManager = ""
         }
         
         <#
