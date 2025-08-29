@@ -39,7 +39,8 @@ function Send-Email {
         [system.string]$MailFrom = $Global:MailFrom,
         [system.string]$Subject = "App Secret Expiration Notice",
         [system.string]$MsgBody ="",
-        [system.string]$Attachment
+        [system.string]$Attachment,
+        [system.array]$Attachments
     )
     #Initialise Variables
     $Message = $null
@@ -64,6 +65,26 @@ function Send-Email {
                 ContentBytes = $AttachmentBase64
                 }
             )
+        }
+    } elseif ($PSBoundParameters.ContainsKey('Attachments')) {
+        $Message = @{
+            Subject = "$Subject"
+            Body = @{
+                ContentType = "HTML"
+                Content = $MsgBody
+                }
+            ToRecipients = @()
+                Attachments = @()
+        }
+        foreach ($ThisAttachment in $Attachments) {
+            $AttachmentContentBytes = [System.IO.File]::ReadAllBytes($ThisAttachment)
+            $AttachmentBase64 = [System.Convert]::ToBase64String($AttachmentContentBytes)
+            $Message.Attachments += @{
+                "@odata.type" = "#microsoft.graph.fileAttachment"
+                Name = (Split-Path $ThisAttachment -Leaf)
+                ContentType = "application/octet-stream"
+                ContentBytes = $AttachmentBase64
+            }
         }
     } else {
         $Message = @{
@@ -110,6 +131,8 @@ $PosCSV = "pos.csv"
 
 $CombinedCSV = "HRData.csv"
 $PendingCSV = "HRData-Pending.csv"
+
+$DifferencesFile = "HRData-Differences.log"
 
 # Set the maximum number of automatic updates. If there are more than this, results are sent to Service Desk for approval.
 $AutomaticUpdateLimit = 4
@@ -282,6 +305,8 @@ catch {
 $CombinedandComparedData = @()
 $UpdateCount = 0
 
+$TotalDifferencesLog = @()
+
 #Populate list of additional properties to retrieve from Entra ID: 
 $AdditionalProperties = "Id","employeeId","IsSoftDeleted","accountEnabled","streetAddress","city","state","postalCode","country","department","displayName","facsimileTelephoneNumber","givenName","jobTitle","mail","mailNickname","manager","mobile","physicalDeliveryOfficeName","preferredLanguage","surname","telephoneNumber","userPrincipalName","otherMails","companyName"
 foreach ($entry in $CombinedData) {
@@ -333,7 +358,7 @@ foreach ($entry in $CombinedData) {
                 $NewManager = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(UserPrincipalName, '$NewManagerUPN@')" -Top 1 -Property $AdditionalProperties
                 $NewManager = $NewManager.DisplayName
             } catch {
-                $NewManager = $null
+                $NewManager = ""
                 Write-Warning "Manager with UPN starting with $($NewManagerUPN) not found."
                 Write-Warning $_.Exception
             }
@@ -399,6 +424,10 @@ foreach ($entry in $CombinedData) {
 
         #If there are differences, increment the update count and log the differences
         if ($differences.Count -gt 0) {
+            $TotalDifferencesLog += "Differences for UserID $($entry.UserID):"
+            foreach ($diff in $differences) {
+                $TotalDifferencesLog += "  - $diff"
+            }
             $UpdateCount++
             $entry.HasChanges = $true
             Write-Output "Differences for UserID $($entry.UserID):"
@@ -439,12 +468,31 @@ catch {
     throw $_.Exception
 }
 
+#Export the differences log to a text file
+$TempDifferencesFilePath = "$env:TEMP\$DifferencesFile"
+try {
+    $TotalDifferencesLog | Out-File -FilePath $TempDifferencesFilePath -Encoding UTF8 -Force
+    Write-Output "Differences log exported to $DifferencesFile."
+}
+catch {
+    Write-Error -Message "Failed to export differences log to text file."
+    Write-Error -Message $_.Exception
+    throw $_.Exception
+}
+
+#Consolidate the CSV and differences log into an array of file paths for emailing
+$Attachments = $TempCSVFilePathEmail, $TempDifferencesFilePath
+
 #If $UpdateCount is greater than $AutomaticUpdateLimit, send the CSV to Service Desk and HR for approval, change the filename from $CombinedCSV to $PendingCSV, else proceed
 $AzureShareFileName = $CombinedCSV
 $TestEmail = $false
 if ($UpdateCount -gt $AutomaticUpdateLimit) {
     $MsgBody = "<p>Hello,</p><p>The number of changes detected in the HR data exceeds the automatic update limit of $AutomaticUpdateLimit. There are a total of $UpdateCount changes that require your approval before they can be applied to Entra ID.</p><p>Please review the attached CSV file containing the proposed changes and approve or reject them as necessary.</p><p>Thank you,<br/>Service Desk</p>"
-    Send-Email -MailTo $Global:MailTo -Subject "HR Data Changes Pending Approval" -MsgBody $MsgBody -Attachment $TempCSVFilePathEmail -MailFrom $Global:MailFrom
+    Send-Email -MailTo $Global:MailTo -Subject "HR Data Changes Pending Approval" -MsgBody $MsgBody -Attachments $Attachments -MailFrom $Global:MailFrom
+
+    #Email the differences log to Service Desk and HR for review
+    #$MsgBody = "<p>Hello,</p><p>Please find attached the log file detailing the differences detected in the HR data that require your approval before they can be applied to Entra ID.</p><p>Thank you,<br/>Service Desk</p>"
+    #Send-Email -MailTo $Global:MailTo -Subject "HR Data Changes Differences Log" -MsgBody $MsgBody -Attachment $TempDifferencesFilePath -MailFrom $Global:MailFrom
     $AzureShareFileName = $PendingCSV
     Write-Output "Update count $UpdateCount exceeds automatic update limit of $AutomaticUpdateLimit. Changes sent for approval."
 } elseif ($TestEmail -eq $true) {
