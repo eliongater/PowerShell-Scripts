@@ -152,7 +152,7 @@ function ConvertTo-HashtableFromPsCustomObject {
     Write-Verbose "[Start]:: ConvertTo-HashtableFromPsCustomObject"
 
     $output = @{}; 
-    $psCustomObject | Get-Member -MemberType *Property | % {
+    $psCustomObject | Get-Member -MemberType *Property | ForEach-Object {
         $output.($_.name) = $psCustomObject.($_.name); 
     } 
     
