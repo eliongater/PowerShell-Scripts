@@ -366,13 +366,17 @@ foreach ($App in $Applications) {
     $AppID  = $App.AppId
     $ownersList = Get-MgApplicationOwner -ApplicationId $app.Id
     $owners = $ownersList.AdditionalProperties.mail -join ';'
+    $Tags = $App.Tags
+    $ManifestOwners = $null
 
-    $ManifestOwners = Get-EmailFromTags -Tags $App.Tags
-    if ($ManifestOwners -ne $null){
-        if ($owners.Length -gt 0){
-            $owners += ";$ManifestOwners"
-        } else {
-            $owners = $ManifestOwners
+    if ($Tags -ne $null){
+        $ManifestOwners = Get-EmailFromTags -Tags $Tags
+        if ($ManifestOwners -ne $null){
+            if ($owners.Length -gt 0){
+                $owners += ";$ManifestOwners"
+            } else {
+                $owners = $ManifestOwners
+            }
         }
     }
 
@@ -446,15 +450,20 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
     $AppType = $EnterpriseApp.ServicePrincipalType
     $ownersList = Get-MgServicePrincipalOwner -ServicePrincipalId  $EnterpriseApp.Id
     $owners = $ownersList.AdditionalProperties.mail -join ';'
+    $Tags = $EnterpriseApp.Tags
+    $ManifestOwners = $null
 
-    $ManifestOwners = Get-EmailFromTags -Tags $EnterpriseApp.Tags
-    if ($ManifestOwners -ne $null){
-        if ($owners.Length -gt 0){
-            $owners += ";$ManifestOwners"
-        } else {
-            $owners = $ManifestOwners
+    if ($Tags -ne $null){
+        $ManifestOwners = Get-EmailFromTags -Tags $Tags
+        if ($ManifestOwners -ne $null){
+            if ($owners.Length -gt 0){
+                $owners += ";$ManifestOwners"
+            } else {
+                $owners = $ManifestOwners
+            }
         }
     }
+    
 
     $AppCreds = Get-MgServicePrincipal -ServicePrincipalId $ObjectID |
         Select-Object PasswordCredentials, KeyCredentials
