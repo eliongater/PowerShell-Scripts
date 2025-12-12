@@ -76,47 +76,60 @@ $Global:MailFrom = "elijah.smart@now4you.nz"
 #Define any functions
 <#
 .SYNOPSIS
-Sends an email (optionally with a file attachment) using Microsoft Graph's Send-MgUserMail cmdlet.
+Sends an email using Microsoft Graph for a specified user, with optional single or multiple file attachments.
 
 .DESCRIPTION
-Send-Email constructs a Microsoft Graph message payload and calls Send-MgUserMail to deliver mail from a specified sender to a recipient. If an Attachment path is provided, the file is read, base64-encoded and included as a fileAttachment. The message body is sent as HTML. The function writes a status message before calling the Graph API and throws on failure.
+Send-Email constructs a Microsoft Graph message payload and calls Send-MgUserMail to deliver an HTML email from the specified sender (user) to one or more recipients.
+- If the Attachment parameter is provided, a single file is read from disk, Base64-encoded and added as a fileAttachment.
+- If the Attachments parameter is provided (and Attachment is not), each file path in the array is read, Base64-encoded and appended as a fileAttachment.
+- If neither Attachment nor Attachments is provided, the message is sent without attachments.
+- The MailTo parameter accepts a semicolon (;) separated list of recipient email addresses.
+- The default Subject and default MailTo/MailFrom fallback to corresponding global variables if not supplied.
 
 .PARAMETER MailTo
-The recipient email address. Single address expected as a string (e.g. "user@example.com") or as string of semi colon seperated emails (e.g. "user@example.com;user2@example.com").
+String of recipient email addresses. Multiple addresses may be provided separated by semicolons (;). Default: $Global:MailTo.
 
 .PARAMETER MailFrom
-The sender (user) id or email address for Send-MgUserMail -UserId parameter. The account used to send must be accessible with the authenticated Graph context and have appropriate Mail.Send permissions.
+Email address (or user id) of the sender to use as the -UserId argument to Send-MgUserMail. Default: $Global:MailFrom.
 
 .PARAMETER Subject
-Optional. The email subject. Defaults to an empty string.
+Subject line for the email. Default: "App Secret Expiration Notice".
 
 .PARAMETER MsgBody
-Optional. The email body content, treated as HTML. Defaults to an empty string.
+HTML content to use as the message body. The function sets the message ContentType to "HTML".
 
 .PARAMETER Attachment
-Optional. A local filesystem path to a file to attach to the message. If provided, the file is read and included as a Base64-encoded fileAttachment. The file must be accessible to the process and should be of a size supported by the Graph API.
+Single file path to attach to the message. If present, this takes precedence over Attachments. The file is read from disk and Base64-encoded into a Microsoft Graph fileAttachment with ContentType "application/octet-stream".
+
+.PARAMETER Attachments
+Array of file paths to attach to the message. Each file path is read from disk and Base64-encoded into an individual Microsoft Graph fileAttachment. Ignored if Attachment is provided.
 
 .EXAMPLE
-Send-Email -MailTo "recipient@contoso.com" -MailFrom "sender@contoso.com" -Subject "Hello" -MsgBody "<p>This is a test</p>"
-Sends a simple HTML email without attachments.
+Send-Email -MailTo "alice@example.com" -MailFrom "sender@example.com" -Subject "Hello" -MsgBody "<p>Test</p>"
+
+Sends a simple HTML email with no attachments.
 
 .EXAMPLE
-Send-Email -MailTo "recipient@contoso.com" -MailFrom "sender@contoso.com" -Subject "Report" -MsgBody "<p>Please find the report attached.</p>" -Attachment "C:\temp\report.pdf"
-Sends an email with report.pdf attached.
+Send-Email -MailTo "bob@example.com;carol@example.com" -Attachment "C:\logs\report.pdf"
+
+Sends an email to Bob and Carol with a single attachment named report.pdf.
+
+.EXAMPLE
+Send-Email -MailTo "team@example.com" -Attachments @("C:\a.txt","C:\b.png")
+
+Sends an email with multiple attachments.
+
+.INPUTS
+None from the pipeline. All parameters are passed explicitly.
 
 .OUTPUTS
-None. On success, the function invokes Send-MgUserMail and does not return a value. On error, it writes an error and rethrows the exception.
+This function primarily performs a side-effect (sending an email). It writes progress messages with Write-Output/Write-Error. Any output returned by the underlying Send-MgUserMail call (if returned) will be passed through. Errors encountered while reading files or sending mail are thrown.
 
 .NOTES
-- Prerequisites: Microsoft Graph PowerShell module (e.g. Microsoft.Graph or Microsoft.Graph.Users) and a valid Connect-MgGraph session.
-- The authenticated context must have permission to send mail as the specified MailFrom (Mail.Send or equivalent delegated/application permissions).
-- Body content type is HTML. Modify the function if you require plain text bodies or multipart content.
-- Large attachments may be rejected by Graph; consider using upload session APIs for very large files.
-- Attachment filename is derived from the provided file path (Split-Path -Leaf).
-- The function logs a simple message before sending; consider replacing with Write-Verbose/Write-Information for advanced scenarios.
-
-.LINK
-https://learn.microsoft.com/graph/api/user-sendmail
+- Requires the Microsoft Graph PowerShell module (Send-MgUserMail) and an authenticated context with appropriate permissions to send mail on behalf of the specified user (e.g., Mail.Send or equivalent application/delegated permissions).
+- Files specified in Attachment(s) must be accessible to the running process; large attachments may fail or be rejected by tenant/Graph size limits.
+- Attachments are added with ContentType "application/octet-stream" and named using the file name from the supplied path; adjust if a specific MIME type is required.
+- If both Attachment and Attachments are supplied, Attachment is used and Attachments is ignored.
 #>
 function Send-Email {
     param (
@@ -124,11 +137,11 @@ function Send-Email {
         [system.string]$MailFrom = $Global:MailFrom,
         [system.string]$Subject = "App Secret Expiration Notice",
         [system.string]$MsgBody ="",
-        [system.string]$Attachment
+        [system.string]$Attachment,
+        [system.array]$Attachments
     )
-    
     #Initialise Variables
-    $Message
+    $Message = $null
 
     #E.g. $Attachment = "C:\logs\mytestapp.log"
     #If a file path to an attachment is passed as a parameter, then send with an attachment, else send without one
@@ -141,13 +154,7 @@ function Send-Email {
                 ContentType = "HTML"
                 Content = $MsgBody
                 }
-            ToRecipients = @(
-                @{
-                    EmailAddress = @{
-                    Address = $MailTo
-                    }
-                }
-                )
+            ToRecipients = @()
                 Attachments = @(
             @{
                 "@odata.type" = "#microsoft.graph.fileAttachment"
@@ -157,6 +164,26 @@ function Send-Email {
                 }
             )
         }
+    } elseif ($PSBoundParameters.ContainsKey('Attachments')) {
+        $Message = @{
+            Subject = "$Subject"
+            Body = @{
+                ContentType = "HTML"
+                Content = $MsgBody
+                }
+            ToRecipients = @()
+                Attachments = @()
+        }
+        foreach ($ThisAttachment in $Attachments) {
+            $AttachmentContentBytes = [System.IO.File]::ReadAllBytes($ThisAttachment)
+            $AttachmentBase64 = [System.Convert]::ToBase64String($AttachmentContentBytes)
+            $Message.Attachments += @{
+                "@odata.type" = "#microsoft.graph.fileAttachment"
+                Name = (Split-Path $ThisAttachment -Leaf)
+                ContentType = "application/octet-stream"
+                ContentBytes = $AttachmentBase64
+            }
+        }
     } else {
         $Message = @{
             Subject = "$Subject"
@@ -164,21 +191,25 @@ function Send-Email {
                 ContentType = "HTML"
                 Content = $msgBody
                 }
-            ToRecipients = @(
-                @{
-                    EmailAddress = @{
-                    Address = $MailTo
-                    }
-                }
-            )
+            ToRecipients = @()
         }
 
+    }
+
+    $EmailAddresses = $MailTo.split(";")
+    foreach ($EmailAddress in $EmailAddresses){
+        Write-Output "Adding $EmailAddress to recipients"
+        $Message.ToRecipients += @{
+            EmailAddress = @{
+                Address = $EmailAddress
+            }
+        }
     }
 
     #Send email
     try
     {
-        "Sending email from $MailFrom to $MailTo, with the subject $Subject"
+        Write-Output "Sending email from $MailFrom to $MailTo, with the subject $Subject"
         Send-MgUserMail -UserId $MailFrom -Message $Message
     }
     catch {
@@ -188,6 +219,45 @@ function Send-Email {
     
 }
 
+
+<#
+.SYNOPSIS
+    Converts a PSCustomObject (or any object with properties) into a Hashtable.
+
+.DESCRIPTION
+    Creates a new Hashtable where each property name of the input object becomes a key and the
+    corresponding property value becomes the hashtable value. The cmdlet accepts input directly
+    or from the pipeline and emits verbose start/exit messages when -Verbose is supplied.
+
+.PARAMETER psCustomObject
+    The input object to convert. This should be an object that exposes properties (for example a
+    PSCustomObject, a custom object, or any object with public properties). This parameter accepts
+    pipeline input by value and by property name.
+
+.EXAMPLE
+    # Convert an object directly
+    $obj = [pscustomobject]@{ Name = 'Alice'; Age = 30 }
+    ConvertTo-HashtableFromPsCustomObject -psCustomObject $obj
+    # Result: @{ Name = 'Alice'; Age = 30 }
+
+.EXAMPLE
+    # Use with the pipeline
+    Get-CustomObject | ConvertTo-HashtableFromPsCustomObject
+
+.INPUTS
+    System.Object
+    Any object that exposes properties (commonly PSCustomObject).
+
+.OUTPUTS
+    System.Collections.Hashtable
+    A Hashtable whose keys are the property names of the input object and whose values are the corresponding property values.
+
+.NOTES
+    - Only properties (MemberType *Property) are copied; methods and script members are ignored.
+    - Property names are used verbatim as hashtable keys. If duplicate property names occur, keys may be overwritten.
+    - Nested objects and collections are assigned as values; the function does not perform a deep/recursive conversion.
+    - Verbose messages are written at start and exit when -Verbose is specified.
+#>
 function ConvertTo-HashtableFromPsCustomObject { 
     param ( 
         [Parameter(  
