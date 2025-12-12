@@ -237,12 +237,12 @@ function Get-EmailFromTags {
             Mandatory = $true,   
             ValueFromPipeline = $true
         )] [string[]] $Tags,
-        [string] $TagName = "owner",
+        [string] $TagName = "email",
         [string] $Delimiter = ":"
     );
     $emails = @()
     foreach ($Tag in $Tags){
-        if ($Tag.ToLower().StartsWith($TagName.ToLower() + $Delimiter)){
+        if ($Tag.ToLower().contains($TagName.ToLower())){
             $email = $Tag.Split($Delimiter)[1].Trim()
             $emails += $email
         }
