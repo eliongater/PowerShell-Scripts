@@ -72,6 +72,7 @@ $Global:MailFrom = "elijah.smart@now4you.nz"
 #$Global:MailFrom = "azurecertautomation@naturalhazards.govt.nz"
 
 
+#**************************************************************************************
 #Define any functions
 <#
 .SYNOPSIS
@@ -273,6 +274,11 @@ $Today = get-date
 $AutomationVariableName = "PriorAlerts"
 #$AutomationVariableName = "EntraID-EntAppCert-RPT-PriorAlerts"
 
+#Should probably make this an automation variable later
+$ApplicationsToIgnore = @(
+    "Office 365 Exchange Online"
+)
+
 [hashtable]$PriorAlerts = @{}
 #ID and Date last alerted on
 #$PriorAlerts.add('71078dec-d452-4c8a-9251-97f070faa3a6','16/08/2024')
@@ -390,6 +396,11 @@ foreach ($App in $Applications) {
     #Sort end dates to soonest first
     [Array]::Sort($EndDates)
 
+    #Check if app is in ignore list
+    if( $ApplicationsToIgnore -contains $AppName){
+        Write-Information "Ignoring $AppName as it is in the ignore list"
+        continue
+    }
     #If closest expiration is in the x day period we care about
     if($EndDates[0] -lt $ExpirationDateToCheck -and $EndDates.Length -gt 0){
         ############################################
@@ -464,6 +475,12 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
 
     #Sort end dates to soonest first
     [Array]::Sort($EndDates)
+
+    #Check if app is in ignore list
+    if( $ApplicationsToIgnore -contains $AppName){
+        Write-Information "Ignoring $AppName as it is in the ignore list"
+        continue
+    }
 
     #If closest expiration is in the x day period we care about
     if($EndDates[0] -lt $ExpirationDateToCheck -and $EndDates.Length -gt 0 -and $AppType -eq "Application"){
