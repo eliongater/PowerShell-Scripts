@@ -120,12 +120,13 @@ https://learn.microsoft.com/graph/api/user-sendmail
 #>
 function Send-Email {
     param (
-        [system.string]$MailTo,
-        [system.string]$MailFrom,
-        [system.string]$Subject = "",
+        [system.string]$MailTo = $Global:MailTo,
+        [system.string]$MailFrom = $Global:MailFrom,
+        [system.string]$Subject = "App Secret Expiration Notice",
         [system.string]$MsgBody ="",
         [system.string]$Attachment
     )
+    
     #Initialise Variables
     $Message
 
