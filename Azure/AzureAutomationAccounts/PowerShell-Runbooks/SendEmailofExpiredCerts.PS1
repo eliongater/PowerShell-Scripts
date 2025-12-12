@@ -161,6 +161,50 @@ function ConvertTo-HashtableFromPsCustomObject {
     return  $output;
 }
 
+<#
+.SYNOPSIS
+    Extracts email addresses from a list of tags based on a specified tag name and delimiter.
+
+.DESCRIPTION
+    The Get-EmailFromTags function scans through an array of tag strings, searching for tags that start with a specified tag name followed by a delimiter (default is "owner:").
+    When a matching tag is found, it extracts the value after the delimiter (assumed to be an email address), trims it, and collects all such emails into a semicolon-separated string.
+    Returns $null if no matching tags are found.
+
+.PARAMETER Tags
+    An array of tag strings to search for email addresses.
+
+.PARAMETER TagName
+    The tag name to look for (default is "owner").
+
+.PARAMETER Delimiter
+    The delimiter separating the tag name and value (default is ":").
+
+.EXAMPLE
+    Get-EmailFromTags -Tags @("owner:someone@example.com", "env:prod")
+    # Returns "someone@example.com"
+#>
+function Get-EmailFromTags {
+    param (
+        [Parameter(
+            Mandatory = $true,   
+            ValueFromPipeline = $true
+        )] [string[]] $Tags,
+        [string] $TagName = "owner",
+        [string] $Delimiter = ":"
+    );
+    $emails = @()
+    foreach ($Tag in $Tags){
+        if ($Tag.ToLower().StartsWith($TagName.ToLower() + $Delimiter)){
+            $email = $Tag.Split($Delimiter)[1].Trim()
+            $emails += $email
+        }
+    }
+    if ($emails.Count -gt 0){
+        return $emails -join ";"
+    } else {
+        return $null
+    }
+}
 
 #Potential for webhooks to be added later?
 #https://github.com/bwya77/PSAlerts/blob/main/Azure/AppSecretExpiration_SendtoTeams.ps1
@@ -271,6 +315,15 @@ foreach ($App in $Applications) {
     $ownersList = Get-MgApplicationOwner -ApplicationId $app.Id
     $owners = $ownersList.AdditionalProperties.mail -join ';'
 
+    $ManifestOwners = Get-EmailFromTags -Tags $App.Tags
+    if ($ManifestOwners -ne $null){
+        if ($owners.Length -gt 0){
+            $owners += ";$ManifestOwners"
+        } else {
+            $owners = $ManifestOwners
+        }
+    }
+
     $AppCreds = Get-MgApplication -ApplicationId $ObjectID |
         Select-Object PasswordCredentials, KeyCredentials
 
@@ -337,6 +390,14 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
     $ownersList = Get-MgServicePrincipalOwner -ServicePrincipalId  $EnterpriseApp.Id
     $owners = $ownersList.AdditionalProperties.mail -join ';'
 
+    $ManifestOwners = Get-EmailFromTags -Tags $EnterpriseApp.Tags
+    if ($ManifestOwners -ne $null){
+        if ($owners.Length -gt 0){
+            $owners += ";$ManifestOwners"
+        } else {
+            $owners = $ManifestOwners
+        }
+    }
 
     $AppCreds = Get-MgServicePrincipal -ServicePrincipalId $ObjectID |
         Select-Object PasswordCredentials, KeyCredentials
