@@ -73,6 +73,14 @@ foreach ($u in $users) {
                 $groupString = ""
         }
 
+        $status = ""
+        $enabled = $u.AccountEnabled
+        if($enabled){
+                $status = "Enabled"
+                } else {
+                $status = "Disabled"
+        }
+
         $results += [PSCustomObject]@{
                 DisplayName            = $u.DisplayName
                 GivenName              = $u.GivenName
@@ -82,7 +90,7 @@ foreach ($u in $users) {
                 EmployeeId             = $u.EmployeeId
                 LastInteractiveLogin   = if ($lastInteractive) { $lastInteractive.createdDateTime } else { $null }
                 LastNonInteractiveLogin= if ($lastNonInteractive) { $lastNonInteractive.createdDateTime } else { $null }
-                AccountEnabled         = $u.AccountEnabled
+                Status                 = $status
                 CreatedDateTime        = $u.CreatedDateTime
                 GroupMembership        = $groupString
         }
