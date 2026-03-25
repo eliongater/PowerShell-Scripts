@@ -32,8 +32,8 @@
 
         .NOTES
         AUTHOR: Elijah Smart
-        LASTEDIT: Nov 8, 2024
-        VERSION: 1.9
+        LASTEDIT: Dec 12, 2025
+        VERSION: 2.0
 
 
 #>
@@ -72,17 +72,76 @@ $Global:MailFrom = "elijah.smart@now4you.nz"
 #$Global:MailFrom = "azurecertautomation@naturalhazards.govt.nz"
 
 
+#**************************************************************************************
 #Define any functions
+<#
+.SYNOPSIS
+Sends an email using Microsoft Graph for a specified user, with optional single or multiple file attachments.
+
+.DESCRIPTION
+Send-Email constructs a Microsoft Graph message payload and calls Send-MgUserMail to deliver an HTML email from the specified sender (user) to one or more recipients.
+- If the Attachment parameter is provided, a single file is read from disk, Base64-encoded and added as a fileAttachment.
+- If the Attachments parameter is provided (and Attachment is not), each file path in the array is read, Base64-encoded and appended as a fileAttachment.
+- If neither Attachment nor Attachments is provided, the message is sent without attachments.
+- The MailTo parameter accepts a semicolon (;) separated list of recipient email addresses.
+- The default Subject and default MailTo/MailFrom fallback to corresponding global variables if not supplied.
+
+.PARAMETER MailTo
+String of recipient email addresses. Multiple addresses may be provided separated by semicolons (;). Default: $Global:MailTo.
+
+.PARAMETER MailFrom
+Email address (or user id) of the sender to use as the -UserId argument to Send-MgUserMail. Default: $Global:MailFrom.
+
+.PARAMETER Subject
+Subject line for the email. Default: "App Secret Expiration Notice".
+
+.PARAMETER MsgBody
+HTML content to use as the message body. The function sets the message ContentType to "HTML".
+
+.PARAMETER Attachment
+Single file path to attach to the message. If present, this takes precedence over Attachments. The file is read from disk and Base64-encoded into a Microsoft Graph fileAttachment with ContentType "application/octet-stream".
+
+.PARAMETER Attachments
+Array of file paths to attach to the message. Each file path is read from disk and Base64-encoded into an individual Microsoft Graph fileAttachment. Ignored if Attachment is provided.
+
+.EXAMPLE
+Send-Email -MailTo "alice@example.com" -MailFrom "sender@example.com" -Subject "Hello" -MsgBody "<p>Test</p>"
+
+Sends a simple HTML email with no attachments.
+
+.EXAMPLE
+Send-Email -MailTo "bob@example.com;carol@example.com" -Attachment "C:\logs\report.pdf"
+
+Sends an email to Bob and Carol with a single attachment named report.pdf.
+
+.EXAMPLE
+Send-Email -MailTo "team@example.com" -Attachments @("C:\a.txt","C:\b.png")
+
+Sends an email with multiple attachments.
+
+.INPUTS
+None from the pipeline. All parameters are passed explicitly.
+
+.OUTPUTS
+This function primarily performs a side-effect (sending an email). It writes progress messages with Write-Output/Write-Error. Any output returned by the underlying Send-MgUserMail call (if returned) will be passed through. Errors encountered while reading files or sending mail are thrown.
+
+.NOTES
+- Requires the Microsoft Graph PowerShell module (Send-MgUserMail) and an authenticated context with appropriate permissions to send mail on behalf of the specified user (e.g., Mail.Send or equivalent application/delegated permissions).
+- Files specified in Attachment(s) must be accessible to the running process; large attachments may fail or be rejected by tenant/Graph size limits.
+- Attachments are added with ContentType "application/octet-stream" and named using the file name from the supplied path; adjust if a specific MIME type is required.
+- If both Attachment and Attachments are supplied, Attachment is used and Attachments is ignored.
+#>
 function Send-Email {
     param (
         [system.string]$MailTo = $Global:MailTo,
         [system.string]$MailFrom = $Global:MailFrom,
         [system.string]$Subject = "App Secret Expiration Notice",
         [system.string]$MsgBody ="",
-        [system.string]$Attachment
+        [system.string]$Attachment,
+        [system.array]$Attachments
     )
     #Initialise Variables
-    $Message
+    $Message = $null
 
     #E.g. $Attachment = "C:\logs\mytestapp.log"
     #If a file path to an attachment is passed as a parameter, then send with an attachment, else send without one
@@ -104,6 +163,26 @@ function Send-Email {
                 ContentBytes = $AttachmentBase64
                 }
             )
+        }
+    } elseif ($PSBoundParameters.ContainsKey('Attachments')) {
+        $Message = @{
+            Subject = "$Subject"
+            Body = @{
+                ContentType = "HTML"
+                Content = $MsgBody
+                }
+            ToRecipients = @()
+                Attachments = @()
+        }
+        foreach ($ThisAttachment in $Attachments) {
+            $AttachmentContentBytes = [System.IO.File]::ReadAllBytes($ThisAttachment)
+            $AttachmentBase64 = [System.Convert]::ToBase64String($AttachmentContentBytes)
+            $Message.Attachments += @{
+                "@odata.type" = "#microsoft.graph.fileAttachment"
+                Name = (Split-Path $ThisAttachment -Leaf)
+                ContentType = "application/octet-stream"
+                ContentBytes = $AttachmentBase64
+            }
         }
     } else {
         $Message = @{
@@ -130,7 +209,7 @@ function Send-Email {
     #Send email
     try
     {
-        "Sending email from $MailFrom to $MailTo, with the subject $Subject"
+        Write-Output "Sending email from $MailFrom to $MailTo, with the subject $Subject"
         Send-MgUserMail -UserId $MailFrom -Message $Message
     }
     catch {
@@ -140,6 +219,45 @@ function Send-Email {
     
 }
 
+
+<#
+.SYNOPSIS
+    Converts a PSCustomObject (or any object with properties) into a Hashtable.
+
+.DESCRIPTION
+    Creates a new Hashtable where each property name of the input object becomes a key and the
+    corresponding property value becomes the hashtable value. The cmdlet accepts input directly
+    or from the pipeline and emits verbose start/exit messages when -Verbose is supplied.
+
+.PARAMETER psCustomObject
+    The input object to convert. This should be an object that exposes properties (for example a
+    PSCustomObject, a custom object, or any object with public properties). This parameter accepts
+    pipeline input by value and by property name.
+
+.EXAMPLE
+    # Convert an object directly
+    $obj = [pscustomobject]@{ Name = 'Alice'; Age = 30 }
+    ConvertTo-HashtableFromPsCustomObject -psCustomObject $obj
+    # Result: @{ Name = 'Alice'; Age = 30 }
+
+.EXAMPLE
+    # Use with the pipeline
+    Get-CustomObject | ConvertTo-HashtableFromPsCustomObject
+
+.INPUTS
+    System.Object
+    Any object that exposes properties (commonly PSCustomObject).
+
+.OUTPUTS
+    System.Collections.Hashtable
+    A Hashtable whose keys are the property names of the input object and whose values are the corresponding property values.
+
+.NOTES
+    - Only properties (MemberType *Property) are copied; methods and script members are ignored.
+    - Property names are used verbatim as hashtable keys. If duplicate property names occur, keys may be overwritten.
+    - Nested objects and collections are assigned as values; the function does not perform a deep/recursive conversion.
+    - Verbose messages are written at start and exit when -Verbose is specified.
+#>
 function ConvertTo-HashtableFromPsCustomObject { 
     param ( 
         [Parameter(  
@@ -161,6 +279,50 @@ function ConvertTo-HashtableFromPsCustomObject {
     return  $output;
 }
 
+<#
+.SYNOPSIS
+    Extracts email addresses from a list of tags based on a specified tag name and delimiter.
+
+.DESCRIPTION
+    The Get-EmailFromTags function scans through an array of tag strings, searching for tags that start with a specified tag name followed by a delimiter (default is "owner:").
+    When a matching tag is found, it extracts the value after the delimiter (assumed to be an email address), trims it, and collects all such emails into a semicolon-separated string.
+    Returns $null if no matching tags are found.
+
+.PARAMETER Tags
+    An array of tag strings to search for email addresses.
+
+.PARAMETER TagName
+    The tag name to look for (default is "owner").
+
+.PARAMETER Delimiter
+    The delimiter separating the tag name and value (default is ":").
+
+.EXAMPLE
+    Get-EmailFromTags -Tags @("owner:someone@example.com", "env:prod")
+    # Returns "someone@example.com"
+#>
+function Get-EmailFromTags {
+    param (
+        [Parameter(
+            Mandatory = $true,   
+            ValueFromPipeline = $true
+        )] [string[]] $Tags,
+        [string] $TagName = "email",
+        [string] $Delimiter = ":"
+    );
+    $emails = @()
+    foreach ($Tag in $Tags){
+        if ($Tag.ToLower().contains($TagName.ToLower())){
+            $email = $Tag.Split($Delimiter)[1].Trim()
+            $emails += $email
+        }
+    }
+    if ($emails.Count -gt 0){
+        return $emails -join ";"
+    } else {
+        return $null
+    }
+}
 
 #Potential for webhooks to be added later?
 #https://github.com/bwya77/PSAlerts/blob/main/Azure/AppSecretExpiration_SendtoTeams.ps1
@@ -182,6 +344,11 @@ $Today = get-date
 
 $AutomationVariableName = "PriorAlerts"
 #$AutomationVariableName = "EntraID-EntAppCert-RPT-PriorAlerts"
+
+#Should probably make this an automation variable later
+$ApplicationsToIgnore = @(
+    "Office 365 Exchange Online"
+)
 
 [hashtable]$PriorAlerts = @{}
 #ID and Date last alerted on
@@ -270,6 +437,19 @@ foreach ($App in $Applications) {
     $AppID  = $App.AppId
     $ownersList = Get-MgApplicationOwner -ApplicationId $app.Id
     $owners = $ownersList.AdditionalProperties.mail -join ';'
+    $Tags = $App.Tags
+    $ManifestOwners = $null
+
+    if ($Tags -ne $null){
+        $ManifestOwners = Get-EmailFromTags -Tags $Tags
+        if ($ManifestOwners -ne $null){
+            if ($owners.Length -gt 0){
+                $owners += ";$ManifestOwners"
+            } else {
+                $owners = $ManifestOwners
+            }
+        }
+    }
 
     $AppCreds = Get-MgApplication -ApplicationId $ObjectID |
         Select-Object PasswordCredentials, KeyCredentials
@@ -291,14 +471,19 @@ foreach ($App in $Applications) {
     #Sort end dates to soonest first
     [Array]::Sort($EndDates)
 
+    #Check if app is in ignore list
+    if( $ApplicationsToIgnore -contains $AppName){
+        Write-Information "Ignoring $AppName as it is in the ignore list"
+        continue
+    }
     #If closest expiration is in the x day period we care about
-    if($EndDates[-1] -lt $ExpirationDateToCheck -and $EndDates.Length -gt 0){
+    if($EndDates[0] -lt $ExpirationDateToCheck -and $EndDates.Length -gt 0){
         ############################################
         $Expirations += [PSCustomObject]@{
             'AppName'                = $AppName
             'ObjectID'               = $ObjectID
             'ApplicationID'          = $AppID
-            'Date'                   = $EndDates[-1]
+            'Date'                   = $EndDates[0]
             'Owners'                 = $owners
         }
         ############################################
@@ -336,7 +521,20 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
     $AppType = $EnterpriseApp.ServicePrincipalType
     $ownersList = Get-MgServicePrincipalOwner -ServicePrincipalId  $EnterpriseApp.Id
     $owners = $ownersList.AdditionalProperties.mail -join ';'
+    $Tags = $EnterpriseApp.Tags
+    $ManifestOwners = $null
 
+    if ($Tags -ne $null){
+        $ManifestOwners = Get-EmailFromTags -Tags $Tags
+        if ($ManifestOwners -ne $null){
+            if ($owners.Length -gt 0){
+                $owners += ";$ManifestOwners"
+            } else {
+                $owners = $ManifestOwners
+            }
+        }
+    }
+    
 
     $AppCreds = Get-MgServicePrincipal -ServicePrincipalId $ObjectID |
         Select-Object PasswordCredentials, KeyCredentials
@@ -358,14 +556,20 @@ foreach ($EnterpriseApp in $EnterpriseApps) {
     #Sort end dates to soonest first
     [Array]::Sort($EndDates)
 
+    #Check if app is in ignore list
+    if( $ApplicationsToIgnore -contains $AppName){
+        Write-Information "Ignoring $AppName as it is in the ignore list"
+        continue
+    }
+
     #If closest expiration is in the x day period we care about
-    if($EndDates[-1] -lt $ExpirationDateToCheck -and $EndDates.Length -gt 0 -and $AppType -eq "Application"){
+    if($EndDates[0] -lt $ExpirationDateToCheck -and $EndDates.Length -gt 0 -and $AppType -eq "Application"){
         ############################################
         $Expirations += [PSCustomObject]@{
             'AppName'                = $AppName
             'ObjectID'               = $ObjectID
             'ApplicationID'          = $AppID
-            'Date'                   = $EndDates[-1]
+            'Date'                   = $EndDates[0]
             'Owners'                 = $owners
         }
         ############################################

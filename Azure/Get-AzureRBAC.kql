@@ -1,0 +1,15 @@
+authorizationresources
+| where type == "microsoft.authorization/roleassignments"
+| extend scope = tostring(properties['scope'])
+| extend principalType = tostring(properties['principalType'])
+| extend principalId = tostring(properties['principalId'])
+| extend roleDefinitionId = tolower(tostring(properties['roleDefinitionId']))
+| mv-expand createdOn = parse_json(properties).createdOn
+| mv-expand updatedOn = parse_json(properties).updatedOn
+| join kind=inner ( 
+    authorizationresources
+    | where type =~ 'microsoft.authorization/roledefinitions'
+    | extend id = tolower(id)
+) on $left.roleDefinitionId == $right.id
+| mv-expand roleName = parse_json(properties1).roleName
+| project createdOn, updatedOn, principalId, principalType, scope, roleName, roleDefinitionId
