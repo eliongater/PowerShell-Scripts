@@ -22,18 +22,21 @@ foreach ($group in $groups) {
     }
 
     # Add members to the group
-    foreach ($member in $membersList) {
-        $user = Get-MgUser -Filter "userPrincipalName eq '$member'" -ErrorAction SilentlyContinue
+    if ($membersList.Count -gt 0) {
 
-        if ($null -eq $user) {
-            $user = Get-MgUser -Filter "mail eq '$member'" -ErrorAction SilentlyContinue
-        }
+        foreach ($member in $membersList) {
+            $user = Get-MgUser -Filter "userPrincipalName eq '$member'" -ErrorAction SilentlyContinue
 
-        if ($null -ne $user) {
-            New-MgGroupMember -GroupId $existingGroup.Id -DirectoryObjectId $user.Id -ErrorAction SilentlyContinue
-            Write-Host "Added member: $member"
-        } else {
-            Write-Host "Member not found: $member"
+            if ($null -eq $user) {
+                $user = Get-MgUser -Filter "mail eq '$member'" -ErrorAction SilentlyContinue
+            }
+
+            if ($null -ne $user) {
+                New-MgGroupMember -GroupId $existingGroup.Id -DirectoryObjectId $user.Id -ErrorAction SilentlyContinue
+                Write-Host "Added member: $member"
+            } else {
+                Write-Host "Member not found: $member"
+            }
         }
     }
 }
