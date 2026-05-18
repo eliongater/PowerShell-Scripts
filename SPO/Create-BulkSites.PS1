@@ -11,39 +11,50 @@ Function Create-SPOSite
     )
  
 #Connection parameters 
-$AdminURL = "https://crescent-admin.sharepoint.com"
+$AdminURL = "https://selwynwater-admin.sharepoint.com/"
  
 #Get Credentials to connect
 #$Cred= Get-Credential -Message "Enter the Admin Credentials"
 #$Credentials = New-Object -TypeName System.Management.Automation.PSCredential -argumentlist $Cred.Username, $Cred.Password
+
+$additionalOwners = @("adm_elijah.smart@selwynwater.nz")
   
-Try{
-    #Connect to Office 365
-    Connect-SPOService #-Url $AdminURL -Credential $Credentials
-  
-    #Check if the site collection exists already
-    $SiteExists = Get-SPOSite | where {$_.url -eq $URL}
-    #Check if site exists in the recycle bin
-    $SiteExistsInRecycleBin = Get-SPODeletedSite | where {$_.url -eq $URL}
- 
-    If($SiteExists -ne $null)
-    {
-        write-host "Site $($url) exists already!" -foregroundcolor red
+    Try{
+        #Connect to Office 365
+        Connect-SPOService #-Url $AdminURL -Credential $Credentials
+    
+        #Check if the site collection exists already
+        $SiteExists = Get-SPOSite | where {$_.url -eq $URL}
+        #Check if site exists in the recycle bin
+        $SiteExistsInRecycleBin = Get-SPODeletedSite | where {$_.url -eq $URL}
+    
+        If($SiteExists -ne $null)
+        {
+            write-host "Site $($url) exists already!" -foregroundcolor red
+        }
+        elseIf($SiteExistsInRecycleBin -ne $null)
+        {
+            write-host "Site $($url) exists in the recycle bin!" -foregroundcolor red
+        }
+        else
+        {
+            #create the site collection
+            New-SPOSite -Url $URL -title $Title -Owner $Owner -StorageQuota $StorageQuota -NoWait -Template $Template -TimeZoneId "17"
+            write-host "Site Collection $($url) Created Successfully!" -foregroundcolor Green
+        }
+        try {
+            foreach ($additionalOwner in $additionalOwners) {
+                Add-SPOUser -Site $URL -LoginName $additionalOwner -Group "Site Owners"
+            }
+        }
+        catch {
+            <#Do this if a terminating exception happens#>
+        }
     }
-    elseIf($SiteExistsInRecycleBin -ne $null)
-    {
-        write-host "Site $($url) exists in the recycle bin!" -foregroundcolor red
-    }
-    else
-    {
-        #create the site collection
-        New-SPOSite -Url $URL -title $Title -Owner $Owner -StorageQuota $StorageQuota -NoWait -Template $Template
-        write-host "Site Collection $($url) Created Successfully!" -foregroundcolor Green
-    }
-}
-catch {
-    write-host "Error: $($_.Exception.Message)" -foregroundcolor Red
-    }
+    catch {
+        write-host "Error: $($_.Exception.Message)" -foregroundcolor Red
+        }
+
 }
  
 #Read from CSV and create site collection
