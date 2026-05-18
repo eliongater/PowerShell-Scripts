@@ -14,7 +14,7 @@ foreach ($group in $groups) {
     $existingGroup = Get-MgGroup -Filter "displayName eq '$groupName'" -ErrorAction SilentlyContinue
 
     if ($null -eq $existingGroup) {
-        $newGroup = New-MgGroup -DisplayName $groupName -Description $groupDescription -MailEnabled $false -SecurityEnabled $true
+        $newGroup = New-MgGroup -DisplayName $groupName -Description $groupDescription -MailEnabled:$false -SecurityEnabled:$true
         $existingGroup = $newGroup
         Write-Host "Group created with name: $groupName and ID: $($existingGroup.Id)"
     } else {
