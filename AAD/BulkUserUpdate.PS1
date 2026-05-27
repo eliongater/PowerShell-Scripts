@@ -133,13 +133,13 @@ foreach ($row in $rows) {
         $mailNickname = ($primaryKey.Split('@')[0] -replace '[^a-zA-Z0-9]', '')
         if (-not $mailNickname) { $mailNickname = "user$($summary.Processed)" }
 
-        <#
+        
         $password = [System.Web.Security.Membership]::GeneratePassword(16, 3)
         $passwordProfile = @{
             ForceChangePasswordNextSignIn = $true
             Password = $password
         }
-        #>
+        
 
         $createBody = [ordered]@{
             AccountEnabled = $true
@@ -181,6 +181,7 @@ foreach ($row in $rows) {
     $phone = Get-RowValue $row @('Primary Work Phone', 'Primary Phone')
     $managerEmail = Get-RowValue $row @('Manager Email', 'Manager E')
     $managerName = Get-RowValue $row @('Manager Name', 'ManagerName')
+    $hireDate = Get-RowValue $row @('Hire Date', 'HireDate')
 
     if ($displayName) { $patchBody.DisplayName = $displayName }
     if ($givenName) { $patchBody.GivenName = $givenName }
@@ -197,6 +198,14 @@ foreach ($row in $rows) {
     if ($country) { $patchBody.Country = $country }
     if ($phone) { $patchBody.BusinessPhones = @($phone) }
     if ($employeeType) { $patchBody.EmployeeType = $employeeType }
+    if ($hireDate) {
+        try {
+            $parsedDate = [DateTime]::Parse($hireDate)
+            $patchBody.HireDate = $parsedDate.ToString("MM/dd/yyyy")
+        } catch {
+            $summary.Errors += "Row $($summary.Processed): invalid hire date format '$hireDate' for user $primaryKey"
+        }
+    }
 
 
 

@@ -11,7 +11,7 @@ Function Create-SPOSite
     )
  
 #Connection parameters 
-$AdminURL = "https://selwynwater-admin.sharepoint.com/"
+$AdminURL = "https://admin.sharepoint.com/"
  
 #Get Credentials to connect
 #$Cred= Get-Credential -Message "Enter the Admin Credentials"
@@ -21,7 +21,7 @@ $additionalOwners = @("adm_elijah.smart@selwynwater.nz")
   
     Try{
         #Connect to Office 365
-        Connect-SPOService #-Url $AdminURL -Credential $Credentials
+        #Connect-SPOService #-Url $AdminURL -Credential $Credentials
     
         #Check if the site collection exists already
         $SiteExists = Get-SPOSite | where {$_.url -eq $URL}
@@ -48,15 +48,16 @@ $additionalOwners = @("adm_elijah.smart@selwynwater.nz")
             }
         }
         catch {
-            <#Do this if a terminating exception happens#>
+            write-host "Error: $($_.Exception.Message)" -foregroundcolor Red
         }
     }
     catch {
-        write-host "Error: $($_.Exception.Message)" -foregroundcolor Red
+        write-host "Error: $($_.Exception)" -foregroundcolor Red
         }
 
 }
  
 #Read from CSV and create site collection
+Connect-SPOService
 Import-Csv ".\downloads\SitesToCreate.csv" | Foreach-Object {
    Create-SPOSite -Title $_.SiteTitle -URL $_.SiteURL -Owner $_.SiteOwner -StorageQuota $_.StorageQuota -Template $_.SiteTemplate  }
