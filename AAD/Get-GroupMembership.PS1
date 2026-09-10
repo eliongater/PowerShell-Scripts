@@ -7,7 +7,8 @@ Connect-MgGraph -Scopes "directory.Read.All"
 $results = @()
 
 # Get all groups
-$groups = Get-MgGroup -All
+$groups = Get-MgGroup -All -ConsistencyLevel eventual -ExpandProperty "AppRoleAssignments"
+$groups = $groups | Where-Object {$_.displayname -like "*OnBase*"}
 
 foreach ($group in $groups) {
     $groupMembers = Get-MgGroupMember -GroupId $group.Id -All
@@ -16,16 +17,24 @@ foreach ($group in $groups) {
     $memberGroups = @()
     $devices = @()
     $servicePrincipals = @()
+
+    $assignedAppRoles = @()
+    if ($group.AppRoleAssignments -ne $null) {
+        foreach ($appRole in $group.AppRoleAssignments) {
+            $assignedAppRoles += $approle.ResourceDisplayName
+            }
+        }
+    
     
     # Categorize members by type
     foreach ($member in $groupMembers) {
         $memberType = $member.AdditionalProperties["@odata.type"]
         
         switch ($memberType) {
-            "#microsoft.graph.user" { $users += $member.Id }
-            "#microsoft.graph.group" { $memberGroups += $member.Id }
-            "#microsoft.graph.device" { $devices += $member.Id }
-            "#microsoft.graph.servicePrincipal" { $servicePrincipals += $member.Id }
+            "#microsoft.graph.user" { $users += $member.additionalproperties.mail }
+            "#microsoft.graph.group" { $memberGroups += $member.additionalproperties.displayName }
+            "#microsoft.graph.device" { $devices += $member.additionalproperties.displayName }
+            "#microsoft.graph.servicePrincipal" { $servicePrincipals += $member.additionalproperties.displayName }
         }
     }
     
@@ -33,6 +42,7 @@ foreach ($group in $groups) {
         GroupId              = $group.Id
         GroupDisplayName     = $group.DisplayName
         GroupMail            = $group.Mail
+        AssignedEntApplications = ($assignedAppRoles -join ";")
         UserCount            = $users.Count
         Users                = ($users -join ";")
         GroupCount           = $memberGroups.Count

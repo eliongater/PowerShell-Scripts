@@ -110,7 +110,8 @@ foreach ($row in $rows) {
         'UPN/email',
         'UPN Email',
         'Current Email Address (Parent Company)',
-        'CurrentEmail'
+        'CurrentEmail',
+        'UPN'
     )
     $primaryKey = $currentEmail
 
@@ -182,6 +183,7 @@ foreach ($row in $rows) {
     $managerEmail = Get-RowValue $row @('Manager Email', 'Manager E')
     $managerName = Get-RowValue $row @('Manager Name', 'ManagerName')
     $hireDate = Get-RowValue $row @('Hire Date', 'HireDate')
+    $accountEnabled = Get-RowValue $row @('Account Enabled', 'AccountEnabled')
 
     if ($displayName) { $patchBody.DisplayName = $displayName }
     if ($givenName) { $patchBody.GivenName = $givenName }
@@ -204,6 +206,15 @@ foreach ($row in $rows) {
             $patchBody.HireDate = $parsedDate.ToString("MM/dd/yyyy")
         } catch {
             $summary.Errors += "Row $($summary.Processed): invalid hire date format '$hireDate' for user $primaryKey"
+        }
+    }
+    if ($accountEnabled -ne $null) {
+        if ($accountEnabled -in @('true', '1', 'yes', 'enabled', 'current', 'active')) {
+            $patchBody.AccountEnabled = $true
+        } elseif ($accountEnabled -in @('false', '0', 'no', 'disabled', 'former', 'inactive', 'terminated', 'exited')) {
+            $patchBody.AccountEnabled = $false
+        } else {
+            $summary.Errors += "Row $($summary.Processed): invalid account enabled value '$accountEnabled' for user $primaryKey"
         }
     }
 

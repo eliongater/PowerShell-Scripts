@@ -9,6 +9,8 @@ param(
     [string]$UserFilter = "accountEnabled eq true"
 )
 
+$NewUPNSuffix = "selwynwater.co.nz"
+
 # Connect to Microsoft Graph
 Connect-MgGraph -Scopes "User.ReadWrite.All", "RoleManagement.Read.Directory"
 
@@ -20,8 +22,11 @@ foreach ($assignment in $roleAssignments) {
     $usersWithRoles += $assignment.PrincipalId
 }
 
+$AdditionalProperties = "Id","employeeId","IsSoftDeleted","accountEnabled","streetAddress","city","state","postalCode","country","department","displayName","facsimileTelephoneNumber","givenName","jobTitle","mail","mailNickname","manager","mobile","physicalDeliveryOfficeName","preferredLanguage","surname","telephoneNumber","userPrincipalName","otherMails","companyName"
+
+
 # Get all users
-$users = Get-MgUser -Filter $UserFilter -All
+$users = Get-MgUser -Filter $UserFilter -All -Property $AdditionalProperties
 
 $skipped = 0
 $updated = 0
@@ -34,13 +39,19 @@ foreach ($user in $users) {
         $skipped++
         continue
     }
+    if ($user.companyName -eq "Datacom"){
+        Write-Host "Skipped: $($user.UserPrincipalName) (companyName is Datacom)" -ForegroundColor Yellow
+        $skipped++
+        continue
+    }
     
     try {
         $mailPrefix = $user.MailNickname
         $newUPN = "$mailPrefix@$NewUPNSuffix"
+        $newMail = "$mailPrefix@$NewUPNSuffix"
         
-        Update-MgUser -UserId $user.Id -UserPrincipalName $newUPN
-        Write-Host "Updated: $($user.UserPrincipalName) -> $newUPN" -ForegroundColor Green
+        Update-MgUser -UserId $user.Id -UserPrincipalName $newUPN -Mail $newMail
+        Write-Host "Updated: $($user.UserPrincipalName) -> $newUPN, Mail -> $newMail" -ForegroundColor Green
         $updated++
     }
     catch {
