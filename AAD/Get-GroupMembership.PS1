@@ -8,7 +8,7 @@ $results = @()
 
 # Get all groups
 $groups = Get-MgGroup -All -ConsistencyLevel eventual -ExpandProperty "AppRoleAssignments"
-$groups = $groups | Where-Object {$_.displayname -like "*OnBase*"}
+$groups = $groups | Where-Object {$_.displayname -like "*zado*"}
 
 foreach ($group in $groups) {
     $groupMembers = Get-MgGroupMember -GroupId $group.Id -All
